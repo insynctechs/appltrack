@@ -12,6 +12,7 @@ namespace recruiter_webapp
         // For more information on Bundling, visit https://go.microsoft.com/fwlink/?LinkID=303951
         public static void RegisterBundles(BundleCollection bundles)
         {
+            /*
             bundles.Add(new ScriptBundle("~/bundles/WebFormsJs").Include(
                             "~/Scripts/WebForms/WebForms.js",
                             "~/Scripts/WebForms/WebUIValidation.js",
@@ -33,6 +34,22 @@ namespace recruiter_webapp
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                             "~/Scripts/modernizr-*"));
+
+            */
+            // Custom script bundling for jquery.js and materialize.js
+            ScriptBundle scriptBndl = new ScriptBundle("~/bundles/main_js");
+
+            //method to add all the materialize script files with their paths 
+            scriptBndl.Include("~/Scripts/jquery-{version}.js",
+                "~/Scripts/materialize.js", "~/Scripts/plugins.js.download");
+
+            bundles.Add(scriptBndl);
+
+            // Custom style bundling for styles.css, materialize.css, custom.css
+            bundles.Add(new StyleBundle("~/bundles/main_css")
+                .Include("~/Content/materialize.css","~/Content/custom.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

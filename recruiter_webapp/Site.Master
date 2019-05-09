@@ -6,66 +6,94 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - My ASP.NET Application</title>
+    <title>TalentRecruit - Empowering Recruiters</title>
 
     <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/modernizr") %>
+        <%: Scripts.Render("~/bundles/main_js") %>
+        <%: Styles.Render("~/bundles/main_css") %>
     </asp:PlaceHolder>
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
+    <link href="~/Content/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <form runat="server">
         <asp:ScriptManager runat="server">
             <Scripts>
-                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
-                <%--Framework Scripts--%>
-                <asp:ScriptReference Name="MsAjaxBundle" />
-                <asp:ScriptReference Name="jquery" />
-                <asp:ScriptReference Name="bootstrap" />
-                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
-                <asp:ScriptReference Name="WebFormsBundle" />
-                <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
 
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" runat="server" href="~/">Application name</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/About">About</a></li>
-                        <li><a runat="server" href="~/Contact">Contact</a></li>
+        
+        <!-- HEADER BEGINS -->
+        <header class="page-topbar" id="header">
+            <div class="navbar navbar-fixed">
+                <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-light-blue-cyan no-shadow">
+                    <div class="nav-wrapper">
+                        <span class="logo-text white-text" style="font-size: 20px; margin-left: 26px">TalentRecruit</span>
+                        <ul class="right">                           
+                            <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="toggle-fullscreen">Fullscreen</span></a></li>
+                            <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Notifications</span></a></li>
+                            <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Profile</span></a></li>                          
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <!-- HEADER ENDS -->
+
+        <!-- MAIN STARTS -->
+        <div id="main">
+            <div class="wrapper">
+
+                <!-- LEFT SIDEBAR STARTS -->
+                <aside class="nav-collapsible">
+		            <!--<aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-light">-->  
+                    <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow ps ps--active-y" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion" style="transform: translateX(0px);">
+
+                        <li class="active"><a class="collapsible-body active" href="Default.aspx" style="display: block"><i class="material-icons"></i><span>Dashboard</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span class="bold-text">Customers</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Employers</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Candidates</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="Skills.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Qualifications</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Users</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Profiles</span></a>
+                        </li>
+                        <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Settings</span></a>
+                        </li>
                     </ul>
-                </div>
+                </aside>
+                <!-- LEFT SIDEBAR ENDS -->
+
+                <!-- CONTENTS SPECIFIC TO PAGES INCLUDING COMMON FOOTER -->
+                <section id="content">
+                    <div class="container body-content row">
+                        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                        </asp:ContentPlaceHolder>
+                        <hr />
+                        <footer class="">
+                            <div class="footer-copyright">
+                                <div class="container">
+                                    <a class="" href="#">Terms of Use</a> | <a class="" href="#">Privacy Policy</a>
+                                    <br>
+                                    © TalentRecruit. All rights reserved. | Developed by <a href="#" target="_blank">Tabore Technologies</a>.
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </section>
             </div>
         </div>
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </footer>
-        </div>
-
+        <!-- MAIN ENDS -->
     </form>
 </body>
 </html>

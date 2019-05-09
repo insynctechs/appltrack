@@ -6,8 +6,7 @@ using System.Data;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-
-
+using System.Threading.Tasks;
 
 namespace recruiter_webapp.Helpers
 {
@@ -68,6 +67,19 @@ namespace recruiter_webapp.Helpers
             }
             else
                 return "Error";// + response.StatusCode.ToString();
+        }
+
+        public int DeleteRecordFromWebApi(string path)
+        {
+            var url = string.Format(path);           
+            HttpResponseMessage response = Utils.Client.DeleteAsync(url).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsStringAsync().Result;
+                int ret = JsonConvert.DeserializeObject<int>(res);
+                return ret;
+            }
+            return 0;
         }
 
 
