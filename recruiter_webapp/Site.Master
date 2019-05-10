@@ -9,7 +9,7 @@
     <title>TalentRecruit - Empowering Recruiters</title>
 
     <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/main_js") %>
+        <%--  Scripts.Render("~/bundles/main_js") --%>
         <%: Styles.Render("~/bundles/main_css") %>
     </asp:PlaceHolder>
 
@@ -17,6 +17,8 @@
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="~/Content/custom.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/Scripts/jquery-3.3.1.js" ></script>
+    <script src="/Scripts/materialize.js" ></script>    
 </head>
 <body>
     <form runat="server">

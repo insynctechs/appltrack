@@ -40,10 +40,10 @@ namespace recruiter_webapp
             ScriptBundle scriptBndl = new ScriptBundle("~/bundles/main_js");
 
             //method to add all the materialize script files with their paths 
-            scriptBndl.Include("~/Scripts/jquery-{version}.js",
-                "~/Scripts/materialize.js", "~/Scripts/plugins.js.download");
+            //scriptBndl.Include("~/Scripts/jquery-{version}.js",
+              //  "~/Scripts/materialize.js", "~/Scripts/plugins.js.download");
 
-            bundles.Add(scriptBndl);
+            //bundles.Add(scriptBndl);
 
             // Custom style bundling for styles.css, materialize.css, custom.css
             bundles.Add(new StyleBundle("~/bundles/main_css")
