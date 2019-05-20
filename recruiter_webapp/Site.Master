@@ -33,7 +33,7 @@
             <div class="navbar navbar-fixed">
                 <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-light-blue-cyan no-shadow">
                     <div class="nav-wrapper">
-                        <span class="logo-text white-text" style="font-size: 20px; margin-left: 26px">TalentRecruit</span>
+                        <span class="logo-text white-text" style="font-size: 20px; margin: 10px">insyncTalentBox</span>
                         <ul class="right">                           
                             <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="toggle-fullscreen">Fullscreen</span></a></li>
                             <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Notifications</span></a></li>
@@ -62,9 +62,9 @@
                         </li>
                         <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Candidates</span></a>
                         </li>
-                        <li><a class="collapsible-body" href="Skills.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
+                        <li><a class="collapsible-body" href="Skill.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
                         </li>
-                        <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Qualifications</span></a>
+                        <li><a class="collapsible-body" href="Qualification.aspx"><i class="material-icons">chevron_right</i><span>Qualifications</span></a>
                         </li>
                         <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Users</span></a>
                         </li>
@@ -87,7 +87,7 @@
                                 <div class="container">
                                     <a class="" href="#">Terms of Use</a> | <a class="" href="#">Privacy Policy</a>
                                     <br>
-                                    © TalentRecruit. All rights reserved. | Developed by <a href="#" target="_blank">Tabore Technologies</a>.
+                                    © insyncTalentBox. All rights reserved. | Developed by <a href="http://www.insynctechs.com" target="_blank">Insync Tech Solutions</a>.
                                 </div>
                             </div>
                         </footer>

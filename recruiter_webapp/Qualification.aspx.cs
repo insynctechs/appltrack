@@ -13,24 +13,21 @@ using Newtonsoft.Json;
 
 namespace recruiter_webapp
 {
-    public partial class Skill : System.Web.UI.Page
+    public partial class Qualification : System.Web.UI.Page
     {
-
         #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
         private string modelType;
-
         // Should to be assigned from an external constant.
         public int maxFileSize { get; set; }
-
         WebApiHelper wHelper = new WebApiHelper();
-        public List<DataRow> SkillList;
+        public List<DataRow> QualificationList;
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            modelType = "Skill";
+            modelType = "Qualification";
             maxFileSize = 1048576;
             if (!IsPostBack)
             {
@@ -40,44 +37,43 @@ namespace recruiter_webapp
 
             InitializeVars();
             if (Request.Url.ToString().Contains("Delete"))
-                DeleteSkill();
+                DeleteQualification();
 
             if (Request.Url.ToString().Contains("Edit"))
-                EditSkill();
+                EditQualification();
 
-            GetSkills();
+            GetQualifications();
         }
+
         private void InitializeVars()
         {
 
-            SkillList = new List<DataRow>();
+            QualificationList = new List<DataRow>();
         }
 
-        private void DeleteSkill()
+        private void DeleteQualification()
         {
 
             try
             {
-                var urlGetId1 = string.Format("api/Skills/Delete?id=" + Request.QueryString["id"]);
+                var urlGetId1 = string.Format("api/Qualifications/Delete?id=" + Request.QueryString["id"]);
                 //rfqmessage.InnerText += urlGetId1;
                 wHelper.DeleteRecordFromWebApi(urlGetId1);
-                GetSkills();
+                GetQualifications();
             }
             catch (Exception ex)
             {
                 CommonLogger.Info(ex.ToString());
 
             }
-
-
         }
 
-        private void EditSkill()
+        private void EditQualification()
         {
 
             try
             {
-                var urlGetId1 = string.Format("api/Skills/Edit?id=" + Request.QueryString["id"]);
+                var urlGetId1 = string.Format("api/Qualifications/Edit?id=" + Request.QueryString["id"]);
                 int res1 = wHelper.GetExecuteNonQueryResFromWebApi(urlGetId1);
 
             }
@@ -90,39 +86,22 @@ namespace recruiter_webapp
 
         }
 
-        private void GetSkills()
+        private void GetQualifications()
         {
             try
             {
-                var url = string.Format("api/Skills/Get?srchBy=ALL&srchVal=");
+                var url = string.Format("api/Qualifications/Get?srchBy=ALL&srchVal=");
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
                 //if(dt.Rows.Count > 0)
                 //{
-                SkillList = dt.AsEnumerable().ToList();
+                QualificationList = dt.AsEnumerable().ToList();
                 //}
             }
             catch (Exception ex)
             {
                 CommonLogger.Info(ex.ToString());
             }
-        }
-        /*
-        protected void btnInsert_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var urlGetId1 = string.Format("api/Skills/Insert?title=" + txtTitle.Value.ToString());
-                //rfqmessage.InnerText += urlGetId1;
-                int res1 = wHelper.GetExecuteNonQueryResFromWebApi(urlGetId1);
-                GetSkills();
-            }
-            catch (Exception ex)
-            {
-                CommonLogger.Info(ex.ToString());
-
-            }
-        }
-        */
+        }       
 
         // To upload, store and validate file.
         protected void btnUpload_Click(object sender, EventArgs e)
@@ -175,9 +154,9 @@ namespace recruiter_webapp
         {
             try
             {
-                var url = string.Format("api/Skills/Get?srchBy=" + srchBy.Value.ToString() + "&srchVal=" + srchVal.Value.ToString());
+                var url = string.Format("api/Qualifications/Get?srchBy=" + srchBy.Value.ToString() + "&srchVal=" + srchVal.Value.ToString());
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
-                SkillList = dt.AsEnumerable().ToList();
+                QualificationList = dt.AsEnumerable().ToList();
             }
             catch (Exception ex)
             {
