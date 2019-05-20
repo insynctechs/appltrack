@@ -10,7 +10,7 @@
 namespace recruiter_webapp {
     
     
-    public partial class Skill {
+    public partial class Qualification {
         
         /// <summary>
         /// fileUpload control.

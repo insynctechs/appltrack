@@ -4,7 +4,7 @@
 
     <div class="jumbotron">
         <h3>Dashboard</h3>
-        <p class="lead">Dashboard for TalentRecruit.</p>
+        <p class="lead">Dashboard for insyncTalentBox.</p>
         <p><a href="#" class="btn waves-effect waves-light blue lighten-1">Learn more &raquo;</a></p>
     </div>
 

@@ -7,6 +7,8 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace recruiter_webapp.Helpers
 {
@@ -71,7 +73,7 @@ namespace recruiter_webapp.Helpers
 
         public int DeleteRecordFromWebApi(string path)
         {
-            var url = string.Format(path);           
+            var url = string.Format(path);
             HttpResponseMessage response = Utils.Client.DeleteAsync(url).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -81,6 +83,46 @@ namespace recruiter_webapp.Helpers
             }
             return 0;
         }
+
+        // To insert records from webform values using post
+        public int PostExecuteNonQueryResFromWebApi(string path, List<KeyValuePair<string, string>> list)
+        {
+            var url = string.Format(path);
+            var content = new StringContent(JsonConvert.SerializeObject(list), Encoding.UTF8, "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = Utils.Client.PostAsJsonAsync(url, content).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsStringAsync().Result;
+                int ret = JsonConvert.DeserializeObject<int>(res);
+                return ret;
+            }
+            return 0;
+        }
+
+
+        // To insert record from datatable using post method
+        public int PostExecuteNonQueryResFromWebApi(string path, DataTable dt)
+        {
+            var url = string.Format(path);
+            
+            string dtAsJson = JsonConvert.SerializeObject(dt);
+            var content = new StringContent(dtAsJson.ToString(), Encoding.UTF8, "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = Utils.Client.PostAsJsonAsync(url, dt).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsStringAsync().Result;
+                int ret = JsonConvert.DeserializeObject<int>(res);
+                return ret;
+            }
+            return 0;
+        }
+
 
 
         public string ApiUrl

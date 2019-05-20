@@ -1,11 +1,11 @@
-﻿<%@ Page Title="Skill" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Skill.aspx.cs" Inherits="recruiter_webapp.Skill" %>
+﻿<%@ Page Title="Qualification" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Qualification.aspx.cs" Inherits="recruiter_webapp.Qualification" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <h4>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h4>
-    <div id="skillsAddForm">
-        <a href="SkillUpdate.aspx" class="btn waves-effect waves-light blue lighten-1" id="btn-insert">
-                Add New Skill<i class="material-icons right">add</i>
+    <div id="qulaificationAddForm">
+        <a href="QualificationUpdate.aspx" class="btn waves-effect waves-light blue lighten-1" id="btn-insert">
+                Add New Qualification<i class="material-icons right">add</i>
         </a>
         <br /><br /><hr style="color: lightblue"/>
         <asp:FileUpload ID="fileUpload" CssClass="file-field input-field" runat="server"/>
@@ -15,11 +15,11 @@
     </div>
     <br /><br />
     <div class="row">
-        <div id="skillsForm">
+        <div id="qualificationsForm">
             <input type="hidden" name="srchBy" id="srchBy" value="title" runat="server" />
             <div class="input-field col s12 m12 l6">
                 <input id="srchVal" name="srchVal" type="text" class="commenttextbox" runat="server">
-                <label for="srchVal">Search By Skill</label>
+                <label for="srchVal">Search By Qualification</label>
             </div>
             <%--
             <button class="btn waves-effect waves-light blue lighten-1" id="btn-search">
@@ -37,19 +37,19 @@
 
                 <tr class="blue-grey lighten-4 bold">
                     <th class="center">ID</th>
-                    <th class="center">Skill</th>
+                    <th class="center">Qualification</th>
                     <th class="center">Actions</th>
                 </tr>
-                <% foreach (var tr in SkillList)
+                <% foreach (var tr in QualificationList)
                     {
                 %>
                 <tr>
                     <td class="center"><%: tr["id"] %> </td>
                     <td class="center"><%: tr["title"] %> </td>
                     <td class="center">
-                        <a href="<%= WebURL %>SkillUpdate?id=<%:tr["id"] %>">Edit</a>
+                        <a href="<%= WebURL %>QualificationUpdate?id=<%:tr["id"] %>">Edit</a>
                         <div style="display: inline; margin: 0px 5px; color: lightblue">|</div>
-                        <a href="<%= WebURL %>Skill/Delete?id=<%:tr["id"] %>" onclick="setId(<%:tr["id"] %>)">Delete </a>                        
+                        <a href="<%= WebURL %>Qualification/Delete?id=<%:tr["id"] %>" onclick="setId(<%:tr["id"] %>)">Delete </a>                        
                     </td>
                 </tr>
 
@@ -63,33 +63,8 @@
 
     <script>
         $(document).ready(function () {
-            $("#btn-search").click(function () {
-                $.get("http://localhost:55541/Skill/Get", function (data, status) {
-                    alert("ok");
-                alert("Data: " + data + "\nStatus: " + status);
-                });
-            });
-
-            function setId(id) { $("#hdId").val(id); alert(id); }
-
-            $("#btn-insert").click(function () {
-                var jqxhr = $.post('api/Skills/Insert', $('#form1').serialize())
-                    .success(function () {
-                        var loc = jqxhr.getResponseHeader('Location');
-                        var a = $('<a/>', { href: loc, text: loc });
-                        $('#message').html(a);
-                    })
-                    .error(function () {
-                        $('#message').html("Error inserting record.");
-                    });
-                return false;
-            });
 
         });
-
-
-
-
 
     </script>
 
