@@ -141,7 +141,7 @@ namespace recruiter_webapp
                     int fileSize = fileUpload.PostedFile.ContentLength;
                     if (fileSize >= maxFileSize)
                     {
-                        setUploadMsgLabel("Filesize exceeds maximum limit 1MB.", failureColor);
+                        setUploadMsgLabel(Constants.ERR_FILE_SIZE, failureColor);
                     }
                     else
                     {
