@@ -82,6 +82,19 @@ namespace recruiter_webapp.Helpers
             return 0;
         }
 
+        public int PostFormFromWebApi(string path, HttpContent content)
+        {
+            var url = string.Format(path);
+            HttpResponseMessage response = Utils.Client.PostAsync(url, content ).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsStringAsync().Result;
+                int ret = JsonConvert.DeserializeObject<int>(res);
+                return ret;
+            }
+            return 0;
+        }
+
 
         public string ApiUrl
         {

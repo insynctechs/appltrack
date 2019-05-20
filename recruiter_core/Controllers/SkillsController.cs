@@ -37,5 +37,13 @@ namespace recruiter_core.Controllers
             var art = await objSkill.DeleteSkills(id);
             return Ok(art);
         }
+
+        [Route("api/Skills/Post")]
+        [HttpPost]
+        public async Task<IHttpActionResult> PostSkills(int id)
+        {
+            var art = await objSkill.DeleteSkills(id);
+            return Ok(art);
+        }
     }
 }
