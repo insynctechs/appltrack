@@ -452,6 +452,17 @@ namespace recruiter_webapp.Helpers
             }
         }
 
-        
+        public static void setErrorLabel(System.Web.UI.WebControls.Label label, string message)
+        {
+            label.Text = message;
+            label.ForeColor = Constants.failureColor;
+        }
+
+        public static void setSuccessLabel(System.Web.UI.WebControls.Label label, string message)
+        {
+            label.Text = message;
+            label.ForeColor = Constants.successColor;
+        }
+
     }
 }

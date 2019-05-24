@@ -11,7 +11,7 @@ namespace recruiter_webapp.Helpers
     public class DataUtils
     {
         // To perform validations on Excel files (.xls and .xlxs) for all models
-        public string ValidateExcelFile(string filepath, string modelType)
+        public string ValidateExcelFile(string filepath, int userid, Object modelType)
         {
             string validationMsg = "";
 
@@ -49,16 +49,16 @@ namespace recruiter_webapp.Helpers
             //Console.WriteLine(dt.Rows[rowPosition][columnPosition]);
             excelReader.Close();
 
-            switch (modelType)
+            switch (modelType.ToString())
             {
                 case "Skill":
-                    validationMsg = validateSkillsDataTable(dt);
+                    validationMsg = validateSkillsDataTable(dt, userid);
                     break;
             }
             return validationMsg;
         }
 
-        public string validateSkillsDataTable(DataTable dt)
+        public string validateSkillsDataTable(DataTable dt, int userid)
         {
             string validationMsg = "";
             for (int row = 1, col = 0; row < dt.Rows.Count; row++)
@@ -71,9 +71,9 @@ namespace recruiter_webapp.Helpers
             }
             try
             {
-                var url = string.Format("api/Skills/Insert/Upload");
-                int res = new WebApiHelper().PostExecuteNonQueryResFromWebApi(url, dt);
-                validationMsg = "upto validation successful!";
+                var url = string.Format("api/Skills/Insert/Upload?userid="+userid);
+                string res = new WebApiHelper().PostExecuteNonQueryResFromWebApi(url, dt);
+                validationMsg = res;
             }
             catch (Exception ex)
             {

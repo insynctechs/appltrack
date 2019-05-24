@@ -35,46 +35,26 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
-        /*
-        [Route("api/Skills/Insert")]
-        [HttpGet]
-        public async Task<IHttpActionResult> InsertSkill(string title)
-        {
-            var cat = await objSkill.InsertSkill(title);
-            return Ok(cat);
-        }
-        */
-
         [Route("api/Skills/Insert")]
         [HttpPost]
-        public async Task<IHttpActionResult> InsertSkill([FromBody] Object jsonString)
+        public async Task<IHttpActionResult> InsertSkill([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("D:\\SkillsController_InsertSkill.txt", jsonString.ToString());
-            var cat = await objSkill.InsertSkill(jsonString.ToString());
+            Dictionary<string, string> skill = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objSkill.InsertSkill(skill);
             return Ok(cat);
         }
        
-        [Route("api/Skills/Insert/Upload")]
+        [Route("api/Skills/Insert/Upload/{userid}")]
         [HttpPost]
-        public async Task<IHttpActionResult> InsertSkills([FromBody] JArray jsonString)
+        public async Task<IHttpActionResult> InsertSkills(int userid, [FromBody] JArray dataTableAsJson)
         {
-            //string httpContent = Request.Content.ReadAsStringAsync().Result;
-            File.WriteAllText("D:\\SkillsController_InsertSkills.txt", jsonString.ToString());
-            DataTable dt = JsonConvert.DeserializeObject<DataTable>(jsonString.ToString());
-            var cat = await objSkill.InsertSkills(dt);
+            File.WriteAllText("D:\\SkillsController_excelup.txt", "called" + " ; userid=" + userid);
+            DataTable dt = JsonConvert.DeserializeObject<DataTable>(dataTableAsJson.ToString());
+            var cat = await objSkill.InsertSkills(dt, userid);
+            File.WriteAllText("D:\\SkillsController_ret.txt", cat.ToString()+" ; userid="+userid);
             return Ok(cat);
         }
 
-
-        /*
-        [Route("api/Skills/Insert")]
-        [HttpPost]
-        public async Task<IHttpActionResult> InsertSkill(string title)
-        {
-            var cat = await objSkill.InsertSkill(title);
-            return Ok(cat);
-        }
-        */
 
         [Route("api/Skills/Delete")]
         [HttpDelete]
@@ -84,24 +64,25 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
-
-        /*
-        [Route("api/Skills/Edit/{id:int}")]
+        [Route("api/Skills/Edit/")]
         [HttpPost]
-        public async Task<IHttpActionResult> EditSkills([FromBody] JObject jData, int id)
+        public async Task<IHttpActionResult> EditSkill([FromBody] JObject dictionaryAsJson)
         {
-            Skill skill = JsonConvert.DeserializeObject<Skill>(jData.ToString());
-            var art = await objSkill.InsertSkill();
-            /*object[] objData = skill.list.ToArray();
-            var res = await rev.InsertCommenter(objData[0].ToString(), objData[1].ToString(), objData[2].ToString(), objData[3].ToString(), objData[4].ToString(), 1);
-            if (res == "success")
-            {
-                if (skill.doaction == "yes")
-                    ReviewActions.SendRegistrationMail(objData[1].ToString(), objData[2].ToString(), objData[3].ToString());
-
-            }
+            File.WriteAllText("D:\\Skillcontroller_edit.txt", "action called");
+            Dictionary<string, string> skill = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objSkill.EditSkill(skill);
+            File.WriteAllText("D:\\Skilledit_ret.txt", cat.ToString());
+            return Ok(cat);
         }
-        */
+
+        // For Skills/Get/Duplicates
+        [Route("api/Skills/Get/Duplicates/{userid}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSkillsDuplicates(int userid)
+        {
+            var art = await objSkill.GetSkillsDuplicates(userid);
+            return Ok(art);
+        }
 
     }
 }

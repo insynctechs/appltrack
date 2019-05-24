@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Text;
 using System.Net.Http.Headers;
+using System.IO;
 
 namespace recruiter_webapp.Helpers
 {
@@ -84,14 +85,14 @@ namespace recruiter_webapp.Helpers
             return 0;
         }
 
-        // To insert records from webform values using post
-        public int PostExecuteNonQueryResFromWebApi(string path, List<KeyValuePair<string, string>> list)
+        // To insert / update a record from webform using url, dictionary through post method
+        public int PostExecuteNonQueryResFromWebApi(string path, Dictionary<string, string> dict)
         {
             var url = string.Format(path);
-            var content = new StringContent(JsonConvert.SerializeObject(list), Encoding.UTF8, "application/json");
+            string dictAsJson = JsonConvert.SerializeObject(dict);
+            var content = new StringContent(dictAsJson.ToString(), Encoding.UTF8, "application/json");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            HttpResponseMessage response = Utils.Client.PostAsJsonAsync(url, content).Result;
+            HttpResponseMessage response = Utils.Client.PostAsync(url, content).Result;
 
             if (response.IsSuccessStatusCode)
             {
@@ -103,11 +104,29 @@ namespace recruiter_webapp.Helpers
         }
 
 
-        // To insert record from datatable using post method
-        public int PostExecuteNonQueryResFromWebApi(string path, DataTable dt)
+        // To insert record from datatable using url, datatable through post method
+        public string PostExecuteNonQueryResFromWebApi(string path, DataTable dt)
         {
-            var url = string.Format(path);
-            
+            var url = string.Format(path);           
+            string dtAsJson = JsonConvert.SerializeObject(dt);
+            var content = new StringContent(dtAsJson.ToString(), Encoding.UTF8, "application/json");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = Utils.Client.PostAsJsonAsync(url, dt).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsStringAsync().Result;
+                string ret = JsonConvert.DeserializeObject<string>(res);
+                return ret;
+            }
+            return "Error executing database operation!";
+        }     
+
+        /*
+         public int PostExecuteNonQueryResFromWebApi(string path, DataTable dt)
+        {
+            var url = string.Format(path);           
             string dtAsJson = JsonConvert.SerializeObject(dt);
             var content = new StringContent(dtAsJson.ToString(), Encoding.UTF8, "application/json");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
@@ -122,7 +141,7 @@ namespace recruiter_webapp.Helpers
             }
             return 0;
         }
-
+         */
 
 
         public string ApiUrl

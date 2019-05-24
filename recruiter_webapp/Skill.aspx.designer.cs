@@ -40,6 +40,15 @@ namespace recruiter_webapp {
         protected global::System.Web.UI.WebControls.Label lblUploadMsg;
         
         /// <summary>
+        /// lblResponseMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblResponseMsg;
+        
+        /// <summary>
         /// srchBy control.
         /// </summary>
         /// <remarks>

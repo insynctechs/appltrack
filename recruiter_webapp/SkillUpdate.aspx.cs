@@ -35,10 +35,12 @@ namespace recruiter_webapp
                 GetSkill(Convert.ToInt32(Request.QueryString["id"]));
                 if (SkillList.Count > 0)
                 {
-                    title.Value = SkillList[0]["title"].ToString();
+                    id.Value = SkillList[0]["id"].ToString();
+                    //title.Value = SkillList[0]["title"].ToString();
                     btnSubmit.Text = "Edit";
                 }
             }
+            lblResponseMsg.Text = "";
         }
 
         private void InitializeVars()
@@ -78,10 +80,18 @@ namespace recruiter_webapp
         {
             if (Request.QueryString["id"] != null)
             {
+                btnSubmit.Text = "Update";
                 try
                 {
-                    var url = string.Format("api/Skills/Edit?id=" + Request.QueryString["id"]);
-                    int res = wHelper.GetExecuteNonQueryResFromWebApi(url);
+                    var url = string.Format("api/Skills/Edit");
+                    var skill = new Dictionary<string, string>();
+                    skill.Add("id", id.Value.ToString());
+                    skill.Add("title", title.Value.ToString());
+                    int res = wHelper.PostExecuteNonQueryResFromWebApi(url, skill);
+                    if (res > 0)
+                        Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
+                    else
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
                 }
                 catch (Exception ex)
                 {
@@ -90,22 +100,24 @@ namespace recruiter_webapp
             }
             else
             {
-                var url = string.Format("api/Skills/Insert");
-                var skills = new List<KeyValuePair<string, string>>();
-                { new KeyValuePair<string, string>("title", title.Value); };
-
-                int res = wHelper.PostExecuteNonQueryResFromWebApi(url, skills);
-                /*
                 try
                 {
-                    var url = string.Format("api/Skills/Insert?title=" + title.Value.ToString());
-                    int res = wHelper.GetExecuteNonQueryResFromWebApi(url);
+                    var url = string.Format("api/Skills/Insert");
+                    var skill = new Dictionary<string, string>();
+                    skill.Add("title", title.Value);
+                    int res = wHelper.PostExecuteNonQueryResFromWebApi(url, skill);
+                    if (res > 0)
+                        Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);
+                    else if (res == -2)
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
+                    else
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_DB_OPERATION);
                 }
                 catch (Exception ex)
                 {
                     CommonLogger.Info(ex.ToString());
                 }
-                */
+              
             }
 
         }
