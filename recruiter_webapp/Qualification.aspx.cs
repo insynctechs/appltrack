@@ -105,7 +105,7 @@ namespace recruiter_webapp
 
         // To upload, store and validate file.
         protected void btnUpload_Click(object sender, EventArgs e)
-        {
+        {/*
             var successColor = System.Drawing.Color.MediumSpringGreen;
             var failureColor = System.Drawing.Color.IndianRed;
             string responseMsg = "";
@@ -140,7 +140,7 @@ namespace recruiter_webapp
             }
             else
                 setUploadMsgLabel("Please select a file.", failureColor);
-
+            */
         }
 
         // To display response messages for file upload.

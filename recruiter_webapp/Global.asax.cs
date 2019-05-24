@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Optimization;
@@ -17,6 +18,7 @@ namespace recruiter_webapp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             log4net.Config.XmlConfigurator.Configure();
+            Directory.CreateDirectory(recruiter_webapp.Helpers.Constants.uploadsDir);
         }
     }
 }
