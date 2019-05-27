@@ -105,14 +105,16 @@ namespace recruiter_webapp.Helpers
 
 
         // To insert record from datatable using url, datatable through post method
-        public string PostExecuteNonQueryResFromWebApi(string path, DataTable dt)
+        public string PostExecuteNonQueryResFromWebApi(string path, int userid, DataTable dt)
         {
             var url = string.Format(path);           
-            string dtAsJson = JsonConvert.SerializeObject(dt);
-            var content = new StringContent(dtAsJson.ToString(), Encoding.UTF8, "application/json");
+            //string dtAsJson = JsonConvert.SerializeObject(dt);
+            JObject jData = new JObject();
+            jData.Add("userid", userid);
+            jData.Add("datatable", JsonConvert.SerializeObject(dt));
+            var content = new StringContent(jData.ToString(), Encoding.UTF8, "application/json");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            HttpResponseMessage response = Utils.Client.PostAsJsonAsync(url, dt).Result;
+            HttpResponseMessage response = Utils.Client.PostAsync(url, content).Result;
 
             if (response.IsSuccessStatusCode)
             {

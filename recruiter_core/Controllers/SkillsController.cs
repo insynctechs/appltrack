@@ -43,15 +43,16 @@ namespace recruiter_core.Controllers
             var cat = await objSkill.InsertSkill(skill);
             return Ok(cat);
         }
-       
-        [Route("api/Skills/Insert/Upload/{userid}")]
+
+        // Action for updating database through excel/csv file upload.
+        // JObject being passed has 2 Jproperties "userid" and "datatable"
+        [Route("api/Skills/Insert/Upload/")]
         [HttpPost]
-        public async Task<IHttpActionResult> InsertSkills(int userid, [FromBody] JArray dataTableAsJson)
-        {
-            File.WriteAllText("D:\\SkillsController_excelup.txt", "called" + " ; userid=" + userid);
-            DataTable dt = JsonConvert.DeserializeObject<DataTable>(dataTableAsJson.ToString());
+        public async Task<IHttpActionResult> InsertSkills([FromBody] JObject jData)
+        {           
+            int userid = Convert.ToInt32(jData.GetValue("userid"));
+            DataTable dt = JsonConvert.DeserializeObject<DataTable>(jData.GetValue("datatable").ToString());
             var cat = await objSkill.InsertSkills(dt, userid);
-            File.WriteAllText("D:\\SkillsController_ret.txt", cat.ToString()+" ; userid="+userid);
             return Ok(cat);
         }
 
@@ -68,10 +69,8 @@ namespace recruiter_core.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> EditSkill([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("D:\\Skillcontroller_edit.txt", "action called");
             Dictionary<string, string> skill = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
             var cat = await objSkill.EditSkill(skill);
-            File.WriteAllText("D:\\Skilledit_ret.txt", cat.ToString());
             return Ok(cat);
         }
 

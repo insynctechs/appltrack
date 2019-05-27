@@ -18,17 +18,17 @@ namespace recruiter_webapp
         #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
-        private string modelType;
-        // Should to be assigned from an external constant.
-        public int maxFileSize { get; set; }
+        public Boolean displayResult = false;
+        private int userid = 1; // For testing purpose
+
         WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> QualificationList;
+        public List<DataRow> QualificationListForDuplicates;
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            modelType = "Qualification";
-            maxFileSize = 1048576;
+            lblResponseMsg.Text = "";
             if (!IsPostBack)
             {
                 ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
@@ -39,51 +39,35 @@ namespace recruiter_webapp
             if (Request.Url.ToString().Contains("Delete"))
                 DeleteQualification();
 
-            if (Request.Url.ToString().Contains("Edit"))
-                EditQualification();
+            /* if (Request.Url.ToString().Contains("Edit"))
+                 EditQualification(); */
 
             GetQualifications();
         }
 
         private void InitializeVars()
         {
-
             QualificationList = new List<DataRow>();
         }
 
         private void DeleteQualification()
         {
-
             try
             {
-                var urlGetId1 = string.Format("api/Qualifications/Delete?id=" + Request.QueryString["id"]);
-                //rfqmessage.InnerText += urlGetId1;
-                wHelper.DeleteRecordFromWebApi(urlGetId1);
+                var url = string.Format("api/Qualifications/Delete?id=" + Request.QueryString["id"]);
+                var ret = wHelper.DeleteRecordFromWebApi(url);
                 GetQualifications();
+                if (ret > 0)
+                {
+                    lblResponseMsg.Text = Constants.SUCCESS_DELETE;
+                    lblResponseMsg.ForeColor = Constants.successColor;
+                }
             }
             catch (Exception ex)
             {
                 CommonLogger.Info(ex.ToString());
 
             }
-        }
-
-        private void EditQualification()
-        {
-
-            try
-            {
-                var urlGetId1 = string.Format("api/Qualifications/Edit?id=" + Request.QueryString["id"]);
-                int res1 = wHelper.GetExecuteNonQueryResFromWebApi(urlGetId1);
-
-            }
-            catch (Exception ex)
-            {
-                CommonLogger.Info(ex.ToString());
-
-            }
-
-
         }
 
         private void GetQualifications()
@@ -92,63 +76,60 @@ namespace recruiter_webapp
             {
                 var url = string.Format("api/Qualifications/Get?srchBy=ALL&srchVal=");
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
-                //if(dt.Rows.Count > 0)
-                //{
                 QualificationList = dt.AsEnumerable().ToList();
-                //}
             }
             catch (Exception ex)
             {
                 CommonLogger.Info(ex.ToString());
             }
-        }       
+        }
 
         // To upload, store and validate file.
         protected void btnUpload_Click(object sender, EventArgs e)
-        {/*
-            var successColor = System.Drawing.Color.MediumSpringGreen;
-            var failureColor = System.Drawing.Color.IndianRed;
+        {
+
             string responseMsg = "";
 
             if (fileUpload.HasFile)
             {
                 string fileExtension = System.IO.Path.GetExtension(fileUpload.FileName);
                 if (fileExtension.ToLower() != ".xls" && fileExtension.ToLower() != ".xlsx" && fileExtension.ToLower() != ".csv")
-                    setUploadMsgLabel("Only .xls, .xlsx, .csv files supported.", failureColor);
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UNSUPPORTED_DATAFILE);
                 else
                 {
                     int fileSize = fileUpload.PostedFile.ContentLength;
-                    if (fileSize >= maxFileSize)
-                    {
-                        setUploadMsgLabel("Filesize exceeds maximum limit 1MB.", failureColor);
-                    }
+                    if (fileSize >= Constants.MAX_UPLOAD_SIZE)
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_FILE_SIZE);
                     else
                     {
-                        string file = Server.MapPath("~/Uploads/" + fileUpload.FileName).ToString();
+                        string file = Constants.uploadsDir + fileUpload.FileName.ToString();
                         fileUpload.SaveAs(file);
-                        responseMsg = new DataUtils().ValidateExcelFile(file, modelType);
+                        responseMsg = new DataUtils().ValidateExcelFile(file, userid, Constants.ModelTypes.Qualification);
                         if (responseMsg != "")
                         {
-                            setUploadMsgLabel(responseMsg, failureColor);
+                            Utils.setErrorLabel(lblResponseMsg, responseMsg);
+                            try
+                            {
+                                var url = string.Format("api/Qualifications/Get/Duplicates?userid=" + userid);
+                                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                                QualificationListForDuplicates = dt.AsEnumerable().ToList();
+                            }
+                            catch (Exception ex)
+                            {
+                                CommonLogger.Info(ex.ToString());
+                            }
+                            //displayResult = true;
                         }
                         else
-                        {
-                            setUploadMsgLabel("blank responseMsg means ok", successColor);
-                        }
+                            Utils.setErrorLabel(lblResponseMsg, Constants.ERR_DB_OPERATION);
                     }
                 }
             }
             else
-                setUploadMsgLabel("Please select a file.", failureColor);
-            */
+                Utils.setErrorLabel(lblResponseMsg, Constants.ERR_NO_FILE);
+
         }
 
-        // To display response messages for file upload.
-        public void setUploadMsgLabel(string msg, System.Drawing.Color color)
-        {
-            lblUploadMsg.Text = msg;
-            lblUploadMsg.ForeColor = color;
-        }
 
         protected void btnSearch_Click(object sender, EventArgs e)
         {

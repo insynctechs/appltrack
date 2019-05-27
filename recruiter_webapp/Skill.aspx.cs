@@ -39,8 +39,8 @@ namespace recruiter_webapp
             if (Request.Url.ToString().Contains("Delete"))
                 DeleteSkill();
 
-            if (Request.Url.ToString().Contains("Edit"))
-                EditSkill();
+           /* if (Request.Url.ToString().Contains("Edit"))
+                EditSkill(); */
 
             GetSkills();
         }
@@ -66,19 +66,6 @@ namespace recruiter_webapp
             {
                 CommonLogger.Info(ex.ToString());
 
-            }
-        }
-
-        private void EditSkill()
-        {
-            try
-            {
-                var urlGetId1 = string.Format("api/Skills/Edit?id=" + Request.QueryString["id"]);
-                int res1 = wHelper.GetExecuteNonQueryResFromWebApi(urlGetId1);
-            }
-            catch (Exception ex)
-            {
-                CommonLogger.Info(ex.ToString());
             }
         }
 
@@ -140,13 +127,6 @@ namespace recruiter_webapp
             else
                 Utils.setErrorLabel(lblResponseMsg, Constants.ERR_NO_FILE);
 
-        }
-
-        // To display response messages for file upload.
-        public void setUploadMsgLabel(string msg, System.Drawing.Color color)
-        {
-            lblUploadMsg.Text = msg;
-            lblUploadMsg.ForeColor = color;
         }
 
         protected void btnSearch_Click(object sender, EventArgs e)

@@ -372,6 +372,7 @@ namespace recruiter_webapp.Helpers
             {
                 //CommonLogger.Info("Failed to send a Mail for Following MailAddress: From :" + strFromAddress + "  ToAddress :");
                 //CommonLogger.Error("Failed to send a Mail fro following reason" + ex.StackTrace);
+                ex.ToString();
                 return false;
             }
         }

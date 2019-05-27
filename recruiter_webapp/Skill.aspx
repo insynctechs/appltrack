@@ -15,7 +15,7 @@
         </a>
         <br />
         <br />
-        <asp:Label ID="lblUploadMsg" runat="server"></asp:Label>
+       
         <asp:Label ID="lblResponseMsg" runat="server"></asp:Label>
     </div>
     <div>
@@ -26,7 +26,7 @@
             <input type="hidden" name="srchBy" id="srchBy" value="title" runat="server" />
             <div class="input-field col s12 m12 l6">
                 <input id="srchVal" name="srchVal" type="text" class="commenttextbox" runat="server">
-                <label for="srchVal">Search By Skill</label>
+                <label for="srchVal">Search By Title</label>
             </div>
             <%--
             <button class="btn waves-effect waves-light blue lighten-1" id="btn-search">
@@ -50,7 +50,7 @@
 
                 <tr class="blue-grey lighten-4 bold">
                     
-                    <th class="center">Skill</th>
+                    <th class="center">Title</th>
                     <th class="center">Actions</th>
                 </tr>
                 <% foreach (var tr in SkillList)
@@ -70,7 +70,7 @@
             </table>
             <% }
             else
-            {%> <p class="center">No matching records found!</p> <%}%>
+            {%> <p class="center">No records found!</p> <%}%>
         </div>
     </div>
     <%
@@ -82,7 +82,7 @@
 
                 <tr class="blue-grey lighten-4 bold">
                     <th class="center">ID</th>
-                    <th class="center">Skill</th>
+                    <th class="center">Title</th>
                     <th class="center"></th>
                 </tr>
                 <% foreach (var tr in SkillListForDuplicates)
@@ -113,8 +113,6 @@
     <% } %>
 
 <script>
-
-
     // Scripts for html anchors to asp button mapping
     function showBrowseDialog() {
         document.getElementById('<%= fileUpload.ClientID %>').click();
@@ -131,7 +129,6 @@
     $(document).ready(function () {           
 
     });
-
 
 </script>
 

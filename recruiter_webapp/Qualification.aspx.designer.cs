@@ -31,13 +31,13 @@ namespace recruiter_webapp {
         protected global::System.Web.UI.WebControls.Button btnUpload;
         
         /// <summary>
-        /// lblUploadMsg control.
+        /// lblResponseMsg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUploadMsg;
+        protected global::System.Web.UI.WebControls.Label lblResponseMsg;
         
         /// <summary>
         /// srchBy control.

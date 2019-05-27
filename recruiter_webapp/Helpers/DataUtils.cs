@@ -71,8 +71,8 @@ namespace recruiter_webapp.Helpers
             }
             try
             {
-                var url = string.Format("api/Skills/Insert/Upload?userid="+userid);
-                string res = new WebApiHelper().PostExecuteNonQueryResFromWebApi(url, dt);
+                var url = string.Format("api/Skills/Insert/Upload");
+                string res = new WebApiHelper().PostExecuteNonQueryResFromWebApi(url, userid, dt);
                 validationMsg = res;
             }
             catch (Exception ex)

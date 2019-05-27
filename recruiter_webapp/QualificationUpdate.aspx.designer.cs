@@ -10,25 +10,7 @@
 namespace recruiter_webapp {
     
     
-    public partial class Skill {
-        
-        /// <summary>
-        /// fileUpload control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload fileUpload;
-        
-        /// <summary>
-        /// btnUpload control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpload;
+    public partial class QualificationUpdate {
         
         /// <summary>
         /// lblResponseMsg control.
@@ -40,30 +22,30 @@ namespace recruiter_webapp {
         protected global::System.Web.UI.WebControls.Label lblResponseMsg;
         
         /// <summary>
-        /// srchBy control.
+        /// id control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputHidden srchBy;
+        protected global::System.Web.UI.HtmlControls.HtmlInputHidden id;
         
         /// <summary>
-        /// srchVal control.
+        /// title control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText srchVal;
+        protected global::System.Web.UI.HtmlControls.HtmlInputText title;
         
         /// <summary>
-        /// btnSearch control.
+        /// btnSubmit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSearch;
+        protected global::System.Web.UI.WebControls.Button btnSubmit;
     }
 }

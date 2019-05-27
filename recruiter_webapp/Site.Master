@@ -64,9 +64,9 @@
                         </li>
                         <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Candidates</span></a>
                         </li>
-                        <li><a class="collapsible-body" href="Skill.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
+                        <li><a class="collapsible-body" href="<%= WebURL %>Skill.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
                         </li>
-                        <li><a class="collapsible-body" href="Qualification.aspx"><i class="material-icons">chevron_right</i><span>Qualifications</span></a>
+                        <li><a class="collapsible-body" href="<%= WebURL %>Qualification.aspx"><i class="material-icons">chevron_right</i><span>Qualifications</span></a>
                         </li>
                         <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Users</span></a>
                         </li>
