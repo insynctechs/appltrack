@@ -63,9 +63,6 @@
 
         // Scripts for html anchors to asp button mapping
         function doSubmit() {
-            if ($("#title").val() != ""){
-                alert($("#title").val());
-            }
         document.getElementById('<%= btnSubmit.ClientID %>').click();
     }
     </script>

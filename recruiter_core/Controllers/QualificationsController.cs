@@ -26,12 +26,15 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
+
         // For Qualifications/Get/
         [Route("api/Qualifications/Get")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetQualifications(string srchBy, string srchVal)
-        {
-            var art = await objQualification.GetQualifications(srchBy, srchVal);
+        public async Task<IHttpActionResult> GetSkills(string srchBy, string srchVal, string PageSize, string CurrentPage)
+        {           
+            if (srchVal == null)
+                srchVal = "%";
+            var art = await objQualification.GetQualifications(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
 
@@ -75,7 +78,7 @@ namespace recruiter_core.Controllers
         }
 
         // For Qualifications/Get/Duplicates
-        [Route("api/Qualifications/Get/Duplicates/{userid}")]
+        [Route("api/Qualifications/Get/Duplicates/")]
         [HttpGet]
         public async Task<IHttpActionResult> GetQualificationsDuplicates(int userid)
         {

@@ -25,13 +25,15 @@ namespace recruiter_core.Controllers
             var art = await objSkill.GetSkill(id);
             return Ok(art);
         }
-
+        
         // For Skills/Get/
         [Route("api/Skills/Get")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetSkills(string srchBy, string srchVal)
+        public async Task<IHttpActionResult> GetSkills(string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
-            var art = await objSkill.GetSkills(srchBy, srchVal);
+            if (srchVal == null)
+                srchVal = "%";
+            var art = await objSkill.GetSkills(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
 
@@ -75,13 +77,12 @@ namespace recruiter_core.Controllers
         }
 
         // For Skills/Get/Duplicates
-        [Route("api/Skills/Get/Duplicates/{userid}")]
+        [Route("api/Skills/Get/Duplicates/")]
         [HttpGet]
         public async Task<IHttpActionResult> GetSkillsDuplicates(int userid)
         {
             var art = await objSkill.GetSkillsDuplicates(userid);
             return Ok(art);
-        }
-
+        }       
     }
 }

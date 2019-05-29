@@ -54,10 +54,14 @@ namespace recruiter_webapp.Helpers
                 case "Skill":
                     validationMsg = validateSkillsDataTable(dt, userid);
                     break;
+                case "Qualification":
+                    validationMsg = validateQualificationsDataTable(dt, userid);
+                    break;
             }
             return validationMsg;
         }
 
+        // To validate rows, columns in uploaded file on Skill Template
         public string validateSkillsDataTable(DataTable dt, int userid)
         {
             string validationMsg = "";
@@ -72,6 +76,31 @@ namespace recruiter_webapp.Helpers
             try
             {
                 var url = string.Format("api/Skills/Insert/Upload");
+                string res = new WebApiHelper().PostExecuteNonQueryResFromWebApi(url, userid, dt);
+                validationMsg = res;
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return validationMsg;
+        }
+
+        // To validate rows, columns in uploaded file on Qualification Template
+        public string validateQualificationsDataTable(DataTable dt, int userid)
+        {
+            string validationMsg = "";
+            for (int row = 1, col = 0; row < dt.Rows.Count; row++)
+            {
+                if (String.IsNullOrEmpty((dt.Rows[row][col]).ToString()))
+                {
+                    validationMsg = "Empty field in Column: " + col + ", Row: " + (row + 1);
+                    return validationMsg;
+                }
+            }
+            try
+            {
+                var url = string.Format("api/Qualifications/Insert/Upload");
                 string res = new WebApiHelper().PostExecuteNonQueryResFromWebApi(url, userid, dt);
                 validationMsg = res;
             }

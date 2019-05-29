@@ -85,7 +85,7 @@ namespace recruiter_webapp.Helpers
             return 0;
         }
 
-        // To insert / update a record from webform using url, dictionary through post method
+        // To insert / update a record from webform using url, dictionary(form field data) through post method
         public int PostExecuteNonQueryResFromWebApi(string path, Dictionary<string, string> dict)
         {
             var url = string.Format(path);
@@ -104,11 +104,10 @@ namespace recruiter_webapp.Helpers
         }
 
 
-        // To insert record from datatable using url, datatable through post method
+        // To insert record from datatable using url, userid and datatable(parsed from file) through post method
         public string PostExecuteNonQueryResFromWebApi(string path, int userid, DataTable dt)
         {
             var url = string.Format(path);           
-            //string dtAsJson = JsonConvert.SerializeObject(dt);
             JObject jData = new JObject();
             jData.Add("userid", userid);
             jData.Add("datatable", JsonConvert.SerializeObject(dt));
@@ -125,7 +124,7 @@ namespace recruiter_webapp.Helpers
             return "Error executing database operation!";
         }     
 
-        /*
+        /* // For sending datatable only
          public int PostExecuteNonQueryResFromWebApi(string path, DataTable dt)
         {
             var url = string.Format(path);           
