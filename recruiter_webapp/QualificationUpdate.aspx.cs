@@ -23,23 +23,23 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            InitializeVars();
             if (!IsPostBack)
             {
                 ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                 WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-            }
-
-            InitializeVars();
-            if (Request.QueryString["id"] != null)
+                if(Request.QueryString["id"] != null)
             {
-                GetQualification(Convert.ToInt32(Request.QueryString["id"]));
-                if (QualificationList.Count > 0)
-                {
-                    id.Value = QualificationList[0]["id"].ToString();
-                    //title.Value = QualificationList[0]["title"].ToString();
-                    btnSubmit.Text = "Edit";
+                    GetQualification(Convert.ToInt32(Request.QueryString["id"]));
+                    if (QualificationList.Count > 0)
+                    {
+                        id.Value = QualificationList[0]["id"].ToString();
+                        title.Value = QualificationList[0]["title"].ToString();
+                        btnSubmit.Text = "Edit";
+                    }
                 }
             }
+
             lblResponseMsg.Text = "";
         }
 

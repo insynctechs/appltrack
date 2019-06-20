@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Qualification" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="QualificationUpdate.aspx.cs" Inherits="recruiter_webapp.QualificationUpdate" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
+    <form id="qualificationForm" runat="server">
     <h4>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h4>
     <% if (string.IsNullOrEmpty(Request.QueryString["id"]))
              { %>
@@ -21,7 +21,7 @@
             <input type="hidden" id="id" class="commenttextbox" runat="server"/>
             <input type="text" id="title" class="commenttextbox" runat="server" />
         </div>
-        <div class="col s2 left">
+        <div class="input-field col s2 left">
             <asp:Button ID="btnSubmit" OnClick="btnSubmit_Click" runat="server" Text="" Style="display:none"/>
             <a class="btn waves-effect waves-light blue lighten-1" id="btn-serach" onclick="doSubmit()">
                 Submit<i class="material-icons right">send</i>
@@ -29,7 +29,7 @@
         </div>
     </div>
         </div>
-
+</form>
     <script>
         $(document).ready(function () {
         $.validator.setDefaults({

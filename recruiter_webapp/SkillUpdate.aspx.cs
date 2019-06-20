@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using recruiter_webapp.Helpers;
+﻿using recruiter_webapp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace recruiter_webapp
@@ -23,23 +20,26 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            InitializeVars();
+
             if (!IsPostBack)
             {
                 ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                 WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-            }
-
-            InitializeVars();
-            if (Request.QueryString["id"] != null)
-            {
-                GetSkill(Convert.ToInt32(Request.QueryString["id"]));
-                if (SkillList.Count > 0)
+                if (Request.QueryString["id"] != null)
                 {
-                    id.Value = SkillList[0]["id"].ToString();
-                    //title.Value = SkillList[0]["title"].ToString();
-                    btnSubmit.Text = "Edit";
+                    GetSkill(Convert.ToInt32(Request.QueryString["id"]));
+                    if (SkillList.Count > 0)
+                    {
+                        id.Value = SkillList[0]["id"].ToString();
+                        title.Value = SkillList[0]["title"].ToString();
+                        btnSubmit.Text = "Edit";
+                    }
                 }
             }
+
+            
+            
             lblResponseMsg.Text = "";
         }
 

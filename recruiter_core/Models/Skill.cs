@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System;
-using System.IO;
+
 
 namespace recruiter_core.Models
 {

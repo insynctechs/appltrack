@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Customers.aspx.cs" Inherits="recruiter_webapp.Customers" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EmployerLocationView.aspx.cs" Inherits="recruiter_webapp.EmployerLocationView" %>
 
 <!DOCTYPE html>
 

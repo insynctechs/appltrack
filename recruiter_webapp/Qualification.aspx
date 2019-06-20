@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Qualification" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Qualification.aspx.cs" Inherits="recruiter_webapp.Qualification" %>
 <%@ Register Namespace="ASPnetControls" Assembly="ASPnetPagerV2_8" TagPrefix="cc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
+    <form runat="server">
     <h4>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h4>
     <div id="qualificationAddForm">
         <a href="<%=WebURL %>QualificationUpdate.aspx" class="btn waves-effect waves-light blue lighten-1" id="btn-insert">
@@ -112,7 +112,7 @@
         </div>
     </div>
     <% } %>
-
+</form>
 <script>
     // Scripts for html anchors to asp button mapping
     function showBrowseDialog() {

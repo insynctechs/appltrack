@@ -13,6 +13,15 @@ namespace recruiter_webapp {
     public partial class QualificationUpdate {
         
         /// <summary>
+        /// qualificationForm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm qualificationForm;
+        
+        /// <summary>
         /// lblResponseMsg control.
         /// </summary>
         /// <remarks>

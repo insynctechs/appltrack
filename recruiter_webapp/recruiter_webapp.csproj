@@ -126,7 +126,20 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Customer.aspx" />
+    <Content Include="CustomerStaffUpdate.aspx" />
+    <Content Include="CustomerUpdate.aspx" />
+    <Content Include="CustomerView.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="Employer.aspx" />
+    <Content Include="EmployerEdit.aspx" />
+    <Content Include="EmployerLocation.aspx" />
+    <Content Include="EmployerLocationAdd.aspx" />
+    <Content Include="EmployerLocationView.aspx" />
+    <Content Include="EmployerStaff.aspx" />
+    <Content Include="EmployerStaffAdd.aspx" />
+    <Content Include="EmployerUpdate.aspx" />
+    <Content Include="EmployerView.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -138,6 +151,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Login.ascx" />
+    <Content Include="WebService.asmx" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Qualification.aspx" />
@@ -149,9 +164,13 @@
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery.toaster.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\materialize_inits.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
     <Content Include="Scripts\WebForms\DetailsView.js" />
     <Content Include="Scripts\WebForms\Focus.js" />
     <Content Include="Scripts\WebForms\GridView.js" />
@@ -177,7 +196,11 @@
     <Content Include="Skill.aspx" />
     <Content Include="SkillUpdate.aspx" />
     <Content Include="Styles\DarkStyle.css" />
+    <Content Include="Styles\form_styles.css" />
     <Content Include="Styles\LightStyle.css" />
+    <Content Include="Styles\toastr.css" />
+    <Content Include="Styles\toastr.min.css" />
+    <Content Include="User.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -202,12 +225,103 @@
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Customer.aspx.cs">
+      <DependentUpon>Customer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Customer.aspx.designer.cs">
+      <DependentUpon>Customer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerStaffUpdate.aspx.cs">
+      <DependentUpon>CustomerStaffUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerStaffUpdate.aspx.designer.cs">
+      <DependentUpon>CustomerStaffUpdate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerUpdate.aspx.cs">
+      <DependentUpon>CustomerUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerUpdate.aspx.designer.cs">
+      <DependentUpon>CustomerUpdate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerView.aspx.cs">
+      <DependentUpon>CustomerView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerView.aspx.designer.cs">
+      <DependentUpon>CustomerView.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Employer.aspx.cs">
+      <DependentUpon>Employer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Employer.aspx.designer.cs">
+      <DependentUpon>Employer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerEdit.aspx.cs">
+      <DependentUpon>EmployerEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerEdit.aspx.designer.cs">
+      <DependentUpon>EmployerEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerLocation.aspx.cs">
+      <DependentUpon>EmployerLocation.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerLocation.aspx.designer.cs">
+      <DependentUpon>EmployerLocation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerLocationAdd.aspx.cs">
+      <DependentUpon>EmployerLocationAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerLocationAdd.aspx.designer.cs">
+      <DependentUpon>EmployerLocationAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerLocationView.aspx.cs">
+      <DependentUpon>EmployerLocationView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerLocationView.aspx.designer.cs">
+      <DependentUpon>EmployerLocationView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerStaff.aspx.cs">
+      <DependentUpon>EmployerStaff.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerStaff.aspx.designer.cs">
+      <DependentUpon>EmployerStaff.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerStaffAdd.aspx.cs">
+      <DependentUpon>EmployerStaffAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerStaffAdd.aspx.designer.cs">
+      <DependentUpon>EmployerStaffAdd.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerUpdate.aspx.cs">
+      <DependentUpon>EmployerUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerUpdate.aspx.designer.cs">
+      <DependentUpon>EmployerUpdate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EmployerView.aspx.cs">
+      <DependentUpon>EmployerView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerView.aspx.designer.cs">
+      <DependentUpon>EmployerView.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -217,6 +331,13 @@
     <Compile Include="Helpers\DataUtils.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\WebApiHelper.cs" />
+    <Compile Include="Login.ascx.cs">
+      <DependentUpon>Login.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.ascx.designer.cs">
+      <DependentUpon>Login.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qualification.aspx.cs">
       <DependentUpon>Qualification.aspx</DependentUpon>
@@ -260,12 +381,23 @@
     <Compile Include="SkillUpdate.aspx.designer.cs">
       <DependentUpon>SkillUpdate.aspx</DependentUpon>
     </Compile>
+    <Compile Include="User.aspx.cs">
+      <DependentUpon>User.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="User.aspx.designer.cs">
+      <DependentUpon>User.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WebService.asmx.cs">
+      <DependentUpon>WebService.asmx</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -275,6 +407,7 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Styles\toastr.scss" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

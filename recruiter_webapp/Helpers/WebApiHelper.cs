@@ -84,6 +84,20 @@ namespace recruiter_webapp.Helpers
             }
             return 0;
         }
+        /*
+        public int UpdateRecordFromWebApi(string path)
+        {
+            var url = string.Format(path);
+            HttpResponseMessage response = Utils.Client.PutAsync(url, ).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var res = response.Content.ReadAsStringAsync().Result;
+                int ret = JsonConvert.DeserializeObject<int>(res);
+                return ret;
+            }
+            return 0;
+        }
+        */
 
         // To insert / update a record from webform using url, dictionary(form field data) through post method
         public int PostExecuteNonQueryResFromWebApi(string path, Dictionary<string, string> dict)

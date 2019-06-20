@@ -4,12 +4,46 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
-
+using System.Data;
+using System.Linq;
+using System.Web.Script.Services;
+using System.Collections.Generic;
 
 namespace recruiter_webapp.Helpers
 {
+
     public class Utils
     {
+        public static int userid = 101; // For testing purpose
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static string FormatCompanyWebsiteLink(string CompanyName)
         {
             if (CompanyName == "" || CompanyName == null)
