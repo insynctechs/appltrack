@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=19.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.19.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
     <Reference Include="ASPnetPagerV2_8">
       <HintPath>dll\ASPnetPagerV2_8.dll</HintPath>
     </Reference>
@@ -120,6 +123,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Candidate.aspx" />
+    <Content Include="CandidateQualification.aspx" />
+    <Content Include="CandidateUpdate.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -127,6 +132,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Customer.aspx" />
+    <Content Include="CustomerStaff.aspx" />
     <Content Include="CustomerStaffUpdate.aspx" />
     <Content Include="CustomerUpdate.aspx" />
     <Content Include="CustomerView.aspx" />
@@ -141,6 +147,7 @@
     <Content Include="EmployerUpdate.aspx" />
     <Content Include="EmployerView.aspx" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\dropify.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -151,16 +158,24 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Interview.aspx" />
+    <Content Include="InterviewUpdate.aspx" />
+    <Content Include="Job.aspx" />
+    <Content Include="JobUpdate.aspx" />
     <Content Include="Login.ascx" />
+    <Content Include="Logout.ascx" />
+    <Content Include="Scripts\dropify.min.js" />
+    <Content Include="Styles\dropify.min.css" />
     <Content Include="WebService.asmx" />
+    <Content Include="fonts\dropify.eot" />
+    <Content Include="fonts\dropify.ttf" />
+    <Content Include="fonts\dropify.woff" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Qualification.aspx" />
     <Content Include="QualificationUpdate.aspx" />
     <Content Include="Scripts\additional-methods.js" />
     <Content Include="Scripts\additional-methods.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
@@ -218,6 +233,20 @@
       <DependentUpon>Candidate.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="CandidateQualification.aspx.cs">
+      <DependentUpon>CandidateQualification.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CandidateQualification.aspx.designer.cs">
+      <DependentUpon>CandidateQualification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CandidateUpdate.aspx.cs">
+      <DependentUpon>CandidateUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CandidateUpdate.aspx.designer.cs">
+      <DependentUpon>CandidateUpdate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -231,6 +260,13 @@
     </Compile>
     <Compile Include="Customer.aspx.designer.cs">
       <DependentUpon>Customer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerStaff.aspx.cs">
+      <DependentUpon>CustomerStaff.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomerStaff.aspx.designer.cs">
+      <DependentUpon>CustomerStaff.aspx</DependentUpon>
     </Compile>
     <Compile Include="CustomerStaffUpdate.aspx.cs">
       <DependentUpon>CustomerStaffUpdate.aspx</DependentUpon>
@@ -331,12 +367,47 @@
     <Compile Include="Helpers\DataUtils.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\WebApiHelper.cs" />
+    <Compile Include="Interview.aspx.cs">
+      <DependentUpon>Interview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Interview.aspx.designer.cs">
+      <DependentUpon>Interview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InterviewUpdate.aspx.cs">
+      <DependentUpon>InterviewUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InterviewUpdate.aspx.designer.cs">
+      <DependentUpon>InterviewUpdate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Job.aspx.cs">
+      <DependentUpon>Job.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Job.aspx.designer.cs">
+      <DependentUpon>Job.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="JobUpdate.aspx.cs">
+      <DependentUpon>JobUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="JobUpdate.aspx.designer.cs">
+      <DependentUpon>JobUpdate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Login.ascx.cs">
       <DependentUpon>Login.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Login.ascx.designer.cs">
       <DependentUpon>Login.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.ascx.cs">
+      <DependentUpon>Logout.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.ascx.designer.cs">
+      <DependentUpon>Logout.ascx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Qualification.aspx.cs">
@@ -402,6 +473,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

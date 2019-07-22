@@ -41,8 +41,7 @@ namespace recruiter_core.Models
         // To insert customer using form data
         public async Task<int> InsertCustomer(Dictionary<string, string> customer)
         {
-            File.WriteAllText("d:\\customer_insert.txt", customer["name"].ToString());
-            SqlParameter[] sqlParam = new SqlParameter[15];
+            SqlParameter[] sqlParam = new SqlParameter[10];
             sqlParam[0] = new SqlParameter("@name", customer["name"]);
             sqlParam[1] = new SqlParameter("@address", customer["address"]);
             sqlParam[2] = new SqlParameter("@city", customer["city"]);
@@ -52,26 +51,30 @@ namespace recruiter_core.Models
             sqlParam[6] = new SqlParameter("@email", customer["email"]);
             sqlParam[7] = new SqlParameter("@phone", customer["phone"]);
             sqlParam[8] = new SqlParameter("@active", customer["active"]);
-            sqlParam[9] = new SqlParameter("@license", customer["license"]);
-            sqlParam[10] = new SqlParameter("@license_expiry", customer["license_expiry"]);
-            sqlParam[11] = new SqlParameter("@license_year", customer["license_year"]);
-            sqlParam[12] = new SqlParameter("@added_date", customer["added_date"]);
-            sqlParam[13] = new SqlParameter("@updated_date", customer["updated_date"]);
-            sqlParam[14] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[14].Direction = ParameterDirection.Output;
+            sqlParam[9] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[9].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCustomers_Add", sqlParam));
-            File.WriteAllText("d:\\customer_insert_ret.txt", sqlret.ToString()+ " : " + sqlParam[14].Value.ToString());
-            return Convert.ToInt32(sqlParam[14].Value);
+            return Convert.ToInt32(sqlParam[9].Value);
         }
 
 
         public async Task<int> EditCustomer(Dictionary<string, string> customer)
         {
-            SqlParameter[] sqlParam = new SqlParameter[2];
+            SqlParameter[] sqlParam = new SqlParameter[11];
             sqlParam[0] = new SqlParameter("@id", customer["id"]);
-            sqlParam[0].SqlDbType = SqlDbType.Int;
-            sqlParam[1] = new SqlParameter("@title", customer["title"]);
-            return await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCustomers_Edit", sqlParam));
+            sqlParam[1] = new SqlParameter("@name", customer["name"]);
+            sqlParam[2] = new SqlParameter("@address", customer["address"]);
+            sqlParam[3] = new SqlParameter("@city", customer["city"]);
+            sqlParam[4] = new SqlParameter("@state", customer["state"]);
+            sqlParam[5] = new SqlParameter("@zip", customer["zip"]);
+            sqlParam[6] = new SqlParameter("@contact", customer["contact"]);
+            sqlParam[7] = new SqlParameter("@email", customer["email"]);
+            sqlParam[8] = new SqlParameter("@phone", customer["phone"]);
+            sqlParam[9] = new SqlParameter("@active", customer["active"]);
+            sqlParam[10] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[10].Direction = ParameterDirection.Output;
+            await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCustomers_Edit", sqlParam));
+            return Convert.ToInt32(sqlParam[10].Value);
         }
 
         public async Task<int> DeleteCustomers(int id)

@@ -38,6 +38,14 @@ namespace recruiter_core.Models
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspQualifications_GetSingle", sqlParam));
         }
 
+        // For AJAX autocomplete based on a search value.
+        public async Task<DataSet> GetQualifications(string srchVal)
+        {
+            SqlParameter[] sqlParam = new SqlParameter[1];
+            sqlParam[0] = new SqlParameter("@srchVal", srchVal);
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspQualifications_Get_StartingWith", sqlParam));
+        }
+
 
         #region "Insert Qualification"
         public async Task<int> InsertQualification(Dictionary<string, string> qualification)

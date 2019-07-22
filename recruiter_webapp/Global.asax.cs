@@ -18,7 +18,7 @@ namespace recruiter_webapp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             log4net.Config.XmlConfigurator.Configure();
-            Directory.CreateDirectory(recruiter_webapp.Helpers.Constants.uploadsDir);
+            //Directory.CreateDirectory(recruiter_webapp.Helpers.Constants.uploadsDir);
         }
     }
 }

@@ -38,6 +38,16 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
+        // To fetch list of skills based on a search value for AJAX autocomplete fields.
+        // Overloaded method for Skills/Get?srchVal=
+        [Route("api/Qualifications/Get/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetQualifications(string srchVal)
+        {
+            var art = await objQualification.GetQualifications(srchVal);
+            return Ok(art);
+        }
+
         [Route("api/Qualifications/Insert")]
         [HttpPost]
         public async Task<IHttpActionResult> InsertQualification([FromBody] JObject dictionaryAsJson)

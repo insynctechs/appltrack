@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.Script.Services;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace recruiter_webapp
@@ -21,25 +19,37 @@ namespace recruiter_webapp
         public List<DataRow> employerList = new List<DataRow>();
         public List<DataRow> employerLocationList = new List<DataRow>();
         public List<DataRow> employerStaffList = new List<DataRow>();
+        public Dictionary<string, string> locations = new Dictionary<string, string>();
+        public Dictionary<string, string> user_types = new Dictionary<string, string>() { { "", "Choose Usertype*" }, { "4", "Admin" }, { "5", "Staff" } };
+        public Dictionary<string, string> genders = new Dictionary<string, string>() { { "", "Choose Gender*" }, { "male", "Male" }, { "female", "Female" }, { "other", "Other" } };
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                if (Convert.ToInt32(Session["user_id"]) < 4)
+                {
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
+
+                    if (Request.QueryString["id"] != null)
+                    {
+                        GetEmployerStaff(Convert.ToInt32(Request.QueryString["id"]));
+                        GetEmployerAndLocations(Convert.ToInt32(employerStaffList[0]["employer_id"]));
+                    }
+                    if (Request.QueryString["employer_id"] != null)
+                    {
+                        GetEmployerAndLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
+                    }
+                }
             }
-            
-            if (Request.QueryString["id"] != null)
+            else
             {
-                GetEmployerStaff(Convert.ToInt32(Request.QueryString["id"]));
-                GetEmployerAndLocations(Convert.ToInt32(employerStaffList[0]["employer_id"]));
-            }
-            if (Request.QueryString["employer_id"] != null)
-            {
-                GetEmployerAndLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
         }
 
@@ -53,6 +63,12 @@ namespace recruiter_webapp
                 url = string.Format("api/EmployerLocations/GetList?id=" + id);
                 dt = wHelper.GetDataTableFromWebApi(url);
                 employerLocationList = dt.AsEnumerable().ToList();
+                locations.Add("", "Choose Location*");
+                foreach(var loc in employerLocationList)
+                {
+                    locations.Add(loc["employer_loc_id"].ToString(), loc["employer_loc_address"].ToString());
+                }
+
 
             }
             catch (Exception ex)
@@ -77,7 +93,7 @@ namespace recruiter_webapp
             }
         }
 
-        [System.Web.Services.WebMethod]
+        [System.Web.Services.WebMethod(EnableSession = true)]
         [ScriptMethod]
         public static int InsertEmployerStaff(string employer_staff_id, string employer_id, string employer_location_id, string name, string gender, string designation, string address, string phone, string email, string active, string notification, string user_type)
         {
@@ -94,10 +110,8 @@ namespace recruiter_webapp
             employer.Add("phone", phone);
             employer.Add("email", email);
             employer.Add("active", active);
-            //employer.Add("logged_in_userid", session["user_id"] != null ? session["user_id"].ToString() : "1");
             employer.Add("logged_in_userid", "1");
-            string ip_address = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-            employer.Add("ip_address", "");
+            employer.Add("ip_address", new Utils().GetIpAddress());
             employer.Add("notification", notification);
             employer.Add("user_type", user_type);
 

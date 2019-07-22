@@ -15,29 +15,39 @@ namespace recruiter_webapp
         #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
-        private int userid = 1; // For testing purpose
         WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> listEmployers;
+        
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblResponseMsg.Text = "";
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-                if (Request.QueryString["employer_id"] != null)
+                if (Convert.ToInt32(Session["user_id"]) < 4)
                 {
-                    employer_id.Value = Request.QueryString["employer_id"];
+                    lblResponseMsg.Text = "";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        if (Request.QueryString["employer_id"] != null)
+                        {
+                            employer_id.Value = Request.QueryString["employer_id"];
+                        }
+                    }
+                    GetEmployerList();
+
+                    if (Request.Url.ToString().Contains("Delete"))
+                        DeleteEmployerStaff();
+
+                    GetEmployerStaffs();
                 }
             }
-            GetEmployerList();
-            
-            if (Request.Url.ToString().Contains("Delete"))
-                DeleteEmployerStaff();
-
-            GetEmployerStaffs();
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         public void pager_Command(object sender, CommandEventArgs e)

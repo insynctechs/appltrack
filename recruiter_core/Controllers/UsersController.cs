@@ -1,6 +1,7 @@
 ﻿using recruiter_core.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -32,9 +33,9 @@ namespace recruiter_core.Controllers
 
         [Route("api/Users/GetDetails/")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetUserDetails(int id)
+        public async Task<IHttpActionResult> GetUserDetails(int id, int user_type)
         {
-            var art = await objUser.GetUserDetails(id);
+            var art = await objUser.GetUserDetails(id, user_type);
             return Ok(art);
         }
     }

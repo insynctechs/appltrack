@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System;
-
+using System.IO;
 
 namespace recruiter_core.Models
 {
@@ -36,6 +36,14 @@ namespace recruiter_core.Models
             SqlParameter[] sqlParam = new SqlParameter[1];
             sqlParam[0] = new SqlParameter("@id", id.ToString());
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspSkills_GetSingle", sqlParam));
+        }
+
+        // For AJAX autocomplete based on a search value.
+        public async Task<DataSet> GetSkills(string srchVal)
+        {
+            SqlParameter[] sqlParam = new SqlParameter[1];
+            sqlParam[0] = new SqlParameter("@srchVal", srchVal);
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspSkills_Get_StartingWith", sqlParam));
         }
 
 

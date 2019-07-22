@@ -2,7 +2,15 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <form id="employer_loc_form" runat="server">
-     <h4>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h4>
+        <div class="card z-depth-1 border-radius-5">
+            <div class="row">
+                <div class="col s12">
+     <h5>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h5>
+                    </div>
+            </div>
+        </div>
+        <div class="row no-padding">
+        <div class="col s12 m12 l6 card blue-grey lighten-4 z-depth-0 border-radius-5 no-margin padding-1">
     <% if (string.IsNullOrEmpty(Request.QueryString["id"]))
             
         { %>
@@ -14,8 +22,9 @@
     <h6>Edit Location <%if (employerList.Count > 0)
                             {%><%:employerList[0]["name"]%><%}%></h6>
     <%}%>
-    <br />
-    <br />
+    </div>
+            </div>
+        <br/>
     <div class="row">
                 <div class="col s6">
                     <input type="hidden" id="employer_id" value="<%if (employerList.Count > 0)
@@ -80,7 +89,30 @@
             if ($('#employer_loc_id').val() != "") {
                 $('btn_employer_loc_submit').html('Update');
             }
+
+            $.validator.setDefaults({
+                ignore: []
+            });
+            // For select input
+            $.validator.addMethod("valueNotEquals", function(value, element, arg){
+            return arg !== value;
+            }, "Value must not equal arg.");
+
+            $.validator.addMethod("regexMatch", function (value, element, regexp) {
+                var regex = new RegExp(regexp);
+                return this.optional(element) || regex.test(value);
+            },
+                "Not a valid input!"
+            );
+            
             $('#<%=employer_loc_form.ClientID%>').validate({
+                onfocusout: false,
+                invalidHandler: function (form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        validator.errorList[0].element.focus();
+                    }
+                },
                 // Specify validation rules
                 rules: {
                     employer_loc_address: "required",
@@ -94,13 +126,11 @@
                     },
                     employer_loc_email: {
                         required: true,
-                        email: true
+                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
                     },
                     employer_loc_phone: {
                         required: true,
-                        digits: true,
-                        minlength: 5,
-                        maxlength: 20,
+                        regexMatch: "^[0-9+()\/-]{5,20}$"
                     },
                 },
                 messages: {
@@ -121,13 +151,11 @@
                     },
                     employer_loc_phone: {
                         required: "Required*",
-                        digits: "Please enter valid phone number",
-                        minlength: "Please enter valid phone number",
-                        maxlength: "Please enter valid phone number",
+                        regexMatch: "Please enter valid phone number",
                     },
                     employer_loc_email: {
                         required: "Required*",
-                        email: "Please enter a valid email address.",
+                        regexMatch: "Please enter a valid email address.",
                     },
                 },
                 errorElement: 'div',

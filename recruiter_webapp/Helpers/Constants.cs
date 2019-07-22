@@ -8,7 +8,8 @@ namespace recruiter_webapp.Helpers
 {
     public class Constants
     {
-        public static string uploadsDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)+"/insyncTalentBox/Uploads/";
+        public static string uploadsDir = "~/Uploads/";
+        //public static string uploadsDir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)+"/insyncTalentBox/Uploads/";
         public const int MAX_UPLOAD_SIZE = 1048576;
 
         // Constants for data validation against model structure (Used in DataUtils.cs for template validation)
@@ -20,7 +21,11 @@ namespace recruiter_webapp.Helpers
         public const String ERR_UNSUPPORTED_DATAFILE = "Only .xls, .xlsx, .csv files supported.";
         public const String ERR_CORRUPTED_FILE = "Uploaded file is corrupted!";
         public const String ERR_RECORD_EXIST = "Record already exist!";
+        public const String ERR_INSERT_NAME_EXIST = "Record with similar name already exist!";
+        public const String ERR_INSERT_EMAIL_EXIST = "Record with similar email already exist!";
         public const String ERR_DB_OPERATION = "Error executing database operation.";
+        public const String ERR_UPDATE_NAME_EXIST = "Updation failed! Record with similar name exists.";
+        public const String ERR_UPDATE_EMAIL_EXIST = "Updation failed! Record with similar email exists.";
         public const String ERR_UPDATE = "Record updation failed!";
         
 

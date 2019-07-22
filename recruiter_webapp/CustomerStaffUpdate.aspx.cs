@@ -18,26 +18,42 @@ namespace recruiter_webapp
 
         WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> customerStaffList = new List<DataRow>();
+        public Dictionary<string, string> user_types = new Dictionary<string, string>() { { "", "Choose Usertype*"}, { "2", "Admin" }, { "3", "Staff"} };
+        public Dictionary<string, string> genders = new Dictionary<string, string>() { { "", "Choose Gender*" }, { "male", "Male" }, { "female", "Female" }, { "other", "Other" } };
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-            }
-
-            if (Request.QueryString["id"] != null)
-            {
-                GetCustomerStaff(Convert.ToInt32(Request.QueryString["id"]));
-                if (customerStaffList.Count > 0)
+                if (Convert.ToInt32(Session["user_id"]) == 1)
                 {
-                    id.Value = customerStaffList[0]["id"].ToString();
-                    btnSubmit.Text = "Edit";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        // To redirect to previous page
+                        if (Request.UrlReferrer.ToString() != null)
+                            Session["previous_url"] = Request.UrlReferrer.ToString();
+                        if (Request.QueryString["id"] != null)
+                        {
+                            GetCustomerStaff(Convert.ToInt32(Request.QueryString["id"]));
+                            if (customerStaffList.Count > 0)
+                            {
+                                btnSubmit.Text = "Edit";
+                            }
+                        }
+                    }
+                    
+
+
+                    lblResponseMsg.Text = "";
                 }
             }
-            lblResponseMsg.Text = "";
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         private void GetCustomerStaff(int id)
@@ -71,22 +87,23 @@ namespace recruiter_webapp
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             var customer = new Dictionary<string, string>();
-            customer.Add("id", id.Value.ToString());
-            customer.Add("user_id", id.Value.ToString());
-            customer.Add("customer_id", id.Value.ToString());
-            customer.Add("name", name.Value.ToString());
-            customer.Add("gender", address.Value.ToString());
-            customer.Add("designation", designation.Value.ToString());
-            customer.Add("address", address.Value.ToString());
-            customer.Add("phone", phone.Value.ToString());
-            customer.Add("email", email.Value.ToString());
-            customer.Add("active", active.Value.ToString());
-            customer.Add("added_date", added_date.Value.ToString());
-            customer.Add("updated_date", updated_date.Value.ToString());
-            customer.Add("logged_in_user_id", logged_in_user_id.Value.ToString());
+            customer.Add("user_id", "0");
+            customer.Add("customer_id", Request.Form["customer_id"].Trim());
+            customer.Add("name", Request.Form["name"].Trim());
+            customer.Add("gender", Request.Form["gender"].Trim());
+            customer.Add("designation", Request.Form["designation"].Trim());
+            customer.Add("address", Request.Form["address"].Trim());
+            customer.Add("phone", Request.Form["phone"].Trim());
+            customer.Add("email", Request.Form["email"].Trim());
+            customer.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
+            customer.Add("logged_in_user_id", Session["user_id"] != null ? Session["user_id"].ToString() : "1");
+            customer.Add("ip_address", new Utils().GetIpAddress());
+            customer.Add("notification", (Request.Form["notitfication"] == "on") ? "1" : "0");
+            customer.Add("user_type", Request.Form["user_type"].Trim());
+
             if (Request.QueryString["id"] != null)
             {
-                btnSubmit.Text = "Update";
+                customer.Add("id", Request.QueryString["id"].Trim());
                 try
                 {
                     var url = string.Format("api/CustomerStaffs/Edit");

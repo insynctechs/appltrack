@@ -28,11 +28,11 @@ namespace recruiter_core.Controllers
         // To fetch multiple customer staffs based on a field type and field value.
         [Route("api/CustomerStaffs/Get")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetCustomers(string srchBy, string srchVal, string PageSize, string CurrentPage)
+        public async Task<IHttpActionResult> GetCustomers(string customer_id, string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
             if (srchVal == null)
                 srchVal = "%";
-            var art = await objCustomerStaff.GetCustomerStaffs(srchBy, srchVal, PageSize, CurrentPage);
+            var art = await objCustomerStaff.GetCustomerStaffs(customer_id, srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
 
@@ -40,7 +40,6 @@ namespace recruiter_core.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> InsertCustomerStaff([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("d:\\customer_contrl_insert.txt", dictionaryAsJson.ToString());
             Dictionary<string, string> customerStaff = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
             var cat = await objCustomerStaff.InsertCustomerStaff(customerStaff);
             return Ok(cat);

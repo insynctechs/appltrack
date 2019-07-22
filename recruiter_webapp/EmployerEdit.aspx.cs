@@ -22,18 +22,26 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                if (Convert.ToInt32(Session["user_id"]) < 4)
+                {
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
+                    if (Request.QueryString["id"] != null)
+                    {
+                        id.Value = Request.QueryString["id"];
+                        GetEmployer(Convert.ToInt32(Request.QueryString["id"]));
+                    }
+                }
             }
-            if (Request.QueryString["id"] != null)
-            {              
-                id.Value = Request.QueryString["id"];
-                GetEmployer(Convert.ToInt32(Request.QueryString["id"]));
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
-            
         }
 
         private void GetEmployer(int id)

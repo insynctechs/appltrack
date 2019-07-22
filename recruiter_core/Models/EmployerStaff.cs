@@ -29,7 +29,7 @@ namespace recruiter_core.Models
             sqlParam[4] = new SqlParameter("@CurrentPage", CurrentPage);
             sqlParam[5] = new SqlParameter("@ItemCount", SqlDbType.Int);
             sqlParam[5].Direction = ParameterDirection.Output;
-            DataSet ds = await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspEmployerStaffs_Get2", sqlParam));
+            DataSet ds = await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspEmployerStaffs_Get", sqlParam));
             // To add an additional table to store the total no. of matching records in db.
             DataTable dt = new DataTable("DB_OUT");
             dt.Columns.Add(new DataColumn("ItemCount", typeof(int)));
@@ -44,7 +44,7 @@ namespace recruiter_core.Models
         {
             
             string password = Utils.GeneratePassword();
-            File.AppendAllText("d:\\EmployerStaffLogins.txt", "Email: " + employerStaff["email"] + "\r\nPassword: " + password + "\r\n\r\n");
+            //File.AppendAllText("d:\\EmployerStaffLogins.txt", "Email: " + employerStaff["email"] + "\r\nPassword: " + password + "\r\n\r\n");
             SqlParameter[] sqlParam = new SqlParameter[16];
             sqlParam[0] = new SqlParameter("@user_id", employerStaff["user_id"]);
             sqlParam[1] = new SqlParameter("@employer_id", employerStaff["employer_id"]);

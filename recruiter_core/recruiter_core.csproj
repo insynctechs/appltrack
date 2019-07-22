@@ -194,6 +194,8 @@
     <Compile Include="Controllers\EmployersController.cs" />
     <Compile Include="Controllers\EmployerStaffsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InterviewsController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\QualificationsController.cs" />
     <Compile Include="Controllers\SkillsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -208,6 +210,8 @@
     <Compile Include="Models\Employer.cs" />
     <Compile Include="Models\EmployerLocation.cs" />
     <Compile Include="Models\EmployerStaff.cs" />
+    <Compile Include="Models\Interview.cs" />
+    <Compile Include="Models\Job.cs" />
     <Compile Include="Models\Qualification.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Skill.cs" />
@@ -268,7 +272,9 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="ViewSwitcher.ascx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

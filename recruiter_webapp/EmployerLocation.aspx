@@ -3,7 +3,13 @@
 <%@ Register Namespace="ASPnetControls" Assembly="ASPnetPagerV2_8" TagPrefix="cc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <form runat="server">
-        <h4>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h4>
+        <div class="card z-depth-1 border-radius-5">
+            <div class="row">
+                <div class="col s12">
+        <h5>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h5>
+                    </div>
+            </div>
+        </div>
         <div id="employerLocsAddForm">
             <%if (Request.QueryString["employer_id"] != null)
                 { %>
@@ -65,7 +71,7 @@
                 <asp:Repeater ID="employerList" runat="server">
                     <HeaderTemplate>
                         <table class="table center">
-                            <tr class="blue-grey lighten-4 bold">
+                            <tr class="card blue-grey z-depth-1 lighten-4 bold">
                                 <th class="center">#</th>
                                 <th class="center">Employer Name</th>
                                 <th class="center">Location</th>
@@ -87,9 +93,9 @@
                                 </div>
                             </td>
                             <td class="center">
-                                <a href="<%= WebURL %>EmployerLocationAdd?id=<%#Eval("employer_loc_id")%>">Edit</a>
-                                <div style="display: inline; margin: 0px 5px; color: lightblue">|</div>
-                                <a href="<%= WebURL %>EmployerStaff?employer_id=<%#Eval("employer_loc_id")%>">Staffs</a>
+                                <a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%= WebURL %>EmployerLocationAdd?id=<%#Eval("employer_loc_id")%>">Edit</a>
+                                
+                                <a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%= WebURL %>EmployerStaff?employer_id=<%#Eval("employer_loc_id")%>">Staffs</a>
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -98,7 +104,7 @@
                     </FooterTemplate>
                 </asp:Repeater>
 
-                <div class="blue-grey lighten-4 bold">
+                <div class="card blue-grey lighten-4 bold">
                     <cc:PagerV2_8 ID="pager1" runat="server"
                         OnCommand="pager_Command"
                         GenerateGoToSection="true" NormalModePageCount="3" PageSize="3" />

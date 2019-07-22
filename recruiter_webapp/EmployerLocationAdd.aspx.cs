@@ -16,7 +16,6 @@ namespace recruiter_webapp
         #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
-
         public static WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> employerList = new List<DataRow>();
         public List<DataRow> employerLocationList = new List<DataRow>();
@@ -24,21 +23,30 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-            }
-            if(Request.QueryString["employer_id"] != null)
-            {
-                GetEmployer(Convert.ToInt32(Request.QueryString["employer_id"]));
-            }
-            
-            if (Request.QueryString["id"] != null) {
-                GetEmployerLocation(Convert.ToInt32(Request.QueryString["id"]));
-            }
+                if (Convert.ToInt32(Session["user_id"]) < 4)
+                {
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
+                    if (Request.QueryString["employer_id"] != null)
+                    {
+                        GetEmployer(Convert.ToInt32(Request.QueryString["employer_id"]));
+                    }
 
+                    if (Request.QueryString["id"] != null)
+                    {
+                        GetEmployerLocation(Convert.ToInt32(Request.QueryString["id"]));
+                    }
+                }
+            }
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         private void GetEmployer(int id)

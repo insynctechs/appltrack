@@ -365,12 +365,31 @@
                 $("#progressbar li").eq($(".form").index(next_fs)).addClass("active");
                 next($("#btn_next_form2"));
             }
+
+            $.validator.setDefaults({
+                ignore: []
+            });
+
             // For select input
             $.validator.addMethod("valueNotEquals", function(value, element, arg){
             return arg !== value;
             }, "Value must not equal arg.");
 
+            $.validator.addMethod("regexMatch", function (value, element, regexp) {
+                var regex = new RegExp(regexp);
+                return this.optional(element) || regex.test(value);
+            },
+                "Not a valid input!"
+            );
+
             $("#employer_form").validate({
+                onfocusout: false,
+                invalidHandler: function (form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        validator.errorList[0].element.focus();
+                    }
+                },
                 // Specify validation rules
                 rules: {
                     employer_name: "required",
@@ -385,12 +404,11 @@
                     },
                     employer_email: {
                         required: true,
-                        email: true
+                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
                     },
                     employer_phone: {
                         required: true,
-                        minlength: 5,
-                        maxlength: 20,
+                        regexMatch: "^[0-9+()\/-]{5,20}$"
                     },
                 },
                 messages: {
@@ -414,13 +432,11 @@
                     },
                     employer_phone: {
                         required: "Required*",
-                        digits: "Please enter valid phone number",
-                        minlength: "Please enter valid phone number",
-                        maxlength: "Please enter valid phone number",
+                        regexMatch: "Please enter valid phone number",
                     },
                     employer_email: {
                         required: "Required*",
-                        email: "Please enter a valid email address.",
+                        regexMatch: "Please enter a valid email address.",
                     },
                 },
                 errorElement: 'div',
@@ -436,6 +452,13 @@
             });
 
             $("#employer_loc_form").validate({
+                onfocusout: false,
+                invalidHandler: function (form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        validator.errorList[0].element.focus();
+                    }
+                },
                 // Specify validation rules
                 rules: {
                     employer_loc_address: "required",
@@ -449,12 +472,11 @@
                     },
                     employer_loc_email: {
                         required: true,
-                        email: true
+                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
                     },
                     employer_loc_phone: {
                         required: true,
-                        minlength: 5,
-                        maxlength: 20,
+                        regexMatch: "^[0-9+()\/-]{5,20}$"
                     },
                 },
                 messages: {
@@ -475,13 +497,11 @@
                     },
                     employer_loc_phone: {
                         required: "Required*",
-                        digits: "Please enter valid phone number",
-                        minlength: "Please enter valid phone number",
-                        maxlength: "Please enter valid phone number",
+                        regexMatch: "Please enter valid phone number",
                     },
                     employer_loc_email: {
                         required: "Required*",
-                        email: "Please enter a valid email address.",
+                        regexMatch: "Please enter a valid email address.",
                     },
                 },
                 errorElement: 'div',
@@ -497,21 +517,28 @@
             });
 
             $("#employer_admin_form").validate({
+                onfocusout: false,
+                invalidHandler: function (form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        validator.errorList[0].element.focus();
+                    }
+                },
                 // Specify validation rules
                 rules: {
                     employer_admin_name: "required",
                     employer_admin_address: "required",
                     employer_admin_designation: "required",
-                    employer_admin_gender: { valueNotEquals: "default" },
+                    employer_admin_gender: {
+                        required: true
+                    },
                     employer_admin_email: {
                         required: true,
-                        email: true
+                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
                     },
                     employer_admin_phone: {
                         required: true,
-                        digits: true,
-                        minlength: 5,
-                        maxlength: 20,
+                        regexMatch: "^[0-9+()\/-]{5,20}$"
                     },
                 },
                 messages: {
@@ -527,16 +554,16 @@
                     employer_gender_address: {
                         required: "Required*",
                     },
-                    employer_admin_gender: { valueNotEquals: "Please select a gender!" },
+                    employer_admin_gender: {
+                       required: "Please select a Gender."
+                    },
                     employer_admin_phone: {
                         required: "Required*",
-                        digits: "Please enter valid phone number",
-                        minlength: "Please enter valid phone number",
-                        maxlength: "Please enter valid phone number",
+                        regexMatch: "Please enter valid phone number",
                     },
                     employer_admin_email: {
                         required: "Required*",
-                        email: "Please enter a valid email address.",
+                        regexMatch: "Please enter a valid email address.",
                     },
                 },
                 errorElement: 'div',
@@ -590,7 +617,7 @@
                                 next($("#btn_next_form1"));
                             }
                             else {
-                                toastr.info('Record for ' + name + ' already exists!');
+                                toastr.error('Record for ' + name + ' already exists!');
                             }
                         },
                         error: function (error) {
@@ -632,7 +659,7 @@
                                 next($("#btn_next_form2"));
                             }
                             else {
-                                toastr.info('Record already exists!');
+                                toastr.error('Record already exists!');
                             }
                         },
                         error: function (error) {
@@ -674,7 +701,7 @@
                         notification = 0;
                     }
 
-                    var datastring = JSON.stringify({ 'employer_id': employer_id, 'employer_location_id': employer_location_id, 'name': name, 'gender': gender, 'designation': designation, 'address': address, 'phone': phone, 'email': email, 'active': active, 'notification': notification, 'user_type': '4' });
+                    var datastring = JSON.stringify({ 'employer_id': employer_id, 'employer_location_id': employer_location_id, 'name': name, 'gender': gender, 'designation': designation, 'address': address, 'phone': phone, 'email': email, 'active': active, 'notification': notification, 'user_type': 4 });
                     $.ajax({
                         url: 'EmployerUpdate.aspx/InsertEmployerAdmin',
                         type: 'post',
@@ -687,7 +714,7 @@
                                 next($("#btn_next_form3"));
                             }
                             else {
-                                toastr.info('Record for ' + name + ' already exists!');
+                                toastr.error('Record for ' + name + ' already exists!');
                             }
                         },
                         error: function (error) {

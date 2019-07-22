@@ -5,27 +5,29 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using System;
 using System.IO;
+using recruiter_core.Helpers;
 
 namespace recruiter_core.Models
 {
     public class CustomerStaff
     {
         // New method to implement pagination
-        public async Task<DataSet> GetCustomerStaffs(string srchBy, string srchVal, string PageSize, string CurrentPage)
+        public async Task<DataSet> GetCustomerStaffs(string customer_id, string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
-            SqlParameter[] sqlParam = new SqlParameter[5];
-            sqlParam[0] = new SqlParameter("@SrchBy", srchBy);
-            sqlParam[1] = new SqlParameter("@SrchVal", srchVal);
-            sqlParam[2] = new SqlParameter("@PageSize", PageSize);
-            sqlParam[3] = new SqlParameter("@CurrentPage", CurrentPage);
-            sqlParam[4] = new SqlParameter("@ItemCount", SqlDbType.Int);
-            sqlParam[4].Direction = ParameterDirection.Output;
+            SqlParameter[] sqlParam = new SqlParameter[6];
+            sqlParam[0] = new SqlParameter("@CustomerId", customer_id);
+            sqlParam[1] = new SqlParameter("@SrchBy", srchBy);
+            sqlParam[2] = new SqlParameter("@SrchVal", srchVal);
+            sqlParam[3] = new SqlParameter("@PageSize", PageSize);
+            sqlParam[4] = new SqlParameter("@CurrentPage", CurrentPage);
+            sqlParam[5] = new SqlParameter("@ItemCount", SqlDbType.Int);
+            sqlParam[5].Direction = ParameterDirection.Output;
             DataSet ds = await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspCustomerStaffs_Get", sqlParam));
             // To add an additional table to store the total no. of matching records in db.
             DataTable dt = new DataTable("DB_OUT");
             dt.Columns.Add(new DataColumn("ItemCount", typeof(int)));
             DataRow dr = dt.NewRow();
-            dr["ItemCount"] = sqlParam[4].Value;
+            dr["ItemCount"] = sqlParam[5].Value;
             dt.Rows.Add(dr);
             ds.Tables.Add(dt);
             return ds;
@@ -41,35 +43,47 @@ namespace recruiter_core.Models
         // To insert customer using form data
         public async Task<int> InsertCustomerStaff(Dictionary<string, string> customerStaff)
         {
-            File.WriteAllText("d:\\customerStaff_insert.txt", customerStaff["name"].ToString());
-            SqlParameter[] sqlParam = new SqlParameter[14];
-            sqlParam[0] = new SqlParameter("@id", customerStaff["id"]);
-            sqlParam[1] = new SqlParameter("@user_id", customerStaff["user_id"]);
-            sqlParam[2] = new SqlParameter("@customer_id", customerStaff["customer_id"]);
-            sqlParam[3] = new SqlParameter("@name", customerStaff["name"]);
-            sqlParam[4] = new SqlParameter("@gender", customerStaff["gender"]);
-            sqlParam[5] = new SqlParameter("@designation", customerStaff["designation"]);
-            sqlParam[6] = new SqlParameter("@address", customerStaff["address"]);
-            sqlParam[7] = new SqlParameter("@phone", customerStaff["phone"]);
-            sqlParam[8] = new SqlParameter("@email", customerStaff["email"]);
-            sqlParam[9] = new SqlParameter("@active", customerStaff["active"]);
-            sqlParam[10] = new SqlParameter("@added_date", customerStaff["added_date"]);
-            sqlParam[11] = new SqlParameter("@updated_date", customerStaff["updated_date"]);
-            sqlParam[12] = new SqlParameter("@logged_in_user_id", customerStaff["logged_in_user_id"]);
-            sqlParam[13] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[13].Direction = ParameterDirection.Output;
+            string password = Utils.GeneratePassword();
+            //File.AppendAllText("d:\\CustomerStaffLogins.txt", "Email: " + customerStaff["email"] + "\r\nPassword: " + password + "\r\n\r\n");
+            SqlParameter[] sqlParam = new SqlParameter[15];
+            
+            sqlParam[0] = new SqlParameter("@user_id", customerStaff["user_id"]);
+            sqlParam[1] = new SqlParameter("@customer_id", customerStaff["customer_id"]);
+            sqlParam[2] = new SqlParameter("@name", customerStaff["name"]);
+            sqlParam[3] = new SqlParameter("@gender", customerStaff["gender"]);
+            sqlParam[4] = new SqlParameter("@designation", customerStaff["designation"]);
+            sqlParam[5] = new SqlParameter("@address", customerStaff["address"]);
+            sqlParam[6] = new SqlParameter("@phone", customerStaff["phone"]);
+            sqlParam[7] = new SqlParameter("@email", customerStaff["email"]);
+            sqlParam[8] = new SqlParameter("@active", customerStaff["active"]);
+            sqlParam[9] = new SqlParameter("@logged_in_user_id", customerStaff["logged_in_user_id"]);
+            sqlParam[10] = new SqlParameter("@password", password);
+            sqlParam[11] = new SqlParameter("@ip_address", customerStaff["ip_address"]);
+            sqlParam[12] = new SqlParameter("@notification", customerStaff["notification"]);
+            sqlParam[13] = new SqlParameter("@user_type", customerStaff["user_type"]);
+            sqlParam[14] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[14].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCustomerStaffs_Add", sqlParam));
-            File.WriteAllText("d:\\customerStaff_insert_ret.txt", sqlret.ToString() + " : " + sqlParam[13].Value.ToString());
-            return Convert.ToInt32(sqlParam[13].Value);
+            return Convert.ToInt32(sqlParam[14].Value);
         }
 
 
         public async Task<int> EditCustomerStaff(Dictionary<string, string> customerStaff)
         {
-            SqlParameter[] sqlParam = new SqlParameter[2];
+            SqlParameter[] sqlParam = new SqlParameter[13];
             sqlParam[0] = new SqlParameter("@id", customerStaff["id"]);
-            sqlParam[0].SqlDbType = SqlDbType.Int;
-            sqlParam[1] = new SqlParameter("@title", customerStaff["title"]);
+            sqlParam[1] = new SqlParameter("@user_id", customerStaff["user_id"]);
+            sqlParam[2] = new SqlParameter("@name", customerStaff["name"]);
+            sqlParam[3] = new SqlParameter("@gender", customerStaff["gender"]);
+            sqlParam[4] = new SqlParameter("@designation", customerStaff["designation"]);
+            sqlParam[5] = new SqlParameter("@address", customerStaff["address"]);
+            sqlParam[6] = new SqlParameter("@phone", customerStaff["phone"]);
+            sqlParam[7] = new SqlParameter("@email", customerStaff["email"]);
+            sqlParam[8] = new SqlParameter("@active", customerStaff["active"]);
+            sqlParam[9] = new SqlParameter("@logged_in_user_id", customerStaff["logged_in_user_id"]);
+            sqlParam[10] = new SqlParameter("@ip_address", customerStaff["ip_address"]);
+            sqlParam[11] = new SqlParameter("@notification", customerStaff["notification"]);
+            sqlParam[12] = new SqlParameter("@user_type", customerStaff["user_type"]);
             return await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCustomerStaffs_Edit", sqlParam));
         }
 

@@ -14,9 +14,20 @@ namespace recruiter_webapp.Helpers
 
     public class Utils
     {
-        public static int userid = 101; // For testing purpose
-        
+        //public static int userid = 101; // For testing purpose
 
+        public string GetIpAddress() {
+            string ipAddress = "";
+            if(System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
+            {
+                ipAddress = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].ToString();
+            }
+            else if(System.Web.HttpContext.Current.Request.UserHostAddress.Length.ToString() != null)
+            {
+                ipAddress = System.Web.HttpContext.Current.Request.UserHostAddress;
+            }
+            return ipAddress;
+        }
         
 
 

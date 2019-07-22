@@ -40,7 +40,6 @@ namespace recruiter_core.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> InsertCustomer([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("d:\\customer_contrl_insert.txt", dictionaryAsJson.ToString());
             Dictionary<string, string> customer = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
             var cat = await objCustomer.InsertCustomer(customer);
             return Ok(cat);

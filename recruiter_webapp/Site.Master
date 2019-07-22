@@ -1,5 +1,7 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="recruiter_webapp.SiteMaster" %>
-<%@ Register TagPrefix="UserControl" TagName="Login" src="~/Login.ascx" %>
+
+<%@ Register TagPrefix="UserControl" TagName="Login" Src="~/Login.ascx" %>
+<%@ Register TagPrefix="UserControl2" TagName="Logout" Src="~/Logout.ascx" %>
 
 <!DOCTYPE html>
 
@@ -22,6 +24,7 @@
 
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <script src="/Scripts/jquery-3.3.1.js"></script>
     <script src="/Scripts/materialize.js"></script>
     <script src="/Scripts/jquery.validate.js"></script>
@@ -29,9 +32,14 @@
     <script src="/Scripts/toastr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.js"></script>
 
+
+
 </head>
 <body>
-
+    <%--
+    <%Session["user_id"] = "1";
+        Session["user_type"] = "1";%>
+    --%>
     <!-- HEADER BEGINS -->
     <header class="page-topbar" id="header">
         <div class="navbar navbar-fixed">
@@ -40,10 +48,17 @@
                     <span class="logo-text white-text" style="font-size: 20px; margin: 10px">insyncTalentBox</span>
                     <ul class="right">
                         <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="toggle-fullscreen">Fullscreen</span></a></li>
+
                         <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Notifications</span></a></li>
                         <%if (Session["user_id"] != null)
                             { %>
-                        <li class=""><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Welcome, <%=Session["user_name"] %></a></li>
+                        <%--
+                        <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Welcome, <%=Session["user_name"] %></a>
+                            <ul id = "dropdown" class = "dropdown-content"> --%>
+                        <li class="hide-on-med-and-down">
+                            <a class="btn waves-effect waves-light blue lighten-1 dropdown-button" href="javascript:void(0);" data-target="login-dropdown"><%=Session["user_name"] %>
+                            </a>
+                        </li>
                         <% }
                             else
                             { %>
@@ -52,10 +67,17 @@
 
                         <%} %>
                     </ul>
+                    <ul id="login-dropdown" class="dropdown-content">
+                        <li><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a id="logout" class="waves-effect waves-block waves-light">Logout</a></li>
+
+                    </ul>
                 </div>
             </nav>
-            
-            <UserControl:Login runat="server" id="Login" />
+
+            <UserControl:Login runat="server" ID="Login" />
+            <UserControl2:Logout runat="server" ID="Logout" />
             <!-- LOGIN DIV WAS HERE -->
 
         </div>
@@ -72,8 +94,20 @@
 
                     <li class="active"><a class="collapsible-body active" href="Default.aspx" style="display: block"><i class="material-icons"></i><span>Dashboard</span></a>
                     </li>
+
+                    <%if (Session["user_id"] != null)
+                        {
+                            if (Convert.ToInt32(Session["user_type"].ToString()) == 1)
+                            {  %>
                     <li><a class="collapsible-body" href="<%= WebURL %>Customer.aspx"><i class="material-icons">chevron_right</i><span class="bold-text">Customers</span></a>
                     </li>
+
+                    <%}
+                        } %>
+                    <%if (Session["user_id"] != null)
+                        {
+                            if (Convert.ToInt32(Session["user_type"].ToString()) < 3)
+                            { %>
                     <li><a class="collapsible-header"><i class="material-icons">chevron_right</i><span>Employers</span></a>
                         <div class="collapsible-body">
                             <ul>
@@ -84,6 +118,23 @@
                             </ul>
                         </div>
                     </li>
+
+                    <% }
+                        }
+                        if (Session["user_id"] != null)
+                        {
+                            if (Convert.ToInt32(Session["user_type"].ToString()) < 6)
+                            {
+                    %>
+                    <li><a class="collapsible-header"><i class="material-icons">chevron_right</i><span>Jobs</span></a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a class="center" href="<%= WebURL %>Job.aspx">List</a></li>
+                                <li><a class="center" href="<%= WebURL %>Interview.aspx">Interview</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
                     <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Candidates</span></a>
                     </li>
                     <li><a class="collapsible-body" href="<%= WebURL %>Skill.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
@@ -92,6 +143,8 @@
                     </li>
                     <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Users</span></a>
                     </li>
+                    <%}
+                    } %>
                     <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Profiles</span></a>
                     </li>
                     <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Settings</span></a>
@@ -103,11 +156,13 @@
             <!-- CONTENTS SPECIFIC TO PAGES INCLUDING COMMON FOOTER -->
             <section id="content" class="container">
 
-
-                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                <div Style="min-height: 540px">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" >
                 </asp:ContentPlaceHolder>
+                </div>
+                
 
-                <footer class="footer-copyright" style="margin-top: 20px">
+                <footer class="footer-copyright" style="margin-top: 20px; margin-bottom: 10px">
                     <a class="" href="#">Terms of Use</a> | <a class="" href="#">Privacy Policy</a>
                     <br>
                     © insyncTalentBox. All rights reserved. | Developed by <a href="http://www.insynctechs.com" target="_blank">Insync Tech Solutions</a>. 
@@ -120,12 +175,14 @@
 </body>
 <script>
     $('.sidenav').sidenav();
-        $('.collapsible').collapsible();
-        toastr.options.positionClass = "toast-bottom-right";
-        $('select').formSelect();
-        $('#login').webuiPopover({ url: '#login-form' }); 
+    $('.collapsible').collapsible();
+    toastr.options.positionClass = "toast-bottom-right";
+    $('select').formSelect();
+    $('.dropdown-trigger').dropdown();
+    $('.dropdown-button').dropdown();
+    $('#login').webuiPopover({ url: '#login-form' });
     $(document).ready(function () {
-               
+
     });
 
 

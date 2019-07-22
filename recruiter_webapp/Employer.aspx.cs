@@ -15,24 +15,34 @@ namespace recruiter_webapp
         #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
-        private int userid = 1; // For testing purpose
         WebApiHelper wHelper = new WebApiHelper();
         public int stage;
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblResponseMsg.Text = "";
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                if (Convert.ToInt32(Session["user_id"]) < 4)
+                {
+                    lblResponseMsg.Text = "";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
+
+                    if (Request.Url.ToString().Contains("Delete"))
+                        DeleteEmployer();
+
+                    GetEmployers();
+                }
+                
             }
-
-            if (Request.Url.ToString().Contains("Delete"))
-                DeleteEmployer();
-
-            GetEmployers();
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         public void pager_Command(object sender, CommandEventArgs e)

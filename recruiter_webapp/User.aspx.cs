@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
-using System.Web.Script.Services;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 namespace recruiter_webapp
@@ -21,15 +18,15 @@ namespace recruiter_webapp
         {
             if(Session["user_id"] != null)
             {
-                GetUserDetails(Convert.ToInt32(Session["user_ref_id"]));
+                GetUserDetails(Convert.ToInt32(Session["user_ref_id"]), Convert.ToInt32(Session["user_type"]));
             }
         }
 
-        public void GetUserDetails(int id)
+        public void GetUserDetails(int id, int user_type)
         {
             try
             {
-                var url = string.Format("api/Users/GetDetails?id=" + id);
+                var url = string.Format("api/Users/GetDetails?id=" + id + "&user_type="+user_type);
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
                 userList = dt.AsEnumerable().ToList();
 

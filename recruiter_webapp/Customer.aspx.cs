@@ -15,23 +15,38 @@ namespace recruiter_webapp
         #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
-        private int userid = 1; // For testing purpose
         WebApiHelper wHelper = new WebApiHelper();
+
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblResponseMsg.Text = "";
-            if (!IsPostBack)
+            
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                if (Convert.ToInt32(Session["user_id"]) == 1)
+                {
+                    lblResponseMsg.Text = "";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        // To redirect to previous page
+                        if (Request.UrlReferrer.ToString() != null)
+                            Session["previous_url"] = Request.UrlReferrer.ToString();
+
+                    }
+
+                    if (Request.Url.ToString().Contains("Delete"))
+                        DeleteCustomer();
+
+                    GetAllCustomers();
+                }
             }
-
-            if (Request.Url.ToString().Contains("Delete"))
-                DeleteCustomer();
-
-            GetAllCustomers();
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
 
@@ -80,52 +95,7 @@ namespace recruiter_webapp
                 CommonLogger.Info(ex.ToString());
             }
         }
-        /*
-        // To upload, store and validate file.
-        protected void btnUpload_Click(object sender, EventArgs e)
-        {
-            string responseMsg;
-
-            if (fileUpload.HasFile)
-            {
-                string fileExtension = System.IO.Path.GetExtension(fileUpload.FileName);
-                if (fileExtension.ToLower() != ".xls" && fileExtension.ToLower() != ".xlsx" && fileExtension.ToLower() != ".csv")
-                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UNSUPPORTED_DATAFILE);
-                else
-                {
-                    int fileSize = fileUpload.PostedFile.ContentLength;
-                    if (fileSize >= Constants.MAX_UPLOAD_SIZE)
-                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_FILE_SIZE);
-                    else
-                    {
-                        string file = Constants.uploadsDir + fileUpload.FileName.ToString();
-                        fileUpload.SaveAs(file);
-                        responseMsg = new DataUtils().ValidateExcelFile(file, userid, Constants.ModelTypes.Skill);
-                        if (responseMsg != "")
-                        {
-                            Utils.setErrorLabel(lblResponseMsg, responseMsg + " Records Inserted.");
-                            try
-                            {
-                                var url = string.Format("api/Skills/Get/Duplicates?userid=" + userid);
-                                DataTable dt = wHelper.GetDataTableFromWebApi(url);
-                                SkillListForDuplicates = dt.AsEnumerable().ToList();
-                                displayUploadResult = true; // Set for displaying conflicting records
-                            }
-                            catch (Exception ex)
-                            {
-                                CommonLogger.Info(ex.ToString());
-                            }
-                        }
-                        else
-                            Utils.setErrorLabel(lblResponseMsg, Constants.ERR_DB_OPERATION);
-                    }
-                }
-            }
-            else
-                Utils.setErrorLabel(lblResponseMsg, Constants.ERR_NO_FILE);
-
-        }
-        */
+        
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             pager1.CurrentIndex = 1; // Reset to display records starting from first page

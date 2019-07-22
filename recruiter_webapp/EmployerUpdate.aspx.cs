@@ -18,19 +18,28 @@ namespace recruiter_webapp
         private static WebApiHelper wHelper = new WebApiHelper();
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
-        public static System.Web.SessionState.HttpSessionState session = System.Web.HttpContext.Current.Session;
         public List<DataRow> formDataList;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Request.QueryString["employer_id"] != null)
+            if (Session["user_id"] != null)
             {
-                PopulateFormData(Convert.ToInt32(Request.QueryString["employer_id"]));
+                if (Convert.ToInt32(Session["user_id"]) < 4)
+                {
+                    if (Request.QueryString["employer_id"] != null)
+                    {
+                        PopulateFormData(Convert.ToInt32(Request.QueryString["employer_id"]));
+                    }
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
+                }
             }
-            if (!IsPostBack)
+            else
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
         }
 
@@ -117,7 +126,7 @@ namespace recruiter_webapp
         }
 
 
-        [System.Web.Services.WebMethod]
+        [System.Web.Services.WebMethod(EnableSession = true)]
         [ScriptMethod]
         public static int InsertEmployerAdmin(string employer_id, string employer_location_id, string name, string gender, string designation, string address, string phone, string email, string active, string notification, string user_type)
         {
@@ -134,10 +143,9 @@ namespace recruiter_webapp
             employer.Add("phone", phone);
             employer.Add("email", email);
             employer.Add("active", active);
-            //employer.Add("logged_in_userid", session["user_id"] != null ? session["user_id"].ToString() : "1");
+            //employer.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");
             employer.Add("logged_in_userid", "1");
-            string ip_address = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-            employer.Add("ip_address", "");
+            employer.Add("ip_address", new Utils().GetIpAddress());
             employer.Add("notification",notification);
             employer.Add("user_type",user_type);
             try

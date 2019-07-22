@@ -35,11 +35,13 @@ namespace recruiter_core.Models
         }
 
         // To fetch all the details of a user based on id in the corresponding staff table.
-        public async Task<DataSet> GetUserDetails(int id)
+        public async Task<DataSet> GetUserDetails(int id, int user_type)
         {
-            SqlParameter[] sqlParam = new SqlParameter[1];
-            sqlParam[0] = new SqlParameter("@id", id);
-            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspUsers_GetDetails", sqlParam));
+            SqlParameter[] sqlParam = new SqlParameter[2];
+            sqlParam[0] = new SqlParameter("@ref_id", id);
+            sqlParam[1] = new SqlParameter("@user_type", user_type);
+            var ret = await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspUsers_GetDetails", sqlParam));
+            return ret;
         }
     }
 }

@@ -20,27 +20,29 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            InitializeVars();
-
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-                if (Request.QueryString["id"] != null)
+                if (Convert.ToInt32(Session["user_id"]) < 6)
                 {
-                    GetSkill(Convert.ToInt32(Request.QueryString["id"]));
-                    if (SkillList.Count > 0)
-                    {
-                        id.Value = SkillList[0]["id"].ToString();
-                        title.Value = SkillList[0]["title"].ToString();
-                        btnSubmit.Text = "Edit";
-                    }
-                }
-            }
+                    InitializeVars();
 
-            
-            
-            lblResponseMsg.Text = "";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        if (Request.QueryString["id"] != null)
+                        {
+                            GetSkill(Convert.ToInt32(Request.QueryString["id"]));
+                        }                      
+                    }
+                    lblResponseMsg.Text = "";
+                }
+                
+            }          
+            else
+                {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         private void InitializeVars()
@@ -80,13 +82,12 @@ namespace recruiter_webapp
         {
             if (Request.QueryString["id"] != null)
             {
-                btnSubmit.Text = "Update";
                 try
                 {
                     var url = string.Format("api/Skills/Edit");
                     var skill = new Dictionary<string, string>();
-                    skill.Add("id", id.Value.ToString());
-                    skill.Add("title", title.Value.ToString());
+                    skill.Add("id", Request.Form["id"]);
+                    skill.Add("title", Request.Form["title"].Trim());
                     int res = wHelper.PostExecuteNonQueryResFromWebApi(url, skill);
                     if (res > 0)
                         Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
@@ -104,7 +105,7 @@ namespace recruiter_webapp
                 {
                     var url = string.Format("api/Skills/Insert");
                     var skill = new Dictionary<string, string>();
-                    skill.Add("title", title.Value);
+                    skill.Add("title", Request.Form["title"].Trim());
                     int res = wHelper.PostExecuteNonQueryResFromWebApi(url, skill);
                     if (res > 0)
                         Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);

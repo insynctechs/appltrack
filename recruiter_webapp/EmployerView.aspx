@@ -58,12 +58,10 @@
                                     </label>
                                 </div>
                     </div>
-                                     
-                </div>
-                <br />
-                    <div class="row">
-                        <input type="button" id="btn_employer_edit" value="Edit"/>
-                    </div>
+                      <div class="input-field col s12">
+                        <a id="btn_employer_edit" class="btn waves-effect waves-light blue lighten-1 right">Edit</a>
+                    </div>               
+                </div>                  
             </div>
             <div class="input-field col s12 m12 l6">
                 <asp:Button ID="btnAdd" onclick="btnAdd_Click" runat="server" Text="" Style="display: none"/>

@@ -22,11 +22,21 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            GetEmployer(Convert.ToInt32(Request.QueryString["id"]));
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                if (Convert.ToInt32(Session["user_id"]) < 4)
+                {
+                    GetEmployer(Convert.ToInt32(Request.QueryString["id"]));
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
+                }
+            }
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
         }
 
@@ -46,12 +56,12 @@ namespace recruiter_webapp
 
         protected void btnAdd_Click(object sender, EventArgs e)
         {
-            Response.Redirect("EmployerStaffUpdate.aspx?employer_id=" + Request.QueryString["id"]);
+            Response.Redirect("EmployerStaffAdd.aspx?employer_id=" + Request.QueryString["id"]);
         }
 
         protected void btnView_Click(object sender, EventArgs e)
         {
-
+            Response.Redirect("EmployerStaff.aspx?employer_id=" + Request.QueryString["id"]);
         }
     }
 }

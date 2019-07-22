@@ -26,16 +26,26 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            lblResponseMsg.Text = "";
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-            }
+                if (Convert.ToInt32(Session["user_id"]) < 6)
+                {
+                    lblResponseMsg.Text = "";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    }
 
-            if (Request.Url.ToString().Contains("Delete"))
-                DeleteQualification();
-            GetQualifications();
+                    if (Request.Url.ToString().Contains("Delete"))
+                        DeleteQualification();
+                    GetQualifications();
+                }
+            }
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         public void pager_Command(object sender, CommandEventArgs e)

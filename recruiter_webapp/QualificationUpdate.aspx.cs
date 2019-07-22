@@ -23,24 +23,27 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            InitializeVars();
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-                if(Request.QueryString["id"] != null)
-            {
-                    GetQualification(Convert.ToInt32(Request.QueryString["id"]));
-                    if (QualificationList.Count > 0)
+                if (Convert.ToInt32(Session["user_id"]) < 6)
+                {
+                    InitializeVars();
+                    if (!IsPostBack)
                     {
-                        id.Value = QualificationList[0]["id"].ToString();
-                        title.Value = QualificationList[0]["title"].ToString();
-                        btnSubmit.Text = "Edit";
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        if (Request.QueryString["id"] != null)
+                        {
+                            GetQualification(Convert.ToInt32(Request.QueryString["id"]));
+                        }
                     }
+                    lblResponseMsg.Text = "";
                 }
             }
-
-            lblResponseMsg.Text = "";
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         private void InitializeVars()
@@ -80,13 +83,12 @@ namespace recruiter_webapp
         {
             if (Request.QueryString["id"] != null)
             {
-                btnSubmit.Text = "Update";
                 try
                 {
                     var url = string.Format("api/Qualifications/Edit");
                     var qualification = new Dictionary<string, string>();
-                    qualification.Add("id", id.Value.ToString());
-                    qualification.Add("title", title.Value.ToString());
+                    qualification.Add("id", Request.Form["id"]);
+                    qualification.Add("title", Request.Form["title"].Trim());
                     int res = wHelper.PostExecuteNonQueryResFromWebApi(url, qualification);
                     if (res > 0)
                         Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
@@ -104,7 +106,7 @@ namespace recruiter_webapp
                 {
                     var url = string.Format("api/Qualifications/Insert");
                     var qualification = new Dictionary<string, string>();
-                    qualification.Add("title", title.Value);
+                    qualification.Add("title", Request.Form["title"].Trim());
                     int res = wHelper.PostExecuteNonQueryResFromWebApi(url, qualification);
                     if (res > 0)
                         Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);

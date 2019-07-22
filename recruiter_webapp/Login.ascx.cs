@@ -36,7 +36,7 @@ namespace recruiter_webapp
             {
                 var url = string.Format("api/Users/Validate?username=" + username + "&password=" + password + "&ip_address=" + ip_address);
                 ret = wHelper.GetExecuteNonQueryResFromWebApi(url);
-                if(ret > 0)
+                if (ret > 0)
                 {
                     url = string.Format("api/Users/Get?username=" + username + "&ip_address=" + ip_address);
                     DataTable dt = wHelper.GetDataTableFromWebApi(url);

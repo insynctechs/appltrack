@@ -20,23 +20,32 @@ namespace recruiter_webapp
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Session["user_id"] != null)
             {
-                ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
-                WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-            }
-
-            if (Request.QueryString["id"] != null)
-            {
-                GetCustomer(Convert.ToInt32(Request.QueryString["id"]));
-                if (customerList.Count > 0)
+                if (Convert.ToInt32(Session["user_id"]) == 1)
                 {
-                    id.Value = customerList[0]["id"].ToString();
-                    //title.Value = SkillList[0]["title"].ToString();
-                    btnSubmit.Text = "Edit";
+                    if (!IsPostBack)
+                    {
+                        ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
+                        WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        // To redirect to previous page
+                        if (Request.UrlReferrer.ToString() != null)
+                            Session["previous_url"] = Request.UrlReferrer.ToString();
+
+                        if (Request.QueryString["id"] != null)
+                        {
+                            GetCustomer(Convert.ToInt32(Request.QueryString["id"]));
+                        }
+                    }
+                    
+                    lblResponseMsg.Text = "";
+
                 }
             }
-            lblResponseMsg.Text = "";
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         private void GetCustomer(int id)
@@ -69,31 +78,29 @@ namespace recruiter_webapp
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            var customer = new Dictionary<string, string>();
-            customer.Add("id", id.Value.ToString());
-            customer.Add("name", name.Value.ToString());
-            customer.Add("address", address.Value.ToString());
-            customer.Add("city", city.Value.ToString());
-            customer.Add("state", state.Value.ToString());
-            customer.Add("zip", zip.Value.ToString());
-            customer.Add("contact", contact.Value.ToString());
-            customer.Add("email", email.Value.ToString());
-            customer.Add("phone", phone.Value.ToString());
-            customer.Add("active", active.Value.ToString());
-            customer.Add("license", license.Value.ToString());
-            customer.Add("license_expiry", license_expiry.Value.ToString());
-            customer.Add("license_year", license_year.Value.ToString());
-            customer.Add("added_date", added_date.Value.ToString());
-            customer.Add("updated_date", updated_date.Value.ToString());
+            var customer = new Dictionary<string, string>();           
+            customer.Add("name", Request.Form["name"].Trim());
+            customer.Add("address", Request.Form["address"].Trim());
+            customer.Add("city", Request.Form["city"].Trim());
+            customer.Add("state", Request.Form["state"].Trim());
+            customer.Add("zip", Request.Form["zip"].Trim());
+            customer.Add("contact", Request.Form["contact"].Trim());
+            customer.Add("email", Request.Form["email"].Trim());
+            customer.Add("phone", Request.Form["phone"].Trim());
+            customer.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
             if (Request.QueryString["id"] != null)
             {
-                btnSubmit.Text = "Update";
+                customer.Add("id", Request.Form["id"].Trim());
                 try
                 {
                     var url = string.Format("api/Customers/Edit");                   
                     int res = wHelper.PostExecuteNonQueryResFromWebApi(url, customer);
                     if (res > 0)
                         Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
+                    else if (res == -2)
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE_NAME_EXIST);                                     
+                    else if (res == -3)
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE_EMAIL_EXIST);
                     else
                         Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
                 }
@@ -109,9 +116,13 @@ namespace recruiter_webapp
                     var url = string.Format("api/Customers/Insert");
                     int res = wHelper.PostExecuteNonQueryResFromWebApi(url, customer);
                     if (res > 0)
+                    {
                         Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);
+                    }
                     else if (res == -2)
-                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_INSERT_NAME_EXIST);                                   
+                    else if (res == -3)
+                        Utils.setErrorLabel(lblResponseMsg, Constants.ERR_INSERT_EMAIL_EXIST);
                     else
                         Utils.setErrorLabel(lblResponseMsg, Constants.ERR_DB_OPERATION);
                 }
