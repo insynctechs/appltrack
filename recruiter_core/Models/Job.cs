@@ -68,28 +68,30 @@ namespace recruiter_core.Models
 
         
         // Some fields not meant to be changed are disabled
-        public async Task<int> EditJob(Dictionary<string, string> employerStaff)
+        public async Task<int> EditJob(Dictionary<string, string> job)
         {
-            SqlParameter[] sqlParam = new SqlParameter[12];
-            sqlParam[0] = new SqlParameter("@employer_staff_id", employerStaff["id"]);
-            sqlParam[1] = new SqlParameter("@employer_id", employerStaff["employer_id"]);
-            sqlParam[2] = new SqlParameter("@employer_location_id", employerStaff["employer_location_id"]);
-            sqlParam[3] = new SqlParameter("@name", employerStaff["name"]);
-            sqlParam[4] = new SqlParameter("@gender", employerStaff["gender"]);
-            sqlParam[5] = new SqlParameter("@designation", employerStaff["designation"]);
-            sqlParam[6] = new SqlParameter("@address", employerStaff["address"]);
-            sqlParam[7] = new SqlParameter("@phone", employerStaff["phone"]);
-            sqlParam[8] = new SqlParameter("@email", employerStaff["email"]);
-            sqlParam[9] = new SqlParameter("@active", employerStaff["active"]);
-            sqlParam[10] = new SqlParameter("@logged_in_userid", employerStaff["logged_in_userid"]);
-            //sqlParam[11] = new SqlParameter("@ip_address", employerStaff["ip_address"]);
-            //sqlParam[13] = new SqlParameter("@notification", employerStaff["notification"]);
-            //sqlParam[14] = new SqlParameter("@user_type", employerStaff["user_type"]);
-            sqlParam[11] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[11].Direction = ParameterDirection.Output;
-
+            SqlParameter[] sqlParam = new SqlParameter[18];
+            sqlParam[0] = new SqlParameter("@job_id", job["job_id"]);
+            sqlParam[1] = new SqlParameter("@job_code", job["job_code"]);
+            sqlParam[2] = new SqlParameter("@description", job["description"]);
+            sqlParam[3] = new SqlParameter("@employer_id", job["employer_id"]);
+            sqlParam[4] = new SqlParameter("@location_id", job["location_id"]);
+            sqlParam[5] = new SqlParameter("@vacancy_count", job["vacancy_count"]);
+            sqlParam[6] = new SqlParameter("@other_notes", job["other_notes"]);
+            sqlParam[7] = new SqlParameter("@min_exp", job["min_exp"]);
+            sqlParam[8] = new SqlParameter("@max_exp", job["max_exp"]);
+            sqlParam[9] = new SqlParameter("@job_skills", job["job_skills"]);
+            sqlParam[10] = new SqlParameter("@job_qualifications", job["job_qualifications"]);
+            sqlParam[11] = new SqlParameter("@currency", job["currency"]);
+            sqlParam[12] = new SqlParameter("@min_sal", job["min_sal"]);
+            sqlParam[13] = new SqlParameter("@max_sal", job["max_sal"]);
+            sqlParam[14] = new SqlParameter("@active", job["active"]);
+            sqlParam[15] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
+            sqlParam[16] = new SqlParameter("@join_date", job["join_date"]);
+            sqlParam[17] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[17].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspJobs_Edit", sqlParam));
-            return Convert.ToInt32(sqlParam[11].Value);
+            return Convert.ToInt32(sqlParam[17].Value);
         }
         
         

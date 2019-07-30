@@ -70,24 +70,24 @@
 
 
 
-                    <!--
-                    <div class="col s8 input-field">
-                        <input type="text" id="salary1" name="salary" value="<%if (jobList.Count > 0)
-                        {%><%:jobList[0]["salary"]%><%}%>" />
-                        <label class="input-label" for="experience">Salary</label>
-                    </div>
-                    -->
+                    
                     <div class="row">
                         <div class="col s8" id="div-salary">
                             <p class="">Salary</p>
                             <div class="col s10 input-field" id="slider-range"></div>
                             <div class="col s10">
                                 <div class="col s4 input-field">
-                                    <input type="text" id="min_salary" name="min_salary" value="0" />
+                                    <input type="text" id="min_salary" name="min_salary" value="<%if (jobList.Count > 0)
+                                        {%><%:jobList[0]["min_sal"]%><%}
+                                        else
+                                        {%><%:0 %><%} %>" />
                                     <label class="input-label" for="min-salary">Min</label>
                                 </div>
                                 <div class="col s4 right input-field">
-                                    <input type="text" id="max_salary" name="max_salary" value="0" />
+                                    <input type="text" id="max_salary" name="max_salary" value="<%if (jobList.Count > 0)
+                                        {%><%:jobList[0]["max_sal"]%><%}
+                                        else
+                                        {%><%:0 %><%} %>" />
                                     <label class="input-label" for="max-salary">Max</label>
                                 </div>
                             </div>
@@ -98,10 +98,10 @@
                         <div class="col s4 input-field">
                             <select id="currency" name="currency">
                                 <option value="" disabled selected>Choose Currency*</option>
-                                <option value="1">INR</option>
-                                <option value="2">QAR</option>
-                                <option value="3">USD</option>
-                                <option value="4">GBP</option>
+                                <%foreach (var currency in currencyList)
+                                    {%>
+                                <option value="<%=currency["id"] %>"><%=currency["code"] %></option>
+                                <%} %>
                             </select>
                         </div>
                     </div>
@@ -129,14 +129,20 @@
                             <p class="">Experience (In Years)</p>
 
                             <div class="col s2 input-field">
-                                <input type="text" id="min_experience" name="min_experience" value="0" />
+                                <input type="text" id="min_experience" name="min_experience" value="<%if (jobList.Count > 0)
+                                        {%><%:jobList[0]["max_exp"]%><%}
+                                        else
+                                        {%><%:0 %><%} %>" />
                                 <label class="input-label" for="min-experience">Min*</label>
                             </div>
                             <div class="col s8 input-field" id="slider-range2">
                             </div>
                             <div class="col s2 right input-field">
-                                <input type="text" id="max_experience" name="max_experience" value="0" />
-                                <label class="input-label" for="max-erperience">Max*</label>
+                                <input type="text" id="max_experience" name="max_experience" value="<%if (jobList.Count > 0)
+                                        {%><%:jobList[0]["max_exp"]%><%}
+                                        else
+                                        {%><%:0 %><%} %>" />
+                                <label class="input-label" for="max-experience">Max*</label>
                             </div>
                         </div>
                     </div>
@@ -167,7 +173,8 @@
                     <div class="row">
                         <div class="col s6 input-field left">
                             
-                            <input type="text" class="datepicker" id="join_date" name="join_date" />
+                            <input type="text" class="datepicker" id="join_date" name="join_date" value="<%if (jobList.Count > 0)
+                                {%><%:jobList[0]["join_date"]%><%}%>" />
                             <label class="input-label" for="join_date">Date of Joining</label>
                         </div>
 

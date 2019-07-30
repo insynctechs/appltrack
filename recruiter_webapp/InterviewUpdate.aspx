@@ -70,9 +70,16 @@
                         <div class="col s4 input-field left">
                             Date of Interview*
                         <input type="text" class="datepicker" id="date_of_inteview" name="date_of_interview" />
+                            
                         </div>
+                        <%--
+                        <div class="col s4 input-field">
+                            Time of Interview*
+                            <input type="text" class="timepicker" id="time_of_inteview" name="time_of_interview"/>
+                        </div>
+                                --%>
 
-                        <div class="col s6 input-field switch right">
+                        <div class="col s4 input-field switch right">
                             <label>
                                 Active<input type="checkbox" id="active" name="active" class="filled-in blue lighten-3" <%= (jobList.Count > 0) ? (jobList[0]["active"] == null) ? "checked" : (jobList[0]["active"].ToString() == "1") ? "checked" : ""  : "checked" %> />
                                 <span class="lever"></span>
@@ -96,6 +103,7 @@
     <script>
         $(document).ready(function () {
             $('.datepicker').datepicker();
+            $('.timepicker').timepicker();
 
             $('.close').click(function () {
                 var closebtns = $(".qualification").get();
@@ -156,7 +164,10 @@
                     },
                     date_of_interview: {
                         required: true,
-                    }
+                    },
+                    time_of_inteview: {
+                        required: true,
+                    },
                 },
                 messages: {
                     title: {
@@ -173,7 +184,10 @@
                     },
                     date_of_interview: {
                         required: "Required*",
-                    },                
+                    },   
+                    time_of_interview: {
+                        required: "Required*",
+                    },
                 },
                 errorElement: 'div',
                 errorPlacement: function (error, element) {

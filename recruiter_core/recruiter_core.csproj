@@ -190,6 +190,7 @@
     <Compile Include="Controllers\CandidatesController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\CustomerStaffsController.cs" />
+    <Compile Include="Controllers\DocumentsController.cs" />
     <Compile Include="Controllers\EmployerLocationsController.cs" />
     <Compile Include="Controllers\EmployersController.cs" />
     <Compile Include="Controllers\EmployerStaffsController.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Controllers\QualificationsController.cs" />
     <Compile Include="Controllers\SkillsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\UtilsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -207,6 +209,7 @@
     <Compile Include="Models\Candidate.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\CustomerStaff.cs" />
+    <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Employer.cs" />
     <Compile Include="Models\EmployerLocation.cs" />
     <Compile Include="Models\EmployerStaff.cs" />
@@ -216,6 +219,7 @@
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\Skill.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Util.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Mobile.Master.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>

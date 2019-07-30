@@ -10,8 +10,10 @@
             </div>
         </div>
         <div id="employersAddForm">
+            <%-- Require Rework
             <a href="#" class="btn waves-effect waves-light blue lighten-1" id="btn-insert">Button<i class="material-icons right">add</i>
             </a>
+                --%>
             <div style="display: inline; padding: 0px 10px"></div>
             <br />
             <br />

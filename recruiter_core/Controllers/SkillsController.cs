@@ -63,6 +63,7 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> InsertSkills([FromBody] JObject jData)
         {           
             int userid = Convert.ToInt32(jData.GetValue("userid"));
+            File.WriteAllText("d:\\jdata.txt", jData.ToString());
             DataTable dt = JsonConvert.DeserializeObject<DataTable>(jData.GetValue("datatable").ToString());
             var cat = await objSkill.InsertSkills(dt, userid);
             return Ok(cat);

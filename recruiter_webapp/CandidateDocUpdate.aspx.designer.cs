@@ -10,16 +10,16 @@
 namespace recruiter_webapp {
     
     
-    public partial class CandidateUpdate {
+    public partial class CandidateDocUpdate {
         
         /// <summary>
-        /// frm_job control.
+        /// frm_candidate_doc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm frm_job;
+        protected global::System.Web.UI.HtmlControls.HtmlForm frm_candidate_doc;
         
         /// <summary>
         /// lblResponseMsg control.

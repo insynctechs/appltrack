@@ -44,6 +44,7 @@ namespace recruiter_webapp
                     {
                         GetEmployerLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
                     }
+                GetCurrencyList();
             }
             else
             {
@@ -65,6 +66,21 @@ namespace recruiter_webapp
             }
         }
 
+        private void GetCurrencyList()
+        {
+            try
+            {
+                var url = string.Format("api/Utils/GetCurrencyList");
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                currencyList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+        }
+        
+
         private void GetEmployerLocations(int id)
         {
             try
@@ -80,26 +96,33 @@ namespace recruiter_webapp
             }
         }
 
+        public Dictionary<string, string> prepareJob()
+        {
+            Dictionary<string, string> job = new Dictionary<string, string>();
+            job.Add("employer_id", Request.Form["employer_id"].Trim());
+            job.Add("location_id", Request.Form["location_id"].Trim());
+            job.Add("job_code", Request.Form["job_code"].Trim());
+            job.Add("description", Request.Form["description"].Trim());
+            job.Add("vacancy_count", Request.Form["vacancy_count"].Trim());
+            job.Add("currency", Request.Form["currency"].Trim());
+            job.Add("min_sal", Request.Form["min_salary"].Trim());
+            job.Add("max_sal", Request.Form["max_salary"].Trim());
+            job.Add("other_notes", Request.Form["other_notes"].Trim());
+            job.Add("min_exp", Request.Form["min_experience"].Trim());
+            job.Add("max_exp", Request.Form["max_experience"].Trim());
+            job.Add("job_skills", Request.Form["skills"].Trim());
+            job.Add("job_qualifications", Request.Form["qualifications"].Trim());
+            job.Add("join_date", Request.Form["join_date"].Trim());
+            job.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
+            job.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");
+
+            return job;
+        }
+
         public int InsertJob()
         {
             int ret = 0;
-            var job = new Dictionary<string, string>();
-            job.Add("employer_id", Request.Form["employer_id"]);
-            job.Add("location_id", Request.Form["location_id"]);
-            job.Add("job_code", Request.Form["job_code"]);
-            job.Add("description", Request.Form["description"]);
-            job.Add("vacancy_count", Request.Form["vacancy_count"]);
-            job.Add("currency", Request.Form["currency"]);
-            job.Add("min_sal", Request.Form["min_salary"]);
-            job.Add("max_sal", Request.Form["max_salary"]);
-            job.Add("other_notes", Request.Form["other_notes"]);
-            job.Add("min_exp", Request.Form["min_experience"]);
-            job.Add("max_exp", Request.Form["max_experience"]);
-            job.Add("job_skills", Request.Form["skills"]);
-            job.Add("job_qualifications", Request.Form["qualifications"]);
-            job.Add("join_date", Request.Form["join_date"]);
-            job.Add("active", (Request.Form["active"] == "on")? "1":"0");
-            job.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");                      
+            Dictionary<string, string> job = prepareJob();                              
                 try
                 {
                     var url = string.Format("api/Jobs/Insert");
@@ -113,15 +136,38 @@ namespace recruiter_webapp
             return ret;
         }
 
+        public int EditJob(int id)
+        {
+            int ret = 0;
+            Dictionary<string, string> job = prepareJob();
+            job.Add("job_id", id.ToString());
+           
+            try
+            {
+                var url = string.Format("api/Jobs/Edit");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, job);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+                return -2;
+            }
+            return ret;
+        }
+
         protected void btn_submit_Click(object sender, EventArgs e)
         {
             int ret = 0;
-            if (Request.QueryString["id"] != null) { }
-            //EditJob(Convert.ToInt32(Request.QueryString["id"]));
+            if (Request.QueryString["id"] != null) {
+                EditJob(Convert.ToInt32(Request.QueryString["id"]));
+                if (ret > 0)
+                    Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
+                else
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
+            }
             else
             {
                 ret = InsertJob();
-                var ret1 = ret;
                 if (ret > 0)
                     Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);
                 else

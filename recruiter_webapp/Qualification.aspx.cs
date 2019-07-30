@@ -125,7 +125,8 @@ namespace recruiter_webapp
                         Utils.setErrorLabel(lblResponseMsg, Constants.ERR_FILE_SIZE);
                     else
                     {
-                        string file = Constants.uploadsDir + fileUpload.FileName.ToString();
+                        string file = Server.MapPath("~/Uploads/") + fileUpload.FileName.ToString();
+                        //string file = Constants.uploadsDir + fileUpload.FileName.ToString();
                         fileUpload.SaveAs(file);
                         responseMsg = new DataUtils().ValidateExcelFile(file, userid, Constants.ModelTypes.Qualification);
                         if (responseMsg != "")

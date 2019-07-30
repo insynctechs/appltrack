@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Script.Services;
@@ -23,6 +24,10 @@ namespace recruiter_webapp
         public List<DataRow> candidateList = new List<DataRow>();
         public List<DataRow> employerLocationList = new List<DataRow>();
         public List<DataRow> currencyList = new List<DataRow>();
+        public List<DataRow> documentList = new List<DataRow>();
+        public static Dictionary<string, Dictionary<string, string>> dict_qualifications;
+        public static Dictionary<string, Dictionary<string, string>> dict_experiences;
+        public static List<int> uploadedDocuments;
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -43,7 +48,8 @@ namespace recruiter_webapp
                 if (Request.QueryString["employer_id"] != null)
                 {
                     //GetEmployerLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
-                }                
+                }
+                GetDocumentList();
             }
             else
             {
@@ -55,7 +61,7 @@ namespace recruiter_webapp
         {
             try
             {
-                var url = string.Format("api/Jobs/Get?id=" + id);
+                var url = string.Format("api/Candidates/Get?id=" + id);
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
                 candidateList = dt.AsEnumerable().ToList();
             }
@@ -65,22 +71,20 @@ namespace recruiter_webapp
             }
         }
 
-        protected void btn_submit_Click(object sender, EventArgs e)
-        {   /*
-            int ret = 0;
-            if (Request.QueryString["id"] != null) { }
-            //EditJob(Convert.ToInt32(Request.QueryString["id"]));
-            else
+        private void GetDocumentList()
+        {
+            try
             {
-                ret = InsertJob();
-                var ret1 = ret;
-                if (ret > 0)
-                    Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);
-                else
-                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
+                var url = string.Format("api/Documents/GetList");
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                documentList = dt.AsEnumerable().ToList();
             }
-            */
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
         }
+
 
         // For fetching list of skills for ajax autocomplete
         [WebMethod]
@@ -119,5 +123,100 @@ namespace recruiter_webapp
             }
             return strList;
         }
+
+        public int InsertCandidate()
+        {
+            int ret = 0;
+            var candidate = new Dictionary<string, string>();
+            candidate.Add("user_id", "0");
+            candidate.Add("name", Request.Form["name"]);
+            candidate.Add("dob", Request.Form["dob"]);
+            candidate.Add("gender", Request.Form["gender"]);
+            candidate.Add("address", Request.Form["address"]);
+            candidate.Add("email", Request.Form["email"]);
+            candidate.Add("phone", Request.Form["phone"]);
+            candidate.Add("others", Request.Form["others"]);
+          
+            candidate.Add("status", (Request.Form["status"]==null? "0": Request.Form["status"]));
+            candidate.Add("rating", (Request.Form["rating"] == null ? "0" : Request.Form["rating"]));
+            candidate.Add("employer_comments", (Request.Form["employer_comments"] == null ? "" : Request.Form["employer_comments"]));
+            candidate.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
+            candidate.Add("ip_address", new Utils().GetIpAddress());
+            candidate.Add("notification", (Request.Form["notitfication"] == "on") ? "1" : "0");
+            candidate.Add("user_type", "6");
+
+            candidate.Add("skills", Request.Form["skills"]);
+            candidate.Add("qualifications", JsonConvert.SerializeObject(dict_qualifications));
+            candidate.Add("experiences", JsonConvert.SerializeObject(dict_experiences));
+            try
+            {
+                var url = string.Format("api/Candidates/Insert");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, candidate);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+                return -2;
+            }
+            return ret;
+        }
+
+        [System.Web.Services.WebMethod]
+        [ScriptMethod]
+        public static int SetFields(Dictionary<string, Dictionary<string, string>> qualifications, Dictionary<string, Dictionary<string, string>> experiences, List<int> documents)
+        {
+            dict_qualifications = qualifications;
+            dict_experiences = experiences;
+            uploadedDocuments = documents;
+            return 1;
+        }
+
+        protected void btn_submit_Click(object sender, EventArgs e)
+        {
+            int candidate_id = InsertCandidate();
+
+            /*
+            for (var i = 0; i < Request.Files.Count; i++)
+            {
+                File.AppendAllText("d:\\allfiles.txt", i+" -> "+Request.Files[i].FileName);
+}
+
+            candidate_id = 100;
+            Directory.CreateDirectory(Server.MapPath("~/Uploads/" + candidate_id+"/"));
+            HttpPostedFile cv_file = Request.Files["cv"];
+            HttpPostedFile photo_file = Request.Files["photo"];
+            HttpPostedFile new_file = Request.Files["1"];
+
+            if (cv_file != null && cv_file.ContentLength > 0)
+            {
+                string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(cv_file.FileName);
+                cv_file.SaveAs(filePath);
+            }
+            if (photo_file != null && photo_file.ContentLength > 0)
+            {
+                string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(photo_file.FileName);
+                photo_file.SaveAs(filePath);
+            }
+            if (new_file != null && new_file.ContentLength > 0)
+            {
+                string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(new_file.FileName);
+                new_file.SaveAs(filePath);
+            }
+
+            foreach (int i in uploadedDocuments)
+            {
+                HttpPostedFile uploaded_file = Request.Files["doc"+i.ToString()];
+                if (uploaded_file != null && uploaded_file.ContentLength > 0)
+                {
+                    string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(uploaded_file.FileName);
+                    uploaded_file.SaveAs(filePath);
+                    /*lbl_cv_message.Visible = true;
+                    lbl_cv_message.Text = "";
+                }
+            }
+            */
+            
+        }
+
     }
 }

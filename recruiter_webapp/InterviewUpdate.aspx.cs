@@ -80,11 +80,11 @@ namespace recruiter_webapp
         {
             int ret = 0;
             var interview = new Dictionary<string, string>();
-            interview.Add("job_id", Request.Form["job_id"]);
-            interview.Add("title", Request.Form["title"]);
-            interview.Add("description", Request.Form["description"]);
-            interview.Add("round", Request.Form["round"]);
-            interview.Add("venue", Request.Form["venue"]);
+            interview.Add("job_id", Request.Form["job_id"].Trim());
+            interview.Add("title", Request.Form["title"].Trim());
+            interview.Add("description", Request.Form["description"].Trim());
+            interview.Add("round", Request.Form["round"].Trim());
+            interview.Add("venue", Request.Form["venue"].Trim());
             interview.Add("date_of_interview", Request.Form["date_of_interview"]);
             interview.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
             interview.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");

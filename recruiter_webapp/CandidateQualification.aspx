@@ -38,6 +38,12 @@
                 <label class="input-label" for="name">Percentage*</label>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col s8 input-field">
+                <a class="btn btn-save waves-effect waves-light blue lighten-1">Save</a>
+                </div>
+        </div>
     </form>
 </body>
     

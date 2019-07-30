@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Candidate.aspx" />
+    <Content Include="CandidateDocUpdate.aspx" />
     <Content Include="CandidateQualification.aspx" />
     <Content Include="CandidateUpdate.aspx" />
     <Content Include="Contact.aspx" />
@@ -165,7 +166,9 @@
     <Content Include="Login.ascx" />
     <Content Include="Logout.ascx" />
     <Content Include="Scripts\dropify.min.js" />
+    <Content Include="Scripts\jquery.fileupload.js" />
     <Content Include="Styles\dropify.min.css" />
+    <Content Include="WebForm1.aspx" />
     <Content Include="WebService.asmx" />
     <Content Include="fonts\dropify.eot" />
     <Content Include="fonts\dropify.ttf" />
@@ -233,6 +236,13 @@
       <DependentUpon>Candidate.aspx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="CandidateDocUpdate.aspx.cs">
+      <DependentUpon>CandidateDocUpdate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CandidateDocUpdate.aspx.designer.cs">
+      <DependentUpon>CandidateDocUpdate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CandidateQualification.aspx.cs">
       <DependentUpon>CandidateQualification.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -465,6 +475,13 @@
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService.asmx.cs">
       <DependentUpon>WebService.asmx</DependentUpon>
