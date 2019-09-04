@@ -51,22 +51,30 @@ namespace recruiter_core.Models
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspEmployers_GetList"));
         }
 
+        public async Task<DataSet> GetEmployerList(int customer_id)
+        {
+            SqlParameter[] sqlParam = new SqlParameter[1];
+            sqlParam[0] = new SqlParameter("@customer_id", customer_id.ToString());
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspEmployers_GetList2", sqlParam));
+        }
+
         // To insert employer using form data
         public async Task<int> InsertEmployer(Dictionary<string, string> employer)
         {
-            SqlParameter[] sqlParam = new SqlParameter[9];
-            sqlParam[0] = new SqlParameter("@name", employer["name"]);
-            sqlParam[1] = new SqlParameter("@address", employer["address"]);
-            sqlParam[2] = new SqlParameter("@city", employer["city"]);
-            sqlParam[3] = new SqlParameter("@state", employer["state"]);
-            sqlParam[4] = new SqlParameter("@zip", employer["zip"]);
-            sqlParam[5] = new SqlParameter("@email", employer["email"]);
-            sqlParam[6] = new SqlParameter("@phone", employer["phone"]);
-            sqlParam[7] = new SqlParameter("@active", employer["active"]);
-            sqlParam[8] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[8].Direction = ParameterDirection.Output;
+            SqlParameter[] sqlParam = new SqlParameter[10];
+            sqlParam[0] = new SqlParameter("@customer_id", employer["customer_id"]);
+            sqlParam[1] = new SqlParameter("@name", employer["name"]);
+            sqlParam[2] = new SqlParameter("@address", employer["address"]);
+            sqlParam[3] = new SqlParameter("@city", employer["city"]);
+            sqlParam[4] = new SqlParameter("@state", employer["state"]);
+            sqlParam[5] = new SqlParameter("@zip", employer["zip"]);
+            sqlParam[6] = new SqlParameter("@email", employer["email"]);
+            sqlParam[7] = new SqlParameter("@phone", employer["phone"]);
+            sqlParam[8] = new SqlParameter("@active", employer["active"]);
+            sqlParam[9] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[9].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspEmployers_Add", sqlParam));
-            return Convert.ToInt32(sqlParam[8].Value);
+            return Convert.ToInt32(sqlParam[9].Value);
         }
 
         public async Task<int> EditEmployer(Dictionary<string, string> employer)

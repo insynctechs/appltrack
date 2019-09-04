@@ -43,6 +43,15 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
+        // To fetch list of employer ids and names
+        [Route("api/Employers/GetList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetEmployerList(int customer_id)
+        {
+            var art = await objEmployer.GetEmployerList(customer_id);
+            return Ok(art);
+        }
+
         // To fetch multiple employers based on a field type and field value.
         [Route("api/Employers/Get")]
         [HttpGet]

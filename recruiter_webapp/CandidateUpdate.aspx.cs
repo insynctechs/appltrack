@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Script.Services;
 using System.Web.Services;
@@ -22,40 +23,38 @@ namespace recruiter_webapp
         public string WebURL { get; set; }
         public static WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> candidateList = new List<DataRow>();
+        public List<DataRow> candidateSkillsList = new List<DataRow>();
+        public List<DataRow> candidateQualificationsList = new List<DataRow>();
+        public List<DataRow> candidateExperiencesList = new List<DataRow>();
         public List<DataRow> employerLocationList = new List<DataRow>();
         public List<DataRow> currencyList = new List<DataRow>();
         public List<DataRow> documentList = new List<DataRow>();
         public static Dictionary<string, Dictionary<string, string>> dict_qualifications;
         public static Dictionary<string, Dictionary<string, string>> dict_experiences;
         public static List<int> uploadedDocuments;
+        public Dictionary<string, string> genders = new Dictionary<string, string>() { { "", "Choose Gender*" }, { "male", "Male" }, { "female", "Female" }, { "other", "Other" } };
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if ((Session["user_id"] != null) && (Convert.ToInt32(Session["user_id"]) < 4))
-            {
                 if (!IsPostBack)
                 {
                     ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                     WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                    // To redirect to previous page
+                    if (Request.UrlReferrer.ToString() != null)
+                        Session["previous_url"] = Request.UrlReferrer.ToString();
+                    if (Request.QueryString["id"] != null)
+                    {
+                        int id = Convert.ToInt32(Request.QueryString["id"]);
+                        GetCandidate(id);
+                        GetCandidateSkills(id);
+                        GetCandidateQualifications(id);
+                        GetCandidateExperiences(id);
+                    }
                 }
-
-                if (Request.QueryString["id"] != null)
-                {
-                    GetCandidate(Convert.ToInt32(Request.QueryString["id"]));
-                    //GetEmployerLocations(Convert.ToInt32(jobList[0]["employer_id"]));
-                }
-                if (Request.QueryString["employer_id"] != null)
-                {
-                    //GetEmployerLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
-                }
-                GetDocumentList();
-            }
-            else
-            {
-                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
-            }
         }
+
 
         private void GetCandidate(int id)
         {
@@ -68,6 +67,52 @@ namespace recruiter_webapp
             catch (Exception ex)
             {
                 CommonLogger.Info(ex.ToString());
+
+            }
+        }
+
+        private void GetCandidateSkills(int id)
+        {
+            try
+            {
+                var url = string.Format("api/Candidates/GetSkills?id=" + id);
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                candidateSkillsList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
+            }
+        }
+
+        private void GetCandidateQualifications(int id)
+        {
+            try
+            {
+                var url = string.Format("api/Candidates/GetQualifications?id=" + id);
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                candidateQualificationsList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
+            }
+        }
+
+        private void GetCandidateExperiences(int id)
+        {
+            try
+            {
+                var url = string.Format("api/Candidates/GetExperiences?id=" + id);
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                candidateExperiencesList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
             }
         }
 
@@ -124,23 +169,22 @@ namespace recruiter_webapp
             return strList;
         }
 
-        public int InsertCandidate()
+        public Dictionary<string, string> PrepareCandidate()
         {
-            int ret = 0;
             var candidate = new Dictionary<string, string>();
-            candidate.Add("user_id", "0");
-            candidate.Add("name", Request.Form["name"]);
+            candidate.Add("user_id", Request.Form["user_id"]);
+            candidate.Add("name", Request.Form["name"].Trim());
             candidate.Add("dob", Request.Form["dob"]);
             candidate.Add("gender", Request.Form["gender"]);
-            candidate.Add("address", Request.Form["address"]);
-            candidate.Add("email", Request.Form["email"]);
+            candidate.Add("address", Request.Form["address"].Trim());
+            candidate.Add("email", Request.Form["email"].Trim());
             candidate.Add("phone", Request.Form["phone"]);
-            candidate.Add("others", Request.Form["others"]);
-          
-            candidate.Add("status", (Request.Form["status"]==null? "0": Request.Form["status"]));
+            candidate.Add("others", Request.Form["others"].Trim());
+
+            candidate.Add("status", (Request.Form["status"] == null ? "0" : Request.Form["status"]));
             candidate.Add("rating", (Request.Form["rating"] == null ? "0" : Request.Form["rating"]));
             candidate.Add("employer_comments", (Request.Form["employer_comments"] == null ? "" : Request.Form["employer_comments"]));
-            candidate.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
+            candidate.Add("active", (Request.Form["active"] == null ? "1" : (Request.Form["active"] == "on") ? "1" : "0"));
             candidate.Add("ip_address", new Utils().GetIpAddress());
             candidate.Add("notification", (Request.Form["notitfication"] == "on") ? "1" : "0");
             candidate.Add("user_type", "6");
@@ -148,6 +192,14 @@ namespace recruiter_webapp
             candidate.Add("skills", Request.Form["skills"]);
             candidate.Add("qualifications", JsonConvert.SerializeObject(dict_qualifications));
             candidate.Add("experiences", JsonConvert.SerializeObject(dict_experiences));
+            return candidate;
+        }
+
+        public int InsertCandidate()
+        {
+            int ret = 0;
+            Dictionary<string, string> candidate = PrepareCandidate();
+            candidate["password"] = Utils.GeneratePassword();
             try
             {
                 var url = string.Format("api/Candidates/Insert");
@@ -158,8 +210,72 @@ namespace recruiter_webapp
                 CommonLogger.Info(ex.ToString());
                 return -2;
             }
+            if (ret > 0)
+            {
+                File.AppendAllText(Server.MapPath(Constants.uploadsDir) + "Candidate_Logins.txt", candidate["email"] + " : " + candidate["password"] + "\r\n");
+                new DataUtils().SendEmail(candidate["name"], candidate["email"], candidate["password"], Constants.EmailTypes.NewUser);
+            }
             return ret;
         }
+
+        public int EditCandidate()
+        {
+            int ret = 0;
+            Dictionary<string, string> candidate = PrepareCandidate();
+            candidate.Add("id", Request.QueryString["id"]);
+            try
+            {
+                var url = string.Format("api/Candidates/Edit");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, candidate);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+                return -2;
+            }
+            return ret;
+
+          
+        }
+
+        [System.Web.Services.WebMethod]
+        [ScriptMethod]
+        public static int InsertSkill(string title)
+        {
+            int ret = 0;
+            var skill = new Dictionary<string, string>();
+            skill.Add("title", title.Trim());
+            try
+            {
+                var url = string.Format("api/Skills/Insert");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, skill);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return ret;
+        }
+
+        [System.Web.Services.WebMethod]
+        [ScriptMethod]
+        public static int InsertQualification(string title)
+        {
+            int ret = 0;
+            var qualification = new Dictionary<string, string>();
+            qualification.Add("title", title.Trim());
+            try
+            {
+                var url = string.Format("api/Qualifications/Insert");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, qualification);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return ret;
+        }
+
 
         [System.Web.Services.WebMethod]
         [ScriptMethod]
@@ -173,49 +289,27 @@ namespace recruiter_webapp
 
         protected void btn_submit_Click(object sender, EventArgs e)
         {
-            int candidate_id = InsertCandidate();
-
-            /*
-            for (var i = 0; i < Request.Files.Count; i++)
+            int ret = 0;
+            if(Request.QueryString["id"]!=null)
             {
-                File.AppendAllText("d:\\allfiles.txt", i+" -> "+Request.Files[i].FileName);
-}
-
-            candidate_id = 100;
-            Directory.CreateDirectory(Server.MapPath("~/Uploads/" + candidate_id+"/"));
-            HttpPostedFile cv_file = Request.Files["cv"];
-            HttpPostedFile photo_file = Request.Files["photo"];
-            HttpPostedFile new_file = Request.Files["1"];
-
-            if (cv_file != null && cv_file.ContentLength > 0)
-            {
-                string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(cv_file.FileName);
-                cv_file.SaveAs(filePath);
+                ret = EditCandidate();
+                if(ret > 0)
+                    Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
+                else
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
             }
-            if (photo_file != null && photo_file.ContentLength > 0)
+            else
             {
-                string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(photo_file.FileName);
-                photo_file.SaveAs(filePath);
-            }
-            if (new_file != null && new_file.ContentLength > 0)
-            {
-                string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(new_file.FileName);
-                new_file.SaveAs(filePath);
-            }
-
-            foreach (int i in uploadedDocuments)
-            {
-                HttpPostedFile uploaded_file = Request.Files["doc"+i.ToString()];
-                if (uploaded_file != null && uploaded_file.ContentLength > 0)
+                ret = InsertCandidate();
+                if (ret > 0)
                 {
-                    string filePath = Server.MapPath("~/Uploads/") + candidate_id + "/" + Path.GetFileName(uploaded_file.FileName);
-                    uploaded_file.SaveAs(filePath);
-                    /*lbl_cv_message.Visible = true;
-                    lbl_cv_message.Text = "";
+                    Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString() + "CandidateDocUpdate.aspx?id=" + ret);
                 }
-            }
-            */
-            
+                else
+                {
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
+                }
+            }           
         }
 
     }

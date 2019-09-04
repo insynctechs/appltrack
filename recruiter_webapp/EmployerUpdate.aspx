@@ -39,7 +39,7 @@
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_zip" name="employer_zip" />
-                        <label class="input-label" for="employer_zip">Zip</label>
+                        <label class="input-label" for="employer_zip">Zip / P.O.Box</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_email" name="employer_email" />
@@ -399,7 +399,7 @@
                     employer_zip: {
                         required: true,
                         digits: true,
-                        minlength: 5,
+                        minlength: 4,
                         maxlength: 10,
                     },
                     employer_email: {
@@ -426,9 +426,9 @@
                     },
                     employer_zip: {
                         required: "Required*",
-                        digits: "Please enter valid zip",
-                        minlength: "Please enter valid zip",
-                        maxlength: "Please enter valid zip",
+                        digits: "Please enter valid zip / p.o.box",
+                        minlength: "Please enter valid zip / p.o.box",
+                        maxlength: "Please enter valid zip / p.o.box",
                     },
                     employer_phone: {
                         required: "Required*",

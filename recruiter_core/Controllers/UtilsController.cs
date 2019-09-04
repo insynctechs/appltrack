@@ -24,5 +24,41 @@ namespace recruiter_core.Controllers
             var art = await objUtil.GetCurrencyList();
             return Ok(art);
         }
+
+        // To fetch industry list
+        [Route("api/Utils/GetIndustryList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetIndustryList()
+        {
+            var art = await objUtil.GetIndustryList();
+            return Ok(art);
+        }
+
+        // To fetch category list
+        [Route("api/Utils/GetCategoryList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCategoryList()
+        {
+            var art = await objUtil.GetCategoryList();
+            return Ok(art);
+        }
+
+        // To fetch currency list
+        [Route("api/Utils/GetDocumentTypeList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetDocumentTypeList()
+        {
+            var art = await objUtil.GetDocumentTypeList();
+            return Ok(art);
+        }
+
+        // To fetch candidate status list
+        [Route("api/Utils/GetCandidateStatusList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidateStatusList()
+        {
+            var art = await objUtil.GetCandidateStatusList();
+            return Ok(art);
+        }
     }
 }

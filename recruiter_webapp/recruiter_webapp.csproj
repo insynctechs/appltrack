@@ -49,6 +49,9 @@
     <Reference Include="ASPnetPagerV2_8">
       <HintPath>dll\ASPnetPagerV2_8.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
     </Reference>
@@ -62,6 +65,7 @@
       <HintPath>..\packages\Microsoft.ApplicationBlocks.Data.2.0.0\lib\net45\Microsoft.ApplicationBlocks.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -72,6 +76,7 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -122,9 +127,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Candidate.aspx" />
     <Content Include="CandidateDocUpdate.aspx" />
     <Content Include="CandidateQualification.aspx" />
+    <Content Include="Candidates.aspx" />
     <Content Include="CandidateUpdate.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -138,6 +143,7 @@
     <Content Include="CustomerUpdate.aspx" />
     <Content Include="CustomerView.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="EmailTemplates\NewUser.html" />
     <Content Include="Employer.aspx" />
     <Content Include="EmployerEdit.aspx" />
     <Content Include="EmployerLocation.aspx" />
@@ -160,14 +166,25 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Interview.aspx" />
+    <Content Include="InterviewResults.aspx" />
     <Content Include="InterviewUpdate.aspx" />
     <Content Include="Job.aspx" />
+    <Content Include="JobDetails.aspx" />
     <Content Include="JobUpdate.aspx" />
     <Content Include="Login.ascx" />
     <Content Include="Logout.ascx" />
     <Content Include="Scripts\dropify.min.js" />
     <Content Include="Scripts\jquery.fileupload.js" />
+    <Content Include="Scripts\metro.min.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="SetInterview.aspx" />
+    <Content Include="SetInterview2.aspx" />
     <Content Include="Styles\dropify.min.css" />
+    <Content Include="Styles\metro-all.min.css" />
+    <Content Include="Styles\metro.min.css" />
+    <Content Include="Styles\style.css" />
+    <Content Include="UserProfile.aspx" />
+    <Content Include="Vacancies.aspx" />
     <Content Include="WebForm1.aspx" />
     <Content Include="WebService.asmx" />
     <Content Include="fonts\dropify.eot" />
@@ -228,13 +245,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Candidate.aspx.cs">
-      <DependentUpon>Candidate.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Candidate.aspx.designer.cs">
-      <DependentUpon>Candidate.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="CandidateDocUpdate.aspx.cs">
       <DependentUpon>CandidateDocUpdate.aspx</DependentUpon>
@@ -249,6 +259,13 @@
     </Compile>
     <Compile Include="CandidateQualification.aspx.designer.cs">
       <DependentUpon>CandidateQualification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Candidates.aspx.cs">
+      <DependentUpon>Candidates.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Candidates.aspx.designer.cs">
+      <DependentUpon>Candidates.aspx</DependentUpon>
     </Compile>
     <Compile Include="CandidateUpdate.aspx.cs">
       <DependentUpon>CandidateUpdate.aspx</DependentUpon>
@@ -384,6 +401,13 @@
     <Compile Include="Interview.aspx.designer.cs">
       <DependentUpon>Interview.aspx</DependentUpon>
     </Compile>
+    <Compile Include="InterviewResults.aspx.cs">
+      <DependentUpon>InterviewResults.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InterviewResults.aspx.designer.cs">
+      <DependentUpon>InterviewResults.aspx</DependentUpon>
+    </Compile>
     <Compile Include="InterviewUpdate.aspx.cs">
       <DependentUpon>InterviewUpdate.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -397,6 +421,13 @@
     </Compile>
     <Compile Include="Job.aspx.designer.cs">
       <DependentUpon>Job.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="JobDetails.aspx.cs">
+      <DependentUpon>JobDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="JobDetails.aspx.designer.cs">
+      <DependentUpon>JobDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="JobUpdate.aspx.cs">
       <DependentUpon>JobUpdate.aspx</DependentUpon>
@@ -434,6 +465,20 @@
     <Compile Include="QualificationUpdate.aspx.designer.cs">
       <DependentUpon>QualificationUpdate.aspx</DependentUpon>
     </Compile>
+    <Compile Include="SetInterview.aspx.cs">
+      <DependentUpon>SetInterview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SetInterview.aspx.designer.cs">
+      <DependentUpon>SetInterview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SetInterview2.aspx.cs">
+      <DependentUpon>SetInterview2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SetInterview2.aspx.designer.cs">
+      <DependentUpon>SetInterview2.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -447,6 +492,13 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="SiteClient.Master.cs">
+      <DependentUpon>SiteClient.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SiteClient.Master.designer.cs">
+      <DependentUpon>SiteClient.Master</DependentUpon>
     </Compile>
     <Compile Include="Skill.aspx.cs">
       <DependentUpon>Skill.aspx</DependentUpon>
@@ -468,6 +520,20 @@
     </Compile>
     <Compile Include="User.aspx.designer.cs">
       <DependentUpon>User.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserProfile.aspx.cs">
+      <DependentUpon>UserProfile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserProfile.aspx.designer.cs">
+      <DependentUpon>UserProfile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vacancies.aspx.cs">
+      <DependentUpon>Vacancies.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vacancies.aspx.designer.cs">
+      <DependentUpon>Vacancies.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
@@ -497,6 +563,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Styles\toastr.scss" />
+    <Content Include="SiteClient.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

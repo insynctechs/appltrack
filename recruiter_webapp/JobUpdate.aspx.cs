@@ -4,6 +4,7 @@ using recruiter_webapp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -21,8 +22,15 @@ namespace recruiter_webapp
         public string WebURL { get; set; }
         public static WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> jobList = new List<DataRow>();
+        public List<DataRow> employerList = new List<DataRow>();
         public List<DataRow> employerLocationList = new List<DataRow>();
         public List<DataRow> currencyList = new List<DataRow>();
+        public List<DataRow> industryList = new List<DataRow>();
+        public List<DataRow> categoryList = new List<DataRow>();
+        public List<DataRow> jobSkillsList = new List<DataRow>();
+        public List<DataRow> jobQualificationsList = new List<DataRow>();
+        public CultureInfo dateFormat = CultureInfo.InvariantCulture;
+        
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -33,23 +41,39 @@ namespace recruiter_webapp
                     {
                         ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                         WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-                    }
+                    // To redirect to previous page
+                    if (Request.UrlReferrer != null)
+                        Session["previous_url"] = Request.UrlReferrer.ToString();
+                    else
+                        Session["previous_url"] = ConfigurationManager.AppSettings["WebURL"].ToString();
 
-                    if (Request.QueryString["id"] != null)
-                    {
-                        GetJob(Convert.ToInt32(Request.QueryString["id"]));
-                        GetEmployerLocations(Convert.ToInt32(jobList[0]["employer_id"]));
-                    }
+                }
                     if (Request.QueryString["employer_id"] != null)
                     {
                         GetEmployerLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
                     }
+                if (Request.QueryString["id"] != null)
+                {
+                    int id = Convert.ToInt32(Request.QueryString["id"]);
+                    GetJob(id);                
+                    GetEmployerLocations(Convert.ToInt32(jobList[0]["employer_id"]));
+                    GetJobSkills(id);
+                    GetJobQualifications(id);
+                }
                 GetCurrencyList();
+                GetIndustryList();
+                GetCategoryList();
+                GetEmployers();
             }
             else
             {
                 Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
+        }
+
+        public void InitVars()
+        {
+            
         }
 
         private void GetJob(int id)
@@ -79,7 +103,35 @@ namespace recruiter_webapp
                 CommonLogger.Info(ex.ToString());
             }
         }
-        
+
+        private void GetIndustryList()
+        {
+            try
+            {
+                var url = string.Format("api/Utils/GetIndustryList");
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                industryList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+        }
+
+        private void GetCategoryList()
+        {
+            try
+            {
+                var url = string.Format("api/Utils/GetCategoryList");
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                categoryList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+        }
+
 
         private void GetEmployerLocations(int id)
         {
@@ -96,12 +148,99 @@ namespace recruiter_webapp
             }
         }
 
+        private void GetEmployers()
+        {
+            try
+            {
+                var url = string.Format("api/Employers/GetList");
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                employerList = dt.AsEnumerable().ToList();
+
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+        }
+
+        private void GetJobSkills(int id)
+        {
+            try
+            {
+                var url = string.Format("api/Jobs/GetSkills?id=" + id);
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                jobSkillsList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
+            }
+        }
+
+        private void GetJobQualifications(int id)
+        {
+            try
+            {
+                var url = string.Format("api/Jobs/GetQualifications?id=" + id);
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                jobQualificationsList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
+            }
+        }
+
+        [System.Web.Services.WebMethod]
+        [ScriptMethod]
+        public static int InsertSkill(string title)
+        {
+            int ret = 0;
+            var skill = new Dictionary<string, string>();
+            skill.Add("title", title.Trim());
+            try
+            {
+                var url = string.Format("api/Skills/Insert");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, skill);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return ret;
+        }
+
+        [System.Web.Services.WebMethod]
+        [ScriptMethod]
+        public static int InsertQualification(string title)
+        {
+            int ret = 0;
+            var qualification = new Dictionary<string, string>();
+            qualification.Add("title", title.Trim());
+            try
+            {
+                var url = string.Format("api/Qualifications/Insert");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, qualification);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return ret;
+        }
+
+
+
         public Dictionary<string, string> prepareJob()
         {
             Dictionary<string, string> job = new Dictionary<string, string>();
             job.Add("employer_id", Request.Form["employer_id"].Trim());
-            job.Add("location_id", Request.Form["location_id"].Trim());
+            job.Add("location_id", Request.Form["location_id"]!=null? Request.Form["location_id"] : "0");
             job.Add("job_code", Request.Form["job_code"].Trim());
+            job.Add("industry", Request.Form["industry"].Trim());
+            job.Add("category", Request.Form["category"].Trim());
             job.Add("description", Request.Form["description"].Trim());
             job.Add("vacancy_count", Request.Form["vacancy_count"].Trim());
             job.Add("currency", Request.Form["currency"].Trim());
@@ -115,7 +254,7 @@ namespace recruiter_webapp
             job.Add("join_date", Request.Form["join_date"].Trim());
             job.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
             job.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");
-
+            
             return job;
         }
 
@@ -159,7 +298,7 @@ namespace recruiter_webapp
         {
             int ret = 0;
             if (Request.QueryString["id"] != null) {
-                EditJob(Convert.ToInt32(Request.QueryString["id"]));
+                ret = EditJob(Convert.ToInt32(Request.QueryString["id"]));
                 if (ret > 0)
                     Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
                 else
@@ -173,7 +312,16 @@ namespace recruiter_webapp
                 else
                     Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
             }
-                
+
+            if (Request.QueryString["id"] != null)
+            {
+                int id = Convert.ToInt32(Request.QueryString["id"]);
+                GetJob(id);
+                GetEmployerLocations(Convert.ToInt32(jobList[0]["employer_id"]));
+                GetJobSkills(id);
+                GetJobQualifications(id);
+            }
+
         }
 
         // For fetching list of skills for ajax autocomplete

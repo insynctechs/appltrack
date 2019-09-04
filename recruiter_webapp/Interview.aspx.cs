@@ -47,9 +47,9 @@ namespace recruiter_webapp
         {
             int currnetPageIndx = Convert.ToInt32(e.CommandArgument);
             pager1.CurrentIndex = currnetPageIndx;
-            if (srchVal != null)
+            /*if (srchVal != null)
                 GetEmployersByField();
-            else
+            else*/
                 GetInterviews();
         }
 

@@ -17,23 +17,90 @@ namespace recruiter_core.Controllers
     {
         Candidate objCandidate = new Candidate();
 
-        [Route("api/Candidates/GetCandidate")]
-        public async Task<IHttpActionResult> GetCandidates(string srchBy, string srchVal)
+        // To fetch multiple customers based on a field type and field value.
+        [Route("api/Candidates/GetCandidates")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidates(string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
-            var art = await objCandidate.GetCandidates(srchBy, srchVal);
+            if (srchVal == null)
+                srchVal = "%";
+            var art = await objCandidate.GetCandidates(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
+
 
         [Route("api/Candidates/Insert")]
         [HttpPost]
         public async Task<IHttpActionResult> InsertCandidate([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("d:\\insertcand.txt", dictionaryAsJson.ToString());
-            Dictionary<string, string> job = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
-            var cat = await objCandidate.InsertCandidate(job);
+            Dictionary<string, string> candidate = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objCandidate.InsertCandidate(candidate);
             return Ok(cat);
         }
 
+        [Route("api/Candidates/Edit")]
+        [HttpPost]
+        public async Task<IHttpActionResult> EditCandidate([FromBody] JObject dictionaryAsJson)
+        {
+            Dictionary<string, string> candidate = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objCandidate.EditCandidate(candidate);
+            return Ok(cat);
+        }
 
+        [Route("api/Candidates/Get/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidate(int id)
+        {
+            var art = await objCandidate.GetCandidate(id);
+            return Ok(art);
+        }
+
+        [Route("api/Candidates/GetSkills/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidateSkills(int id)
+        {
+            var art = await objCandidate.GetCandidateSkills(id);
+            return Ok(art);
+        }
+
+        [Route("api/Candidates/GetQualifications/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidateQualifications(int id)
+        {
+            var art = await objCandidate.GetCandidateQualifications(id);
+            return Ok(art);
+        }
+
+        [Route("api/Candidates/GetExperiences/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidateExperiences(int id)
+        {
+            var art = await objCandidate.GetCandidateExperiences(id);
+            return Ok(art);
+        }
+
+        [Route("api/Candidates/GetCandidateDocuments/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCandidateDocuments(int id)
+        {
+            var art = await objCandidate.GetCandidateDocuments(id);
+            return Ok(art);
+        }
+
+        [Route("api/Candidates/DeleteDocument/")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteDocument(string file)
+        {
+            var art = await objCandidate.DeleteDocument(file);
+            return Ok(art);
+        }
+
+        [Route("api/Candidates/Delete")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteCandidate(int id)
+        {
+            var art = await objCandidate.DeleteCandidate(id);
+            return Ok(art);
+        }
     }
 }

@@ -50,7 +50,7 @@
                             }                           
                             else if (ret == -2)
                                 toastr.error('Account deactivated!');
-                            else if (ret==-1){
+                            else if (ret==0 || ret==-1){
                                 toastr.error('Invalid credentials!');
                                 //location.reload(true);
                             }

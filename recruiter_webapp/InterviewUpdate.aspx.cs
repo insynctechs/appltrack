@@ -17,8 +17,8 @@ namespace recruiter_webapp
         public string WebURL { get; set; }
         public static WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> jobList = new List<DataRow>();
-        public List<DataRow> employerLocationList = new List<DataRow>();
-        public List<DataRow> currencyList = new List<DataRow>();
+        public List<DataRow> interviewList = new List<DataRow>();
+        public List<DataRow> interviewListForJob = new List<DataRow>();
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
@@ -34,12 +34,15 @@ namespace recruiter_webapp
                 if (Request.QueryString["id"] != null)
                 {
                     GetInterview(Convert.ToInt32(Request.QueryString["id"]));
-                    //GetEmployerLocations(Convert.ToInt32(jobList[0]["employer_id"]));
                 }
-                if (Request.QueryString["employer_id"] != null)
+                if (Request.QueryString["job_id"] != null)
                 {
-                    GetEmployerLocations(Convert.ToInt32(Request.QueryString["employer_id"]));
+                    int job_id = Convert.ToInt32(Request.QueryString["job_id"]);
+                    GetInterviewsForJob(job_id);
+                    GetJob(job_id);
                 }
+                if (Request.Url.ToString().Contains("Delete"))
+                    DeleteInterview();
             }
             else
             {
@@ -47,11 +50,11 @@ namespace recruiter_webapp
             }
         }
 
-        private void GetInterview(int id)
+        private void GetJob(int id)
         {
             try
             {
-                var url = string.Format("api/Interviews/Get?id=" + id);
+                var url = string.Format("api/Jobs/Get?id=" + id);
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
                 jobList = dt.AsEnumerable().ToList();
             }
@@ -61,14 +64,14 @@ namespace recruiter_webapp
             }
         }
 
-        private void GetEmployerLocations(int id)
+
+        private void GetInterview(int id)
         {
             try
             {
-                var url = string.Format("api/EmployerLocations/GetList?id=" + id);
+                var url = string.Format("api/Interviews/Get?id=" + id);
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
-                employerLocationList = dt.AsEnumerable().ToList();
-
+                interviewList = dt.AsEnumerable().ToList();
             }
             catch (Exception ex)
             {
@@ -76,11 +79,44 @@ namespace recruiter_webapp
             }
         }
 
-        public int InsertInterview()
+        private void GetInterviewsForJob(int id)
         {
-            int ret = 0;
-            var interview = new Dictionary<string, string>();
-            interview.Add("job_id", Request.Form["job_id"].Trim());
+            try
+            {
+                var url = string.Format("api/Interviews/GetList?id=" + id);
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                interviewListForJob = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+        }
+
+        private void DeleteInterview()
+        {
+            try
+            {
+                var url = string.Format("api/Interviews/Delete?id=" + Request.QueryString["id"]);
+                var ret = wHelper.DeleteRecordFromWebApi(url);
+                Response.Redirect(WebURL+"InterviewUpdate?job_id="+ Request.QueryString["job_id"]);
+                if (ret > 0)
+                {
+                    lblResponseMsg.Text = Constants.SUCCESS_DELETE;
+                    lblResponseMsg.ForeColor = Constants.successColor;
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
+            }
+        }
+
+        public Dictionary<string, string> PrepareInterview()
+        {
+            Dictionary<string, string> interview = new Dictionary<string, string>();
+            interview.Add("job_id", Request.QueryString["job_id"].ToString());
             interview.Add("title", Request.Form["title"].Trim());
             interview.Add("description", Request.Form["description"].Trim());
             interview.Add("round", Request.Form["round"].Trim());
@@ -88,6 +124,14 @@ namespace recruiter_webapp
             interview.Add("date_of_interview", Request.Form["date_of_interview"]);
             interview.Add("active", (Request.Form["active"] == "on") ? "1" : "0");
             interview.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");
+            return interview;
+        }
+
+
+        public int InsertInterview()
+        {
+            Dictionary<string, string> interview = PrepareInterview();
+            int ret = 0;
             try
             {
                 var url = string.Format("api/Interviews/Insert");
@@ -101,19 +145,56 @@ namespace recruiter_webapp
             return ret;
         }
 
+        public int EditInterview(int id)
+        {
+            Dictionary<string, string> interview = PrepareInterview();
+            interview.Add("id", id.ToString());
+            int ret = 0;
+            try
+            {
+                var url = string.Format("api/Interviews/Edit");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, interview);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+                return -2;
+            }
+            return ret;
+        }
+
         protected void btn_submit_Click(object sender, EventArgs e)
         {
             int ret = 0;
-            if (Request.QueryString["id"] != null) { }
-            //EditJob(Convert.ToInt32(Request.QueryString["id"]));
+            if (Request.QueryString["id"] != null) {
+                ret = EditInterview(Convert.ToInt32(Request.QueryString["id"]));
+                if (ret > 0)
+                {
+                    Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
+                    GetInterviewsForJob(Convert.ToInt32(Request.QueryString["job_id"]));
+                    GetInterview(Convert.ToInt32(Request.QueryString["id"]));
+                }
+                    
+                else if (ret == -3)
+                    Utils.setErrorLabel(lblResponseMsg, "Another record already exists for this round.");
+                else
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
+                
+            } 
             else
             {
                 ret = InsertInterview();
-                var ret1 = ret;
                 if (ret > 0)
+                {
                     Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);
+                    GetInterviewsForJob(Convert.ToInt32(Request.QueryString["job_id"]));
+                }
+                    
+                else if(ret == -3)
+                    Utils.setErrorLabel(lblResponseMsg, "Another record already exists for this round.");
                 else
                     Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
+                
             }
 
         }

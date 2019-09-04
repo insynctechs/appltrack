@@ -72,6 +72,7 @@ namespace recruiter_webapp
             int ret = 0;
             var employer = new Dictionary<string, string>();
             //employer.Add("id", id);
+            employer.Add("customer_id", "58");
             employer.Add("name", name);
             employer.Add("address", address);
             employer.Add("city", city);

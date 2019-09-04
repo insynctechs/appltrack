@@ -15,15 +15,12 @@
             </a>
                 --%>
             <div style="display: inline; padding: 0px 10px"></div>
-            <br />
-            <br />
 
             <asp:Label ID="lblResponseMsg" runat="server"></asp:Label>
         </div>
         <div>
         </div>
-        <br />
-        <br />
+
         <div class="row no-padding">
             <div class="col s12 m12 l12 card grey lighten-4 z-depth-0 no-padding">
                 <div id="employersForm">
@@ -64,6 +61,7 @@
                                 <th class="center">Employer</th>
                                 <th class="center">Description</th>
                                 <th class="center">Active</th>
+                                <th class="center"></th>
                                 <th class="center">Interview</th>
                             </tr>
                     </HeaderTemplate>
@@ -82,6 +80,7 @@
                                     </label>
                                 </div>
                             </td>
+                            <td><a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL %>InterviewResults?job_id=<%#Eval("id")%>">Results</a></td>
                             <td class="center"><a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL %>InterviewUpdate?job_id=<%#Eval("id")%>">Schedule</a></td>
 
                         </tr>

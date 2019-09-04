@@ -14,14 +14,23 @@ namespace recruiter_core.Controllers
 {
     public class InterviewsController : ApiController
     {
-        Interview objJob = new Interview();
+        Interview objInterview = new Interview();
 
         // To fetch a single Interview based on id
         [Route("api/Interviews/Get/")]
         [HttpGet]
         public async Task<IHttpActionResult> GetInterview(int id)
         {
-            var art = await objJob.GetInterview(id);
+            var art = await objInterview.GetInterview(id);
+            return Ok(art);
+        }
+
+        // To fetch interview list based on job id
+        [Route("api/Interviews/GetList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetInterviewList(int id)
+        {
+            var art = await objInterview.GetInterviewList(id);
             return Ok(art);
         }
 
@@ -32,7 +41,7 @@ namespace recruiter_core.Controllers
         {
             if (srchVal == null)
                 srchVal = "%";
-            var art = await objJob.GetInterviews(srchBy, srchVal, PageSize, CurrentPage);
+            var art = await objInterview.GetInterviews(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
 
@@ -41,7 +50,7 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> InsertInterview([FromBody] JObject dictionaryAsJson)
         {
             Dictionary<string, string> interview = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
-            var cat = await objJob.InsertInterview(interview);
+            var cat = await objInterview.InsertInterview(interview);
             return Ok(cat);
         }
 
@@ -50,9 +59,34 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> EditInterview([FromBody] JObject dictionaryAsJson)
         {
             Dictionary<string, string> interview = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
-            var cat = await objJob.EditInterview(interview);
+            var cat = await objInterview.EditInterview(interview);
             return Ok(cat);
         }
 
+        [Route("api/Interviews/Delete")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteInterview(int id)
+        {
+            var art = await objInterview.DeleteInterview(id);
+            return Ok(art);
+        }
+
+        [Route("api/Interviews/SetInterview")]
+        [HttpPost]
+        public async Task<IHttpActionResult> SetInterviewForCandidates([FromBody] JObject dictionaryAsJson)
+        {
+            Dictionary<string, string> interview_candidates = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objInterview.SetInterviewForCandidates(interview_candidates);
+            return Ok(cat);
+        }
+
+        [Route("api/Interviews/UpdateCandidates")]
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateCandidatesForInterview([FromBody] JObject dictionaryAsJson)
+        {
+            Dictionary<string, string> interview_candidates = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objInterview.UpdateCandidatesForInterview(interview_candidates);
+            return Ok(cat);
+        }
     }
 }

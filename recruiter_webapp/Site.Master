@@ -14,13 +14,15 @@
     <asp:PlaceHolder runat="server">
         <%--  Scripts.Render("~/bundles/main_js") --%>
         <%: Styles.Render("~/bundles/main_css") %>
-        <link href="/Styles/toastr.min.css?v=1.2.3.4<%= currentTime %>" rel="stylesheet">
+        <%-- <link href="/Styles/toastr.min.css?v=1.2.3.4<%= currentTime %>" rel="stylesheet"> --%>
+        <link href="/Styles/toastr.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css" rel="stylesheet" />
     </asp:PlaceHolder>
 
     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="~/Content/custom.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="~/Styles/metro.min.css">-->
 
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -30,16 +32,18 @@
     <script src="/Scripts/jquery.validate.js"></script>
     <script src="/Scripts/additional-methods.js"></script>
     <script src="/Scripts/toastr.min.js"></script>
+    <script src="/Scripts/moment.min.js"></script>
+    <!--<script src="/Scripts/metro.min.js"></script>-->
     <script src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.js"></script>
 
 
 
 </head>
 <body>
-   
-    <%Session["user_id"] = "1";
-        Session["user_type"] = "1";%>
-    
+   <%--
+    Session["user_id"] = "1";
+        Session["user_type"] = "1";
+    --%>
     <!-- HEADER BEGINS -->
     <header class="page-topbar" id="header">
         <div class="navbar navbar-fixed">
@@ -68,9 +72,9 @@
                         <%} %>
                     </ul>
                     <ul id="login-dropdown" class="dropdown-content">
-                        <li><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Profile</a></li>
+                        <li><a class="waves-effect waves-block waves-light popup-btn" href="<%= WebURL %>UserProfile.aspx">Profile</a></li>
                         <li class="divider"></li>
-                        <li><a id="logout" class="waves-effect waves-block waves-light">Logout</a></li>
+                        <li><a id="logout" class="waves-effect waves-block waves-light popup-btn">Logout</a></li>
 
                     </ul>
                 </div>
@@ -91,23 +95,20 @@
             <aside class="nav-collapsible">
                 <!--<aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-light">-->
                 <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow ps ps--active-y" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion" style="transform: translateX(0px);">
-
+                    <%if (Session["user_type"] != null)
+                        { %>
                     <li class="active"><a class="collapsible-body active" href="Default.aspx" style="display: block"><i class="material-icons"></i><span>Dashboard</span></a>
                     </li>
-
-                    <%if (Session["user_id"] != null)
-                        {
-                            if (Convert.ToInt32(Session["user_type"].ToString()) == 1)
-                            {  %>
+                    <%} %>
+                    <%if (Session["user_type"] != null)
+                        { %>
+                    <%if (Convert.ToInt32(Session["user_type"].ToString()) == 1)
+    {%>
                     <li><a class="collapsible-body" href="<%= WebURL %>Customer.aspx"><i class="material-icons">chevron_right</i><span class="bold-text">Customers</span></a>
                     </li>
-
-                    <%}
-                        } %>
-                    <%if (Session["user_id"] != null)
-                        {
-                            if (Convert.ToInt32(Session["user_type"].ToString()) < 3)
-                            { %>
+                    <%} %>
+                    <%if (Convert.ToInt32(Session["user_type"].ToString()) <= 3)
+    {%>
                     <li><a class="collapsible-header"><i class="material-icons">chevron_right</i><span>Employers</span></a>
                         <div class="collapsible-body">
                             <ul>
@@ -118,25 +119,43 @@
                             </ul>
                         </div>
                     </li>
-
-                    <% }
-                        }
-                        if (Session["user_id"] != null)
-                        {
-                            if (Convert.ToInt32(Session["user_type"].ToString()) < 6)
-                            {
-                    %>
+                    <%} %>
+                    <%if (Convert.ToInt32(Session["user_type"].ToString()) <= 5)
+    {%>
                     <li><a class="collapsible-header"><i class="material-icons">chevron_right</i><span>Jobs</span></a>
                         <div class="collapsible-body">
                             <ul>
+                                <li><a class="center" href="<%= WebURL %>JobUpdate.aspx">Add</a></li>
                                 <li><a class="center" href="<%= WebURL %>Job.aspx">List</a></li>
                                 <li><a class="center" href="<%= WebURL %>Interview.aspx">Interview</a></li>
                             </ul>
                         </div>
                     </li>
+                    <%}
+    }%>
+                    <%if (Session["user_type"] != null) { %>
+                    <li><a class="collapsible-header"><i class="material-icons">chevron_right</i><span>Candidates</span></a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <% if (Convert.ToInt32(Session["user_type"].ToString()) == 1)
+                                    {%>
+                                <li><a class="center" href="<%= WebURL %>CandidateUpdate.aspx">Add</a></li>
 
-                    <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Candidates</span></a>
+                                <%} %>
+                                
+                                                                         <% if (Convert.ToInt32(Session["user_type"].ToString()) < 6)
+                                                                           {%>
+                                <li><a class="center" href="<%= WebURL %>Candidates.aspx">List</a></li>
+                                <%} %>
+                                                                       
+                            </ul>
+                        </div>
                     </li>
+                    <%} %>
+                    <%if (Session["user_type"] != null)
+                                                           {
+                                                               if (Convert.ToInt32(Session["user_type"].ToString()) <= 5)
+                                                               {%>
                     <li><a class="collapsible-body" href="<%= WebURL %>Skill.aspx"><i class="material-icons">chevron_right</i><span>Skills</span></a>
                     </li>
                     <li><a class="collapsible-body" href="<%= WebURL %>Qualification.aspx"><i class="material-icons">chevron_right</i><span>Qualifications</span></a>
@@ -144,11 +163,17 @@
                     <li><a class="collapsible-body" href="#"><i class="material-icons">chevron_right</i><span>Users</span></a>
                     </li>
                     <%}
-                    } %>
+                                                          }%>
+                    <%-- 
                     <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Profiles</span></a>
                     </li>
-                    <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Settings</span></a>
+                    --%>
+                    <%if (Session["user_type"] != null)
+                        {%>
+                    <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Reports</span></a>
                     </li>
+                    <%} %>
+                    
                 </ul>
             </aside>
             <!-- LEFT SIDEBAR ENDS -->
@@ -173,6 +198,19 @@
     </div>
     <!-- MAIN ENDS -->
 </body>
+</html>
+
+<style>
+    .navbar .navbar-dark ul .popup-btn {
+        background: #90caf9;
+        color: #fff;
+    }
+    .navbar .navbar-dark ul a:hover {
+        background: #42a5f5;
+        
+    }
+</style>
+
 <script>
     $('.sidenav').sidenav();
     $('.collapsible').collapsible();
@@ -184,17 +222,4 @@
     $(document).ready(function () {
 
     });
-
-
-
-
-
-
-
-
-
 </script>
-
-
-
-</html>

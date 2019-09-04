@@ -1,4 +1,6 @@
-﻿using recruiter_core.Models;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using recruiter_core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +39,26 @@ namespace recruiter_core.Controllers
         {
             var art = await objUser.GetUserDetails(id, user_type);
             return Ok(art);
+        }
+
+        // To validate user based on username & password
+        [Route("api/Users/ChangePassword/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> ChangePassword(string email, string old_password, string new_password, string ip_address)
+        {
+            //File.WriteAllText("d:\\changecalled.txt", email + " -> " + old_password + " -> " + new_password + " -> " + ip_address);
+            var art = await objUser.ChangePassword(email, old_password, new_password, ip_address);
+            return Ok(art);
+        }
+
+        [Route("api/Users/EditDetails/")]
+        [HttpPost]
+        public async Task<IHttpActionResult> EditUserDetails([FromBody] JObject dictionaryAsJson)
+        {
+
+            Dictionary<string, string> user = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
+            var cat = await objUser.EditUserDetails(user);
+            return Ok(cat);
         }
     }
 }

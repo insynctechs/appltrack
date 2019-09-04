@@ -1,4 +1,5 @@
-﻿using recruiter_webapp.Helpers;
+﻿using Newtonsoft.Json;
+using recruiter_webapp.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -40,6 +41,7 @@ namespace recruiter_webapp
                     // Storing frequently used values in session.
                     if (userList[0]["user_id"].ToString() != "1")
                     {
+                        Session.Add("user_ref_id", userList[0]["user_ref_id"]);
                         Session.Add("user_name", userList[0]["user_name"]);
                         Session.Add("user_type", userList[0]["user_type"]);
                         Session.Add("user_type_name", userList[0]["user_type_name"]);
@@ -51,6 +53,7 @@ namespace recruiter_webapp
                         Session.Add("user_name", "Super Admin");
                         Session.Add("user_type", 1);
                         Session.Add("user_type_name", "Super Admin");
+                        Session.Add("user_email", userList[0]["user_email"]);
                     }
                 }
             }
@@ -69,5 +72,25 @@ namespace recruiter_webapp
             Session.Abandon();
             //HttpContext.Current.Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
         }
+
+        [System.Web.Services.WebMethod(EnableSession = true)]
+        public int ChangePassword(string old_password, string new_password)
+        {
+            int ret = 0;
+            string ip_address = utils.GetIpAddress();
+            try
+            {
+                var url = string.Format("api/Users/ChangePassword?email=" + Session["user_email"] + "&old_password=" + old_password + "&new_password=" + new_password + "&ip_address=" + ip_address);
+                ret = wHelper.GetExecuteNonQueryResFromWebApi(url);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+
+            }
+            return ret;
+        }
+
+        
     }
 }

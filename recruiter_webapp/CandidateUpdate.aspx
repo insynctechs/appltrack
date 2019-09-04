@@ -17,8 +17,9 @@
                 <%}
                     else
                     { %>
-                <h6>Edit Profile <%if (candidateList.Count > 0)
+                <h6 style="display:inline">Edit Profile - <%if (candidateList.Count > 0)
                                      {%><%:candidateList[0]["name"]%><%}%></h6>
+                <a href="<%= WebURL %>CandidateDocUpdate.aspx?id=<%:Request.QueryString["id"]%>" class="btn waves-effect waves-light blue lighten-1 right">Edit Documents</a>
                 <%}%>
             </div>
         </div>
@@ -27,6 +28,8 @@
         <asp:Label ID="lblResponseMsg" runat="server"></asp:Label>
         <div class="row">
             <div class="input-field col s12 m12 l8 card white lighten-3 z-depth-3 padding-3 border-radius-5">
+                
+                <input type="hidden" id="user_id" name="user_id" value="<%:(candidateList.Count > 0)?candidateList[0]["user_id"]: "0"%>" />
 
                 <input type="hidden" id="id" name="id" value="<%if (candidateList.Count > 0)
                     {%><%:candidateList[0]["id"]%><%}%>" />
@@ -42,196 +45,246 @@
                 <div class="row">
                     <div class="col s4 input-field left">
                         <select id="gender" name="gender">
-                            <option value="" disabled selected>Choose Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
+                            <% foreach (var gender in genders)
+                                { %>
+                            <option value="<%=gender.Key %>" <%=(gender.Key=="") ? "disabled" : "" %> <%=(((candidateList.Count > 0) && candidateList[0]["gender"].ToString().Trim()== gender.Key) || gender.Key=="") ? "selected" : "" %>><%=gender.Value%></option>
+                            <%} %>
                         </select>
                         <label class="input-label" for="gender">Gender*</label>
                     </div>
 
                     <div class="col s4 input-field">
                         <input type="text" class="datepicker" id="dob" name="dob" value="<%if (candidateList.Count > 0)
-                            {%><%:candidateList[0]["dob"]%><%}%>" />
+                                {%><%:Convert.ToDateTime(candidateList[0]["dob"]).Day.ToString("d2")+"-"+Convert.ToDateTime(candidateList[0]["dob"]).Month.ToString("d2")+"-"+Convert.ToDateTime(candidateList[0]["dob"]).Year%><%}%>" />
                         <label class="input-label" for="dob">Date of Birth*</label>
                     </div>
 
                 </div>
 
-            <div class="row">
-                <div class="col s12 input-field left">
-                    <textarea id="address" name="address"><%if (candidateList.Count > 0)
-                                                              {%><%:candidateList[0]["address"]%><%}%></textarea>
-                    <label class="input-label" for="qualifications">Address*</label>
+                <div class="row">
+                    <div class="col s12 input-field left">
+                        <textarea id="address" name="address"><%if (candidateList.Count > 0)
+                                                                  {%><%:candidateList[0]["address"]%><%}%></textarea>
+                        <label class="input-label" for="qualifications">Address*</label>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col s6 input-field">
-                    <input type="text" id="email" name="email" value="<%if (candidateList.Count > 0)
-                        {%><%:candidateList[0]["email"]%><%}%>" />
-                    <label class="input-label" for="email">Email*</label>
+                <div class="row">
+                    <div class="col s6 input-field">
+                        <input type="text" id="email" name="email" value="<%if (candidateList.Count > 0)
+                            {%><%:candidateList[0]["email"]%><%}%>" />
+                        <label class="input-label" for="email">Email*</label>
+                    </div>
+                    <div class="col s6 input-field">
+                        <input type="text" id="phone" name="phone" value="<%if (candidateList.Count > 0)
+                            {%><%:candidateList[0]["phone"]%><%}%>" />
+                        <label class="input-label" for="phone">Phone*</label>
+                    </div>
                 </div>
-                <div class="col s6 input-field">
-                    <input type="text" id="phone" name="phone" value="<%if (candidateList.Count > 0)
-                        {%><%:candidateList[0]["phone"]%><%}%>" />
-                    <label class="input-label" for="phone">Phone*</label>
+
+
+                <div class="row">
+                    <div class="col s8 input-field">
+                        <input type="text" id="candidate_skills" name="candidate_skills" />
+                        <a id="btn-skill-add" class="btn blue lighten-1" style="display: inline">Add +</a>
+
+                        <label class="input-label" for="candidate_skills">Key Skills*</label>
+
+                    </div>
+                    <input type="text" id="skills" name="skills" hidden value="<%
+                        if (candidateSkillsList.Count > 0)
+                        {
+                            foreach (var skill in candidateSkillsList)
+                            {
+                            %>
+                        <%:candidateSkillsList[0]["id"] + ","%>
+                        <%}
+                        }%>" />
+                    <div class="col s6 input-field" id="div-skills">
+                        <%if (candidateSkillsList.Count > 0)
+                            {
+                                foreach (var skill in candidateSkillsList)
+                                {
+                        %>
+                        <div class="skill chip" id="<%:skill["id"]%>"><%:skill["skill"]%><i class="close material-icons">close</i></div>
+
+                        <%}
+                            }%>
+                    </div>
                 </div>
-            </div>
 
-
-            <div class="row">
-                <div class="col s8 input-field">
-                    <input type="text" id="candidate_skills" name="candidate_skills" value="<%if (candidateList.Count > 0)
-                        {%><%:candidateList[0]["skills"]%><%}%>" />
-                    <label class="input-label" for="candidate_skills">Key Skills*</label>
-                </div>
-                <input type="text" id="skills" name="skills" hidden />
-                <div class="col s6 input-field" id="div-skills"></div>
-            </div>
-
-            <hr />
-            <div class="row" id="div-qualification">
-                <div class="input-field col s12">
-                    <h6 class="card card grey lighten-2 padding-1 border-radius-5">Qualifications</h6>
-                    <div id="dialog-form1" title="Add Qualification">
-                        <div class="frm-qualification">
-                            <fieldset>
-                                <label for="qualification">Qualification</label>
-                                <input type="text" name="qualification" id="qualification" class="text ui-widget-content ui-corner-all">
-                                <label for="institute">Institute</label>
-                                <input type="text" name="institute" id="institute" class="text ui-widget-content ui-corner-all">
-                                <label for="year">Year</label>
-                                <input class="datepicker text ui-widget-content ui-corner-all" id="year" />
-                                <label for="percentage">Percentage</label>
-                                <input type="number" name="percentage" id="percentage" max="100" min="0" class="text ui-widget-content ui-corner-all">
-                                <!-- Allow form submission with keyboard without duplicating the dialog button -->
-                                <a tabindex="-1" style="position: absolute; top: -1000px">SUBMIT</a>
-                            </fieldset>
+                <hr />
+                <div class="row" id="div-qualification">
+                    <div class="input-field col s12">
+                        <h6 class="card card grey lighten-2 padding-1 border-radius-5">Qualifications</h6>
+                        <div id="dialog-form1" title="Add Qualification">
+                            <div class="frm-qualification">
+                                <fieldset>
+                                    <label for="qualification">Qualification</label>
+                                    <input type="text" name="qualification" id="qualification" class="text ui-widget-content ui-corner-all">
+                                    <label for="institute">Institute</label>
+                                    <input type="text" name="institute" id="institute" class="text ui-widget-content ui-corner-all">
+                                    <label for="year">Year</label>
+                                    <input class="datepicker text ui-widget-content ui-corner-all" id="year" />
+                                    <label for="percentage">Percentage</label>
+                                    <input type="number" name="percentage" id="percentage" max="100" min="0" class="text ui-widget-content ui-corner-all">
+                                    <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                                    <a tabindex="-1" style="position: absolute; top: -1000px">SUBMIT</a>
+                                </fieldset>
+                            </div>
                         </div>
-                    </div>
 
-                    <div id="qualifications-contain" style="display: none">
-                        <table id="qualifications" class="">
-                            <thead>
-                                <tr class="blue-grey lighten-4">
-                                    <th class="font-weight-100">Course/Qualification</th>
-                                    <th class="font-weight-100">Institute/University</th>
-                                    <th class="font-weight-100">Year</th>
-                                    <th class="font-weight-100">Percentage</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    <a class="right" id="create-qualification">Add Qualification +</a>
-                </div>
-            </div>
-
-            <!-- Experiences -->
-            <hr />
-            <div class="row" id="div-experience">
-                <div class="input-field col s12">
-                    <h6 class="card card grey lighten-2 padding-1 border-radius-5">Experiences</h6>
-
-                    <div id="dialog-form2" title="Add Experience">
-                        <div class="frm-experience">
-                            <fieldset>
-                                <label for="designation">Designation</label>
-                                <input type="text" name="designation" id="designation" class="text ui-widget-content ui-corner-all">
-                                <label for="organisation">Organisation</label>
-                                <input type="text" name="organisation" id="organisation" class="text ui-widget-content ui-corner-all">
-                                <label for="from_year">From Year</label>
-                                <input class="datepicker text ui-widget-content ui-corner-all" id="from_year" />
-                                <label for="to_year">To Year</label>
-                                <input class="datepicker text ui-widget-content ui-corner-all" id="to_year" />
-                                <label for="description">Description</label>
-                                <textarea name="description" id="description" class="text ui-widget-content ui-corner-all"></textarea>
-                                <!-- Allow form submission with keyboard without duplicating the dialog button -->
-                                <a tabindex="-1" style="position: absolute; top: -1000px">SUBMIT</a>
-                            </fieldset>
+                        <div id="qualifications-contain">
+                            <table id="qualifications" class="">
+                                <thead>
+                                    <tr class="blue-grey lighten-4">
+                                        <th class="font-weight-100">Course/Qualification</th>
+                                        <th class="font-weight-100">Institute/University</th>
+                                        <th class="font-weight-100">Year</th>
+                                        <th class="font-weight-100">Percentage</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%if (candidateQualificationsList.Count > 0)
+                                        {
+                                            foreach (var qualification in candidateQualificationsList)
+                                            {
+                                    %>
+                                    <tr id="data-qualification">
+                                        <td class="qualification"><%:qualification["qualification"]%></td>
+                                        <td class="qualification"><%:qualification["institute"]%></td>
+                                        <td class="qualification"><%:qualification["year"]%></td>
+                                        <td class="qualification"><%:qualification["percentage"]%></td>
+                                        <td><a class="btn btn-remove white-text waves-light blue lighten-1 padding-2 border-radius-5 right">Remove</a></td>
+                                    </tr>
+                                    <%}
+                                        }%>
+                                </tbody>
+                            </table>
                         </div>
+                        <a class="right" id="create-qualification">Add Qualification +</a>
                     </div>
+                </div>
 
-                    <div id="experiences-contain" style="display: none">
-                        <table id="experiences" class="">
-                            <thead>
-                                <tr class="blue-grey lighten-4">
-                                    <th class="font-weight-100">Designation</th>
-                                    <th class="font-weight-100">Organisation</th>
-                                    <th class="font-weight-100">From</th>
-                                    <th class="font-weight-100">To</th>
-                                    <th class="font-weight-100">Description</th>
-                                    <th class="col s2"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!-- Experiences -->
+                <hr />
+                <div class="row" id="div-experience">
+                    <div class="input-field col s12">
+                        <h6 class="card card grey lighten-2 padding-1 border-radius-5">Experiences</h6>
+
+                        <div id="dialog-form2" title="Add Experience">
+                            <div class="frm-experience">
+                                <fieldset>
+                                    <label for="designation">Designation</label>
+                                    <input type="text" name="designation" id="designation" class="text ui-widget-content ui-corner-all" required>
+                                    <label for="organisation">Organisation</label>
+                                    <input type="text" name="organisation" id="organisation" class="text ui-widget-content ui-corner-all">
+                                    <label for="from_year">From Year</label>
+                                    <input class="datepicker text ui-widget-content ui-corner-all" id="from_year" />
+                                    <label for="to_year">To Year</label>
+                                    <input class="datepicker text ui-widget-content ui-corner-all" id="to_year" />
+                                    <label for="description">Description</label>
+                                    <textarea name="description" id="description" class="text ui-widget-content ui-corner-all"></textarea>
+                                    <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                                    <a tabindex="-1" style="position: absolute; top: -1000px">SUBMIT</a>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div id="experiences-contain">
+                            <table id="experiences" class="">
+                                <thead>
+                                    <tr class="blue-grey lighten-4">
+                                        <th class="font-weight-100">Designation</th>
+                                        <th class="font-weight-100">Organisation</th>
+                                        <th class="font-weight-100">From</th>
+                                        <th class="font-weight-100">To</th>
+                                        <th class="font-weight-100">Description</th>
+                                        <th class="col s2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%if (candidateExperiencesList.Count > 0)
+                                        {
+                                            foreach (var experience in candidateExperiencesList)
+                                            {
+                                    %>
+                                    <tr>
+                                        <td><%:experience["designation"]%></td>
+                                        <td><%:experience["organisation"]%></td>
+                                        <td><%:experience["from_year"]%></td>
+                                        <td><%:experience["to_year"]%></td>
+                                        <td><%:experience["description"]%></td>
+                                        <td><a class="btn btn-remove white-text waves-light blue lighten-1 padding-2 border-radius-5 right">Remove</a></td>
+                                    </tr>
+                                    <%}
+                                        }%>
+                                </tbody>
+                            </table>
+                        </div>
+                        <a class="right" id="create-experience">Add Experience +</a>
                     </div>
-                    <a class="right" id="create-experience">Add Experience +</a>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col s12 input-field right">
-                    <textarea id="others" name="others"><%if (candidateList.Count > 0)
-                                                            {%><%:candidateList[0]["others"]%><%}%></textarea>
-                    <label class="input-label" for="others">Other Notes</label>
+                <div class="row">
+                    <div class="col s12 input-field right">
+                        <textarea id="others" name="others"><%if (candidateList.Count > 0)
+                                                                {%><%:candidateList[0]["others"]%><%}%></textarea>
+                        <label class="input-label" for="others">Other Notes</label>
+                    </div>
                 </div>
-            </div>
-
-
-
 
             </div>
         </div>
 
         <div class="row">
             <div class="input-field col s12 m12 l8 card white lighten-3 z-depth-3 padding-3 border-radius-5">
-                <h6>For Employers Use</h6>
-                <%if (Convert.ToInt32(Session["user_type"].ToString()) < 6)
-                    { %>
-                <div class="row">
+                <% if (Session["user_type"] != null)
+                         {
+                             if (Convert.ToInt32(Session["user_type"].ToString()) < 6)
+                             { %>
+                <div class="row" hidden>
                     <div class="col s6 input-field left">
                         <input type="number" id="status" name="status" value="<%if (candidateList.Count > 0)
-                            {%><%:candidateList[0]["status"]%><%}%>" />
+                         {%><%:candidateList[0]["status"]%><%}%>" />
                         <label class="input-label" for="status">Status *(Dummy Field)*</label>
                     </div>
                     <div class="col s6 input-field right">
                         <input type="number" id="rating" name="rating" value="<%if (candidateList.Count > 0)
-                            {%><%:candidateList[0]["rating"]%><%}%>" />
+                         {%><%:candidateList[0]["rating"]%><%}%>" />
                         <label class="input-label" for="rating">Rating *(Dummy Field)*</label>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" hidden>
                     <div class="col s12 input-field">
                         <textarea id="employer_comments" name="employer_comments"><%if (candidateList.Count > 0)
-                                                                                      {%><%:candidateList[0]["employer_comments"]%><%}%></textarea>
+                         {%><%:candidateList[0]["employer_comments"]%><%}%></textarea>
                         <label class="input-label" for="employer_comments">Comments *(Dummy Field)*</label>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" hidden>
                     <div class="col s12 input-field switch left">
                         <label>
-                            Active<input type="checkbox" id="active" name="active" class="filled-in blue lighten-3" <%= (candidateList.Count > 0) ? (candidateList[0]["active"] == null) ? "checked" : (candidateList[0]["active"].ToString() == "1") ? "checked" : "" : "checked" %> />
+                            Active<input type="checkbox" id="active" name="active" class="filled-in blue lighten-3" <%= (candidateList.Count > 0) ? (candidateList[0]["active"] == null) ? "checked" : (candidateList[0]["active"].ToString() == "1") ? "checked" : ""  : "checked" %> />
                             <span class="lever"></span>
                         </label>
                     </div>
                 </div>
-                <%} %>
+                <%}
+                         } %>
 
+                
+                    <div class="col s12 input-field right">
 
-                <div class="col s12 input-field right">
-                    <a id="btn-check" class="btn waves-effect waves-light blue lighten-1 right">Check</a>
-                    <a id="btn-submit" class="btn waves-effect waves-light blue lighten-1 right">Submit</a>
+                        <a href="<%=Session["previous_url"] %>" class="btn waves-effect waves-light blue lighten-1 left" id="btn-cancel">Cancel<i class="material-icons right">close</i></a>
+  
+                    <a id="btn-submit" class="btn waves-effect waves-light blue lighten-1 right"><%:Request.QueryString["id"]!=null?"Update":"Submit" %></a>
                     <asp:Button Style="display: none" ID="btn_submit" CssClass="btn waves-effect waves-light blue lighten-1 right" Text="Submit" runat="server" OnClick="btn_submit_Click" />
                 </div>
+              
+                
             </div>
         </div>
 
@@ -324,11 +377,27 @@
     <script>
         $(document).ready(function () {
 
+            var q = [];
+
+            $('#dob').datepicker({
+                maxDate: 0,
+                dateFormat: 'dd-mm-yy',
+                //changeMonth: true,
+                //changeYear: true,
+            });
 
             $("#year").datepicker({ dateFormat: 'yy' });
             $("#from_year").datepicker({ dateFormat: 'yy' });
             $("#to_year").datepicker({ dateFormat: 'yy' });
 
+
+
+            var arrData = [];
+
+            $('#check').click(function () {
+                getSkills();
+
+            });
 
 
             var documents = [];
@@ -389,16 +458,7 @@
             var qualifications = {};
             var experiences = {};
 
-            $('#btn-check').click(function () {
-                console.log('qualification is ' + JSON.stringify(qualifications));
-                console.log('experiences is ' + JSON.stringify(experiences));
-                console.log(documents);
 
-            });
-
-            $('#btn-upload-cv').click(function () {
-                $('#cv').click();
-            });
 
             $(document).on("click", "a.btn-remove", function () {
                 $(this).parents("tr").remove();
@@ -412,46 +472,79 @@
                 allFields = $([]).add(qualification).add(institute).add(year).add(percentage),
                 tips = $(".validateTips");
 
-            function checkLength(o, n, min, max) {
-                if (o.val().length > max || o.val().length < min) {
-                    o.addClass("ui-state-error");
-                    updateTips("Length of " + n + " must be between " +
-                        min + " and " + max + ".");
-                    return false;
-                } else {
-                    return true;
-                }
-            }
+            
+            function validateQualDialogFields() {
+            var valid = true;
+            allFields.removeClass( "ui-state-error" );
+ 
+                valid = valid && checkLength(qualification, "Qualification", 1, 100);
+                valid = valid && checkLength(institute, "Institute", 1, 200);
+                valid = valid && isBetween(year, "Year", 1950, new Date().getFullYear());
+                valid = valid && isBetween(percentage, "Percentage", 0, 100);
+      return valid;
+    }
+
 
             var i = 0;
             function addQualification() {
-                var valid = true;
+                var valid = validateQualDialogFields();
+                
+                var exists = false;
                 $('#qualifications-contain').show();
                 if (valid) {
-                    i += 1;
-                    $("#qualifications tbody").append("<tr id=\"qual" + i + "\">" +
-                        "<td>" + qualification.val() + "</td>" +
-                        "<td>" + institute.val() + "</td>" +
-                        "<td>" + year.val() + "</td>" +
-                        "<td>" + percentage.val() + "</td>" +
-                        "<td><a class=\"btn btn-remove white-text waves-light blue lighten-1 padding-2 border-radius-5\">Remove</a></td>" +
-                        "</tr>");
-                    dialog.dialog("close");
-
-                    var jsonData = {};
-                    jsonData['qualification'] = qualification.val();
-                    jsonData['institute'] = institute.val();
-                    jsonData['year'] = year.val();
-                    jsonData['percentage'] = percentage.val();
-                    qualifications[i] = jsonData;
-
-                }
-                $('#qualification').val("");
+                    insertQualification();
+                    $("#qualifications tr").each(function () {
+                        var currentRow = $(this);
+                        if (currentRow.find("td:eq(0)").text().toLowerCase() == $('#qualification').val().trim().toLowerCase()) {
+                            exists = true;
+                        }; 
+                    });
+                    if (!exists) {
+                        $("#qualifications tbody").append("<tr\>" +
+                            "<td>" + qualification.val() + "</td>" +
+                            "<td>" + institute.val() + "</td>" +
+                            "<td>" + year.val() + "</td>" +
+                            "<td>" + percentage.val() + "</td>" +
+                            "<td><a class=\"btn btn-remove white-text waves-light blue lighten-1 padding-2 border-radius-5 right\">Remove</a></td>" +
+                            "</tr>");
+                        dialog.dialog("close");
+                        exists = false;
+                    }
+                    else {
+                        alert("Similar record for qualification already exists.");
+                    }
+                    $('#qualification').val("");
                 $('#institute').val("");
                 $('#year').val("");
                 $('#percentage').val("");
                 return valid;
+                }
+                
             }
+
+            function insertQualification() {
+               var title = $('#qualification').val();
+                if (title.trim() != "") {
+                    var datastring = JSON.stringify({ 'title': title });
+                $.ajax({
+                    url: 'CandidateUpdate.aspx/InsertQualification',
+                    type: 'post',
+                    data: datastring,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (data) {
+ 
+                    },
+                    error: function (error) {
+                        toastr.error("Unable to complete process.");
+                    }
+                });
+
+                }
+            }
+
+
+
 
             dialog = $("#dialog-form1").dialog({
                 autoOpen: false,
@@ -491,7 +584,15 @@
                 allFields2 = $([]).add(designation).add(organisation).add(from_year).add(to_year).add(description),
                 tips2 = $(".validateTips");
 
+            function updateTips( t ) {
+      tips
+        .text( t )
+        .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+        tips.removeClass( "ui-state-highlight", 1500 );
+                }, 500);
 
+    }
 
             function checkLength(o, n, min, max) {
                 if (o.val().length > max || o.val().length < min) {
@@ -504,38 +605,76 @@
                 }
             }
 
+            function isBetween(o, n, min, max) {
+                if (o.val() == "")
+                    return false;
+                if (parseInt(o.val()) > max || parseInt(o.val()) < min) {
+                    o.addClass("ui-state-error");
+                    updateTips("Must be a valid year between" +
+                        min + " and " + max + ".");
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+      function validateExpDialogFields() {
+      var valid = true;
+      allFields.removeClass( "ui-state-error" );
+ 
+                valid = valid && checkLength(designation, "Designation", 1, 50);
+                valid = valid && checkLength(organisation, "Organisation", 1, 100);
+                valid = valid && checkLength(description, "Description", 1, 200);
+                valid = valid && isBetween(from_year, "From year", 1950, new Date().getFullYear());
+                valid = valid && isBetween(to_year, "To year", 1950, new Date().getFullYear());
+
+      return valid;
+    }
+
+
+
+
             var j = 0;
             function addExperience() {
-                var valid = true;
+
+                var valid = validateExpDialogFields();
+
+                var exists = false;
                 $('#experiences-contain').show();
                 if (valid) {
-                    j += 1;
-                    $("#experiences tbody").append("<tr id=\"exp" + j + "\">" +
-                        "<td>" + designation.val() + "</td>" +
-                        "<td>" + organisation.val() + "</td>" +
-                        "<td>" + from_year.val() + "</td>" +
-                        "<td>" + to_year.val() + "</td>" +
-                        "<td>" + description.val() + "</td>" +
-                        "<td><a class=\"btn btn-remove white-text waves-light blue lighten-1 padding-2 border-radius-5\">Remove</a></td>" +
-                        "</tr>");
-                    dialog2.dialog("close");
-
-                    var jsonData = {};
-                    jsonData['designation'] = designation.val();
-                    jsonData['organisation'] = organisation.val();
-                    jsonData['from_year'] = from_year.val();
-                    jsonData['to_year'] = to_year.val();
-                    jsonData['description'] = description.val();
-                    experiences[j] = jsonData;
-
-                }
-                $('#designation').val("");
+                    $("#experiences tr").each(function () {
+                        var currentRow = $(this);
+                        if (currentRow.find("td:eq(0)").text().toLowerCase() == $('#designation').val().trim().toLowerCase() && currentRow.find("td:eq(1)").text().toLowerCase() == $('#organisation').val().trim().toLowerCase()) {
+                            exists = true;
+                        }; 
+                    });
+                    if (!exists) {
+                        $("#experiences tbody").append("<tr>" +
+                            "<td>" + designation.val() + "</td>" +
+                            "<td>" + organisation.val() + "</td>" +
+                            "<td>" + from_year.val() + "</td>" +
+                            "<td>" + to_year.val() + "</td>" +
+                            "<td>" + description.val() + "</td>" +
+                            "<td><a class=\"btn btn-remove white-text waves-light blue lighten-1 padding-2 border-radius-5 right\">Remove</a></td>" +
+                            "</tr>");
+                        dialog2.dialog("close");
+                        exists = false;
+                    }
+                    else {
+                        alert('Similar record for experience already exists.');
+                    }
+                    $('#designation').val("");
                 $('#organisation').val("");
                 $('#from_year').val("");
                 $('#to_year').val("");
                 $('#description').val("");
                 return valid;
+                }
+                
             }
+
+
+
 
             dialog2 = $("#dialog-form2").dialog({
                 autoOpen: false,
@@ -587,7 +726,6 @@
 
             $('.close').click(function () {
                 var closebtns = $(".qualification").get();
-                alert(closebtns);
             });
 
             var arrSkills = [];
@@ -595,53 +733,6 @@
             $("#slider-range").slider({
                 step: 100
             });
-
-
-            /*
-            var formCount = 0;
-            
-            $('#btn-qualification-add').click(function () {
-                formCount += 1;
-                var $Qfrm = $('<div />', { id: 'div-Qfrm' + formCount }),
-                    divQual = $('<div />', { id: 'div-Qfrm' + formCount }),
-                    lblqualification = $('<label />', { text: 'Qualification' }),
-                    qualification = $('<input />', { id: 'qualification' + formCount, name: 'qualification' + formCount, type: 'text' }),
-                    
-                    institute = $('<input />', { id: 'institute' + formCount, name: 'institute' + formCount, type: 'text' }),
-                    year = $('<input />', { id: 'year'+ formCount, name: 'year'+ formCount, type: 'number' }),
-                    percentage = $('<input />', { id: 'percentage'+ formCount, name: 'percentage'+ formCount, type: 'number' }),
-                    button = $('<a />', { id: 'btn-save-form'+ formCount });
-
-                $Qfrm.append(lblqualification, qualification, institute, year, percentage, $('<br />'), button).appendTo($('#div-qualification'));
-            });
-            */
-
-            $("#slider-range").slider({
-                range: true,
-                min: 0,
-                max: 200000,
-                values: [10000, 20000],
-                slide: function (event, ui) {
-                    $('#min_salary').val(ui.values[0]);
-                    $('#max_salary').val(ui.values[1]);
-                }
-            });
-            $('#min_salary').val($("#slider-range").slider("values", 0));
-            $('#max_salary').val($("#slider-range").slider("values", 1));
-
-            $("#slider-range2").slider({
-                range: true,
-                min: 0,
-                max: 30,
-                values: [0, 3],
-                slide: function (event, ui) {
-                    $('#min_experience').val(ui.values[0]);
-                    $('#max_experience').val(ui.values[1]);
-                }
-            });
-            $('#min_experience').val($("#slider-range2").slider("values", 0));
-            $('#max_experience').val($("#slider-range2").slider("values", 1));
-
 
 
             $("#candidate_skills").autocomplete({
@@ -731,6 +822,14 @@
                 return /^\s+$/.test(input);
             }
 
+            function isEmpty() {
+                if ($('#div-skills').children().length == 0) {
+                    return true;
+                }
+                return false;
+            }
+
+
             $.validator.addMethod("valueNotEquals", function (value, element, arg) {
                 return arg != value;
             }, "Required");
@@ -746,6 +845,10 @@
                 return !isNullOrWhitespace(value);
             }, "Blank spaces not allowed!");
 
+            $.validator.addMethod("isEmpty", function (value, element) {
+                return !isEmpty();
+            }, "Please add a key skill!");
+
             $('#<%=frm_job.ClientID%>').validate({
                 onfocusout: false,
                 invalidHandler: function (form, validator) {
@@ -755,90 +858,53 @@
                     }
                 },
                 rules: {
-                    job_code: {
+                    name: {
                         required: true,
                         validateNullOrWhiteSpace: true,
                     },
-                    location_id: {
+                    dob: {
                         required: true,
                     },
-                    description: {
+                    gender: {
+                        required: true,
+                        valueNotEquals: "0",
+                    },
+                    address: {
                         required: true,
                         validateNullOrWhiteSpace: true,
                     },
-                    vacancy_count: {
+                    email: {
                         required: true,
                         validateNullOrWhiteSpace: true,
-                        regexMatch: "^([0-9]{1,2})$"
-                    },
-                    currency: {
-                        required: true,
-                    },
+                        regexMatch: "[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 
-                    min_salary: {
+                    },
+                    phone: {
                         required: true,
                         validateNullOrWhiteSpace: true,
-                        regexMatch: "^([0-9]{1,6})$"
+                        regexMatch: "^[0-9 +()\/-]{5,20}$"
                     },
-
-                    max_salary: {
-                        required: true,
-                        validateNullOrWhiteSpace: true,
-                        regexMatch: "^([0-9]{1,6})$"
-                    },
-
-                    other_notes: {
-                        required: true,
-                        validateNullOrWhiteSpace: true,
-                    },
-
-                    min_experience: {
-                        required: true,
-                        validateNullOrWhiteSpace: true,
-                        regexMatch: "^([0-9]{1,2})$"
-                    },
-
-                    max_experience: {
-                        required: true,
-                        validateNullOrWhiteSpace: true,
-                        regexMatch: "^([0-9]{1,2})$"
-                    },
-
+                    candidate_skills: {
+                        isEmpty: true,
+                    }
                 },
                 messages: {
-                    job_code: {
+                    name: {
                         required: "Required*",
                     },
-                    location_id: {
+                    dob: {
                         required: "Required*",
                     },
-                    description: {
-                        required: "Required*",
+                    gender: {
+                        required: "Please select a gender.",
+                        valueNotEquals: "Please select a gender."
                     },
-                    vacancy_count: {
+                    email: {
                         required: "Required*",
+                        regexMatch: "Please enter a valid email address."
                     },
-                    currency: {
-                        required: "Required*",
-                    },
-                    min_salary: {
-                        required: "Required*",
-                        regexMatch: "Please enter a valid salary",
-                    },
-                    max_salary: {
-                        required: "Required*",
-                        regexMatch: "Please enter a valid salary",
-                    },
-                    min_experience: {
-                        required: "Required*",
-                        regexMatch: "Please enter valid no. of years",
-                    },
-                    max_experience: {
-                        required: "Required*",
-                        regexMatch: "Please enter valid no. of years",
-                    },
-
                     phone: {
+                        required: "Required*",
                         regexMatch: "Please enter valid phone number",
                     },
                 },
@@ -851,15 +917,100 @@
                         error.insertAfter(element);
                     }
                 }
+            });
 
+            function getQualifications() {
+
+                var i = 0;
+                $("#qualifications tr").each(function () {
+
+                    var currentRow = $(this);
+                    if (currentRow.find("td:eq(0)").text() != "") {
+                        i += 1;
+                        var col1_value = currentRow.find("td:eq(0)").text();
+                        var col2_value = currentRow.find("td:eq(1)").text();
+                        var col3_value = currentRow.find("td:eq(2)").text();
+                        var col4_value = currentRow.find("td:eq(3)").text();
+                        var jsonData = {};
+                        jsonData['qualification'] = col1_value;
+                        jsonData['institute'] = col2_value;
+                        jsonData['year'] = col3_value;
+                        jsonData['percentage'] = col4_value;
+                        qualifications[i] = jsonData;
+                    };
+                });
+            };
+
+            function getExperiences() {
+                var i = 0;
+                $("#experiences tr").each(function () {
+
+                    var currentRow = $(this);
+                    if (currentRow.find("td:eq(0)").text() != "") {
+                        i += 1;
+                        var col1_value = currentRow.find("td:eq(0)").text();
+                        var col2_value = currentRow.find("td:eq(1)").text();
+                        var col3_value = currentRow.find("td:eq(2)").text();
+                        var col4_value = currentRow.find("td:eq(3)").text();
+                        var col5_value = currentRow.find("td:eq(4)").text();
+                        var jsonData = {};
+                        jsonData['designation'] = col1_value;
+                        jsonData['organisation'] = col2_value;
+                        jsonData['from_year'] = col3_value;
+                        jsonData['to_year'] = col4_value;
+                        jsonData['description'] = col5_value;
+                        experiences[i] = jsonData;
+                    };
+                });
+            };
+
+            var skillarray = [];
+            function getSkills() {
+                $('#div-skills > div').map(function () {
+                    skillarray.push(this.id);
+                });
+            }
+
+            $('#btn-skill-add').click(function () {
+                var title = $('#candidate_skills').val();
+                if (title.trim() != "") {
+                    var datastring = JSON.stringify({ 'title': title });
+                $.ajax({
+                    url: 'CandidateUpdate.aspx/InsertSkill',
+                    type: 'post',
+                    data: datastring,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (parseInt(data.d) > 0) {
+                            var divs = $(".skill").get();
+                        for (var i = 0; i < divs.length; i++) {
+                            if (divs[i].getAttribute('id') == data.d) {
+                                return false;
+                            }
+                        }
+                        $("#div-skills").append('<div class="skill chip user-chip" id = "' + data.d + '">' + title + '<i class="close material-icons">close</i></div>');
+                        $('#candidate_skills').val("");
+                        }
+                        
+                    },
+                    error: function (error) {
+                        toastr.error("Unable to complete process.");
+                    }
+                });
+
+                }
+                
             });
 
 
             $('#btn-submit').click(function () {
                 if ($('#<%=frm_job.ClientID%>').valid()) {
-                    $('#skills').val(arrSkills);
-                    console.log(qualifications);
-                    /* AJAX call to webmethod */
+                    getQualifications();
+                    getExperiences();
+                    getSkills();
+                    $('#skills').val(skillarray);
+                    /*AJAX call to webmethod*/
                     var datastring = JSON.stringify({ 'qualifications': qualifications, 'experiences': experiences, 'documents': documents });
                     $.ajax({
                         url: 'CandidateUpdate.aspx/SetFields',
@@ -872,18 +1023,11 @@
                         error: function (error) {
                             toastr.error("Unable to complete process.");
                         }
+
                     });
-
-
-
-
-
-
-
 
                     document.getElementById('<%= btn_submit.ClientID %>').click();
                 }
-
             });
 
         });

@@ -65,18 +65,21 @@
                                 <th class="center">Round</th>
                                 <th class="center">Venue</th>
                                 <th class="center">Date</th>
-                                <th class="center">Active</th>                                
+                                <th class="center">Active</th>   
+                                <th class="center">Action</th> 
                             </tr>
                     </HeaderTemplate>
                     <ItemTemplate>
 
                         <tr>
                             <td class="center"><%#Eval("RowNumber")%></td>
-                            <td class="center"><a href="<%=WebURL %>InterviewUpdate?id=<%#Eval("id")%>"><%#Eval("title")%></a></td>
+                            <td class="center">
+                                <a href="<%=WebURL %>InterviewUpdate?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>"><%#Eval("title")%></a>
+                            </td>
                             <td class="center"><%#Eval("description")%></td>
                             <td class="center"><%#Eval("round")%></td>
                             <td class="center"><%#Eval("venue")%></td>
-                            <td class="center"><%#Eval("date_of_interview")%></td>
+                            <td class="center"><%#Convert.ToDateTime(Eval("date_of_interview")).ToShortDateString()%></td>
                             <td class="center">
                                 <div class="switch">
                                     <label>
@@ -84,6 +87,10 @@
                                         <span class="lever"></span>
                                     </label>
                                 </div>
+                            </td>
+                            <td class="center">
+                                <a <%# Convert.ToInt32(Eval("round").ToString()) == 1 ? "" : "hidden" %> class="btn-edit white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL%>SetInterview.aspx?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>">Set Interview</a>
+                                <a <%# Convert.ToInt32(Eval("round").ToString()) > 1 ? "" : "hidden" %> class="btn-edit white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL%>SetInterview2.aspx?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>">Set Interview</a>
                             </td>
 
                         </tr>

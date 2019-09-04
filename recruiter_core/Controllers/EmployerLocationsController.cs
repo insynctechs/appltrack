@@ -25,7 +25,7 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
-        // To fetch multiple employers based on a field type and field value.
+        // To fetch multiple employer locations based on a field type and field value.
         [Route("api/EmployerLocations/Get")]
         [HttpGet]
         public async Task<IHttpActionResult> GetEmployerLocations(string employer_id, string srchBy, string srchVal, string PageSize, string CurrentPage)
