@@ -63,7 +63,7 @@
                             <td class="center"><%#Eval("title")%></td>
                             <td class="center">
                                 <a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" style="margin: 3px" href="<%= WebURL %>SkillUpdate?id=<%#Eval("id")%>">Edit</a>
-                                <a class="btn-delete white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%= WebURL %>Skill/Delete?id=<%#Eval("id")%>" onclick="setId(<%#Eval("id")%>)">Delete </a>
+                                <a id= "<%#Eval("id")%>" class="btn-delete white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%= WebURL %>Skill/Delete?id=<%#Eval("id")%>"   >Delete </a>
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -143,19 +143,25 @@
         function doDelete() {
             $(this).webuiPopover({ title: 'Are you sure to delete?', content: '<a href="#">Yes</a><a class="right" href="2">No</a>' });
         };
-
+                      
         $(document).ready(function () {
-            $('.btn-delete').click(function () {
+            /*$('.btn-delete').click(function () {
                 $(this).webuiPopover({ title: 'Sure to delete?', content: '<a href="' + this.getAttribute("href") + '">Yes</a>', closeable: true });
                 return false;
-            });
-        });
-
-
-
-
-
+            });*/
+            $('.btn-delete').on('focus', function () {
+               
+   $(this).webuiPopover('destroy'); // the trick
+   $(this).webuiPopover({
+      placement: 'right',
+       title: 'Sure to delete?',
+       content: '<a href="' + this.getAttribute("href") + '">Yes</a>',
+       closeable: true,
+       cache: false
+   }); 
+});
+            
+         });
 
     </script>
-
 </asp:Content>
