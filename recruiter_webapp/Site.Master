@@ -40,11 +40,11 @@
 
 </head>
 <body>
-   <%--
+   <%
     Session["user_id"] = "1";
         Session["user_type"] = "1";
        Session["user_name"] = "Super Admin";
-    --%>
+    %>
     <!-- HEADER BEGINS -->
     <header class="page-topbar" id="header">
         <div class="navbar navbar-fixed">

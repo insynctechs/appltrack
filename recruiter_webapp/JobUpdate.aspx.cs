@@ -239,6 +239,7 @@ namespace recruiter_webapp
             job.Add("employer_id", Request.Form["employer_id"].Trim());
             job.Add("location_id", Request.Form["location_id"]!=null? Request.Form["location_id"] : "0");
             job.Add("job_code", Request.Form["job_code"].Trim());
+            job.Add("title", Request.Form["title"].Trim());
             job.Add("industry", Request.Form["industry"].Trim());
             job.Add("category", Request.Form["category"].Trim());
             job.Add("description", Request.Form["description"].Trim());

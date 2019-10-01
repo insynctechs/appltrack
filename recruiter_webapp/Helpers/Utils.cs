@@ -36,6 +36,12 @@ namespace recruiter_webapp.Helpers
             return value.ToString("yyyyMMddHHmmssffff");
         }
 
+        // This method is used to create a numeric timestamp (Used for creating a unique filename)
+        public static String GetDatestamp(DateTime value)
+        {
+            return value.ToString("yyyyMMdd");
+        }
+
 
         // This method is used to generate a random 8 character long alpha-numeric password.
         public static string GeneratePassword()

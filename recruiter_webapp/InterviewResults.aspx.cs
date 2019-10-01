@@ -42,13 +42,13 @@ namespace recruiter_webapp
                         WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
                     }
                     GetEmployers();
-                    if (employer_id.Value != "0")
+                    if (employer_id.Value != "0" || Request.QueryString["employer_id"]!=null)
                     {
                         GetJobs();
                     }
-                    if (job_id.Value != "0")
+                    if (job_id.Value != "0" || Request.QueryString["job_id"] != null)
                     {
-                        GetInterviewListForJob(Convert.ToInt32(job_id.Value));
+                        GetInterviewListForJob();
                     }
                 }
 
@@ -79,7 +79,16 @@ namespace recruiter_webapp
         {
             try
             {
-                var url = string.Format("api/Jobs/GetList?employer_id=" + employer_id.Value);
+                var url = "";
+                if(employer_id.Value!="0")
+                {
+                    url = string.Format("api/Jobs/GetList?employer_id=" + employer_id.Value);
+                }
+                if(Request.QueryString["employer_id"]!=null)
+                {
+                    url = string.Format("api/Jobs/GetList?employer_id=" + Request.QueryString["employer_id"]);
+                }
+                
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
                 jobList = dt.AsEnumerable().ToList();
 
@@ -90,14 +99,21 @@ namespace recruiter_webapp
             }
         }
 
-        private void GetInterviewListForJob(int job_id)
+        private void GetInterviewListForJob()
         {
             try
             {
-                var url = string.Format("api/Jobs/GetInterviewList?job_id=" + job_id);
+                var url = "";
+                if (job_id.Value != "0")
+                {
+                    url = string.Format("api/Jobs/GetInterviewList?job_id=" + job_id.Value);
+                }
+                if (Request.QueryString["job_id"] != null)
+                {
+                    url = string.Format("api/Jobs/GetInterviewList?job_id=" + Request.QueryString["job_id"]);
+                } 
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
                 interviewList = dt.AsEnumerable().ToList();
-
             }
             catch (Exception ex)
             {
@@ -143,9 +159,10 @@ namespace recruiter_webapp
                         ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Results");
                         worksheet.Row(1).Height = 20;
                         worksheet.Row(1).Style.Font.Bold = true;
+                        worksheet.Row(1).Style.Font.Size = 12;
                         worksheet.Cells[1, 1, 1, 13].Merge = true;
                         worksheet.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[1, 1].Value = "Interview Results generated on " + DateTime.Now;
+                        worksheet.Cells[1, 1].Value = "Interview Results Report generated on " + DateTime.Now.ToLongDateString();
                         worksheet.Cells[1, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
                         worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(Constants.excelHeaderColor);
 
@@ -205,13 +222,14 @@ namespace recruiter_webapp
                         worksheet.Column(12).AutoFit();
                         worksheet.Column(13).AutoFit();
 
-                        string filename = "Interview_Results_" + Utils.GetTimestamp(DateTime.Now) + ".xlsx";
+                        string filename = "Interview_Results_" + Utils.GetDatestamp(DateTime.Now) + ".xlsx";
                         this.Response.Clear(); // To fix file corruption
                         this.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         this.Response.AddHeader(
                                   "content-disposition",
                                   string.Format("attachment;  filename={0}", filename));
                         this.Response.BinaryWrite(excelPackage.GetAsByteArray());
+                        this.Response.End();
                     }
                 }
                 else

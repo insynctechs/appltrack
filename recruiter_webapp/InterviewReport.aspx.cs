@@ -13,6 +13,7 @@ using OfficeOpenXml.Drawing.Chart;
 using System.IO;
 using OfficeOpenXml.Style;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace recruiter_webapp
 {
@@ -122,15 +123,25 @@ namespace recruiter_webapp
 
 
                         ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Report");
+
                         worksheet.Row(1).Height = 20;
                         worksheet.Row(1).Style.Font.Bold = true;
-                        worksheet.Cells[1, 1, 1, 8].Merge = true;
+                        worksheet.Row(1).Style.Font.Size = 12;
+                        worksheet.Cells["A1,A2,A3"].Merge = true;
                         worksheet.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        worksheet.Cells[1, 1].Value = "Interview Report generated on " + DateTime.Now + (fromDate.Value==""?" (All Records)":" (" + fromDate.Value + " to " + toDate.Value + ")");
+                        worksheet.Cells[1, 1].Value = "Interview Report generated on " + DateTime.Now.ToLongDateString();
                         worksheet.Cells[1, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
                         worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(Constants.excelHeaderColor);
 
-                        int rowIndex = 2;
+                        worksheet.Row(2).Height = 20;
+                        worksheet.Row(2).Style.Font.Bold = true;
+                        worksheet.Cells[2, 1, 2, 8].Merge = true;
+                        worksheet.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        worksheet.Cells[2, 1].Value = (fromDate.Value == "" ? " ( All Records )" : " (" + fromDate.Value + " to " + toDate.Value + ")");
+                        worksheet.Cells[2, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        worksheet.Cells[2, 1].Style.Fill.BackgroundColor.SetColor(Constants.excelHeaderColor);
+
+                        int rowIndex = 3;
 
                         worksheet.Row(rowIndex).Height = 20;
                         worksheet.Row(rowIndex).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -169,13 +180,14 @@ namespace recruiter_webapp
                         worksheet.Column(7).AutoFit();
                         worksheet.Column(8).AutoFit();
 
-                        string filename = "Interview_Report_" + Utils.GetTimestamp(DateTime.Now) + ".xlsx";
+                        string filename = "Interview_Report_" + Utils.GetDatestamp(DateTime.Now) + ".xlsx";
                         this.Response.Clear(); // To fix file corruption
                         this.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         this.Response.AddHeader(
                                   "content-disposition",
                                   string.Format("attachment;  filename={0}", filename));
                         this.Response.BinaryWrite(excelPackage.GetAsByteArray());
+                        this.Response.End();
                     }
                     Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_EXCEL_GEN);
                 }

@@ -168,7 +168,7 @@ namespace recruiter_webapp.Helpers
                 //Now set your SMTP   
                 SmtpClient _smtp = new SmtpClient();
 
-                Object state = _mailmsg;
+                //Object state = _mailmsg;
 
                 //Set HOST server SMTP detail  
                 _smtp.Host = emailSenderHost;
@@ -185,8 +185,8 @@ namespace recruiter_webapp.Helpers
 
                 //Send Method will send your MailMessage create above.  
                 //_smtp.Send(_mailmsg);
-       
-                _smtp.SendCompleted += new SendCompletedEventHandler(smtpClient_SendCompleted);
+
+                //_smtp.SendCompleted += new SendCompletedEventHandler(smtpClient_SendCompleted);
                 try
                 {
                     _smtp.Send(_mailmsg);
@@ -195,6 +195,7 @@ namespace recruiter_webapp.Helpers
                 {
                     CommonLogger.Info(ex.ToString() + " while sending mail to " + email + " at " + DateTime.Now);
                 }
+  
         }
 
         public void smtpClient_SendCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)

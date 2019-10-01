@@ -106,33 +106,34 @@ namespace recruiter_core.Models
                 dtQualifications.Rows.Add(dr);
             }
 
-            SqlParameter[] sqlParam = new SqlParameter[19];
+            SqlParameter[] sqlParam = new SqlParameter[20];
             sqlParam[0] = new SqlParameter("@job_code", job["job_code"]);
-            sqlParam[1] = new SqlParameter("@description", job["description"]);
-            sqlParam[2] = new SqlParameter("@industry", job["industry"]);
-            sqlParam[3] = new SqlParameter("@category", job["category"]);
-            sqlParam[4] = new SqlParameter("@employer_id", job["employer_id"]);
-            sqlParam[5] = new SqlParameter("@location_id", job["location_id"]);                      
-            sqlParam[6] = new SqlParameter("@vacancy_count", job["vacancy_count"]);
-            sqlParam[7] = new SqlParameter("@other_notes", job["other_notes"]);
-            sqlParam[8] = new SqlParameter("@min_exp", job["min_exp"]);
-            sqlParam[9] = new SqlParameter("@max_exp", job["max_exp"]);
-            sqlParam[10] = new SqlParameter("@skillList", dtSkills);
-            sqlParam[10].SqlDbType = SqlDbType.Structured;
-            sqlParam[11] = new SqlParameter("@qualificationList", dtQualifications);
+            sqlParam[1] = new SqlParameter("@title", job["title"]);
+            sqlParam[2] = new SqlParameter("@description", job["description"]);
+            sqlParam[3] = new SqlParameter("@industry", job["industry"]);
+            sqlParam[4] = new SqlParameter("@category", job["category"]);
+            sqlParam[5] = new SqlParameter("@employer_id", job["employer_id"]);
+            sqlParam[6] = new SqlParameter("@location_id", job["location_id"]);                      
+            sqlParam[7] = new SqlParameter("@vacancy_count", job["vacancy_count"]);
+            sqlParam[8] = new SqlParameter("@other_notes", job["other_notes"]);
+            sqlParam[9] = new SqlParameter("@min_exp", job["min_exp"]);
+            sqlParam[10] = new SqlParameter("@max_exp", job["max_exp"]);
+            sqlParam[11] = new SqlParameter("@skillList", dtSkills);
             sqlParam[11].SqlDbType = SqlDbType.Structured;
+            sqlParam[12] = new SqlParameter("@qualificationList", dtQualifications);
+            sqlParam[12].SqlDbType = SqlDbType.Structured;
             /*sqlParam[8] = new SqlParameter("@job_skills", job["job_skills"]);
             sqlParam[9] = new SqlParameter("@job_qualifications", job["job_qualifications"]);*/
-            sqlParam[12] = new SqlParameter("@currency", job["currency"]);
-            sqlParam[13] = new SqlParameter("@min_sal", job["min_sal"]);
-            sqlParam[14] = new SqlParameter("@max_sal", job["max_sal"]);
-            sqlParam[15] = new SqlParameter("@active", job["active"]);
-            sqlParam[16] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
-            sqlParam[17] = new SqlParameter("@join_date", job["join_date"]);
-            sqlParam[18] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[18].Direction = ParameterDirection.Output;
+            sqlParam[13] = new SqlParameter("@currency", job["currency"]);
+            sqlParam[14] = new SqlParameter("@min_sal", job["min_sal"]);
+            sqlParam[15] = new SqlParameter("@max_sal", job["max_sal"]);
+            sqlParam[16] = new SqlParameter("@active", job["active"]);
+            sqlParam[17] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
+            sqlParam[18] = new SqlParameter("@join_date", job["join_date"]);
+            sqlParam[19] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[19].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspJobs_Add", sqlParam));
-            return Convert.ToInt32(sqlParam[18].Value);
+            return Convert.ToInt32(sqlParam[19].Value);
         }
 
         
@@ -159,32 +160,33 @@ namespace recruiter_core.Models
                 dtQualifications.Rows.Add(dr);
             }
 
-            SqlParameter[] sqlParam = new SqlParameter[20];
+            SqlParameter[] sqlParam = new SqlParameter[21];
             sqlParam[0] = new SqlParameter("@job_id", job["job_id"]);
             sqlParam[1] = new SqlParameter("@job_code", job["job_code"]);
-            sqlParam[2] = new SqlParameter("@description", job["description"]);
-            sqlParam[3] = new SqlParameter("@industry", job["industry"]);
-            sqlParam[4] = new SqlParameter("@category", job["category"]);
-            sqlParam[5] = new SqlParameter("@employer_id", job["employer_id"]);
-            sqlParam[6] = new SqlParameter("@location_id", job["location_id"]);
-            sqlParam[7] = new SqlParameter("@vacancy_count", job["vacancy_count"]);
-            sqlParam[8] = new SqlParameter("@other_notes", job["other_notes"]);
-            sqlParam[9] = new SqlParameter("@min_exp", job["min_exp"]);
-            sqlParam[10] = new SqlParameter("@max_exp", job["max_exp"]);
-            sqlParam[11] = new SqlParameter("@skillList", dtSkills);
-            sqlParam[11].SqlDbType = SqlDbType.Structured;
-            sqlParam[12] = new SqlParameter("@qualificationList", dtQualifications);
+            sqlParam[2] = new SqlParameter("@title", job["title"]);
+            sqlParam[3] = new SqlParameter("@description", job["description"]);
+            sqlParam[4] = new SqlParameter("@industry", job["industry"]);
+            sqlParam[5] = new SqlParameter("@category", job["category"]);
+            sqlParam[6] = new SqlParameter("@employer_id", job["employer_id"]);
+            sqlParam[7] = new SqlParameter("@location_id", job["location_id"]);
+            sqlParam[8] = new SqlParameter("@vacancy_count", job["vacancy_count"]);
+            sqlParam[9] = new SqlParameter("@other_notes", job["other_notes"]);
+            sqlParam[10] = new SqlParameter("@min_exp", job["min_exp"]);
+            sqlParam[11] = new SqlParameter("@max_exp", job["max_exp"]);
+            sqlParam[12] = new SqlParameter("@skillList", dtSkills);
             sqlParam[12].SqlDbType = SqlDbType.Structured;
-            sqlParam[13] = new SqlParameter("@currency", job["currency"]);
-            sqlParam[14] = new SqlParameter("@min_sal", job["min_sal"]);
-            sqlParam[15] = new SqlParameter("@max_sal", job["max_sal"]);
-            sqlParam[16] = new SqlParameter("@active", job["active"]);
-            sqlParam[17] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
-            sqlParam[18] = new SqlParameter("@join_date", job["join_date"]);
-            sqlParam[19] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[19].Direction = ParameterDirection.Output;
+            sqlParam[13] = new SqlParameter("@qualificationList", dtQualifications);
+            sqlParam[13].SqlDbType = SqlDbType.Structured;
+            sqlParam[14] = new SqlParameter("@currency", job["currency"]);
+            sqlParam[15] = new SqlParameter("@min_sal", job["min_sal"]);
+            sqlParam[16] = new SqlParameter("@max_sal", job["max_sal"]);
+            sqlParam[17] = new SqlParameter("@active", job["active"]);
+            sqlParam[18] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
+            sqlParam[19] = new SqlParameter("@join_date", job["join_date"]);
+            sqlParam[20] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[20].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspJobs_Edit", sqlParam));
-            return Convert.ToInt32(sqlParam[19].Value);
+            return Convert.ToInt32(sqlParam[20].Value);
         }
 
         public async Task<DataSet> GetJobSkills(int id)

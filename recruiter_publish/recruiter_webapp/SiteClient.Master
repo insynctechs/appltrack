@@ -1,0 +1,146 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="SiteClient.master.cs" Inherits="recruiter_webapp.SiteClient" %>
+
+<%@ Register TagPrefix="UserControl" TagName="Login" Src="~/Login.ascx" %>
+<%@ Register TagPrefix="UserControl2" TagName="Logout" Src="~/Logout.ascx" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TalentRecruit - Empowering Recruiters</title>
+
+    <asp:PlaceHolder runat="server">
+        <%--  Scripts.Render("~/bundles/main_js") --%>
+        <%: Styles.Render("~/bundles/main_css") %>
+        <link href="/Styles/toastr.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css" rel="stylesheet" />
+    </asp:PlaceHolder>
+
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/Content/custom.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="~/Styles/metro.min.css">-->
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="/Scripts/jquery-3.3.1.js"></script>
+    <script src="/Scripts/materialize.js"></script>
+    <script src="/Scripts/jquery.validate.js"></script>
+    <script src="/Scripts/additional-methods.js"></script>
+    <script src="/Scripts/toastr.min.js"></script>
+    <!--<script src="/Scripts/metro.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.js"></script>
+</head>
+
+<body>
+    <%--
+    Session["user_id"] = "1";
+        Session["user_type"] = "1";
+    --%>
+    <!-- HEADER BEGINS -->
+    <header class="page-topbar" id="header">
+        <div class="navbar navbar-fixed">
+            <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-red-grey no-shadow">
+                <div class="nav-wrapper">
+                    <span class="logo-text white-text" style="font-size: 20px; margin: 10px">insyncTalentBox</span>
+                    <ul class="right">
+                        
+                        <%if (Session["user_id"] != null)
+                            { %>
+                        <%--
+                        <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Welcome, <%=Session["user_name"] %></a>
+                            <ul id = "dropdown" class = "dropdown-content"> --%>
+                        <li class="hide-on-med-and-down">
+                            <a class="btn waves-effect waves-light red darken-3 dropdown-button" href="javascript:void(0);" data-target="login-dropdown"><%=Session["user_name"] %>
+                            </a>
+                        </li>
+                        <% }
+                            else
+                            { %>
+                        <li class="hide-on-med-and-down"><a id="login" class="waves-effect red darken-3 waves-block waves-light"><span class="flag-icon flag-icon-gb">Login</span></a>
+                        </li>
+
+                        <%} %>
+                    </ul>
+                    <ul id="login-dropdown" class="dropdown-content">
+                        <li><a class="red darken-3 waves-effect waves-block waves-light popup-btn" href="<%= WebURL %>UserProfile.aspx">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a id="logout" class="red darken-3 waves-effect waves-block waves-light popup-btn">Logout</a></li>
+
+                    </ul>
+                </div>
+            </nav>
+
+            <UserControl:Login runat="server" ID="Login" />
+            <UserControl2:Logout runat="server" ID="Logout" />
+            <!-- LOGIN DIV WAS HERE -->
+
+        </div>
+    </header>
+    <!-- HEADER ENDS -->
+
+    <div id="client_main">
+        <div class="wrapper">
+
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
+
+                <!-- CONTENTS SPECIFIC TO PAGES INCLUDING COMMON FOOTER -->
+                <section id="content" class="container">
+
+
+                    <%--<div Style="min-height: 540px">
+                    
+                </div>
+                    --%>
+
+                    <footer class="footer-copyright" style="margin-top: 20px; margin-bottom: 10px">
+                        <a class="" href="#">Terms of Use</a> | <a class="" href="#">Privacy Policy</a>
+                        <br>
+                        © insyncTalentBox. All rights reserved. | Developed by <a href="http://www.insynctechs.com" target="_blank">Insync Tech Solutions</a>. 
+                    </footer>
+                </section>
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+    .flex-parent {
+        display: flex; /* equal height of the children */
+    }
+
+    .flex-child {
+        display: flex;
+    }
+
+
+    .navbar .navbar-dark ul .popup-btn {
+        background: #90caf9;
+        color: #fff;
+    }
+
+    .navbar .navbar-dark ul a:hover {
+        background: #42a5f5;
+    }
+</style>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+        $('.sidenav').sidenav();
+        $('.collapsible').collapsible();
+        toastr.options.positionClass = "toast-bottom-right";
+        $('select').formSelect();
+        $('.dropdown-trigger').dropdown();
+        $('.dropdown-button').dropdown();
+        $('#login').webuiPopover({ url: '#login-form' });
+
+    });
+</script>
