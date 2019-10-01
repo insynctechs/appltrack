@@ -47,6 +47,13 @@ namespace recruiter_core.Models
             return ds;
         }
 
+        public async Task<DataSet> GetJobList(int employer_id)
+        {
+            SqlParameter[] sqlParam = new SqlParameter[1];
+            sqlParam[0] = new SqlParameter("@employer_id", employer_id.ToString());
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspJobs_GetListForEmployer", sqlParam));
+        }
+
         // Method for displaying all job vacancies with pagination (For client queries)
         public async Task<DataSet> GetJobVacancies(int customer, int industry, int category, int skill, string job_code, int employer, int min_exp, int max_exp, string PageSize, string CurrentPage)
         {
@@ -122,7 +129,6 @@ namespace recruiter_core.Models
             sqlParam[15] = new SqlParameter("@active", job["active"]);
             sqlParam[16] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
             sqlParam[17] = new SqlParameter("@join_date", job["join_date"]);
-            sqlParam[17].SqlDbType = SqlDbType.Date;
             sqlParam[18] = new SqlParameter("@Ret", SqlDbType.Int);
             sqlParam[18].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspJobs_Add", sqlParam));
@@ -175,7 +181,6 @@ namespace recruiter_core.Models
             sqlParam[16] = new SqlParameter("@active", job["active"]);
             sqlParam[17] = new SqlParameter("@logged_in_userid", job["logged_in_userid"]);
             sqlParam[18] = new SqlParameter("@join_date", job["join_date"]);
-            sqlParam[18].SqlDbType = SqlDbType.Date;
             sqlParam[19] = new SqlParameter("@Ret", SqlDbType.Int);
             sqlParam[19].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspJobs_Edit", sqlParam));
@@ -219,22 +224,14 @@ namespace recruiter_core.Models
             sqlParam[1].Direction = ParameterDirection.Output;
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspJobs_GetSelectedsList", sqlParam));
         }
-
+        /*
         public async Task<DataSet> GetInterviewResults(int job_id)
         {
             SqlParameter[] sqlParam = new SqlParameter[1];
             sqlParam[0] = new SqlParameter("@job_id", job_id.ToString());
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspJobs_GetInterviewResults", sqlParam));
         }
-
-        public async Task<DataSet> GetInterviewResults2(int job_id, int interview_id)
-        {
-            SqlParameter[] sqlParam = new SqlParameter[2];
-            sqlParam[0] = new SqlParameter("@job_id", job_id.ToString());
-            sqlParam[1] = new SqlParameter("@int_id", interview_id.ToString());
-            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspJobs_GetInterviewResults2", sqlParam));
-        }
-
+        */
         public async Task<DataSet> GetInterviewList(int job_id)
         {
             SqlParameter[] sqlParam = new SqlParameter[1];

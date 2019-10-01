@@ -177,9 +177,11 @@ namespace recruiter_webapp
                     
                 else if (ret == -3)
                     Utils.setErrorLabel(lblResponseMsg, "Another record already exists for this round.");
+                else if (ret == -4)
+                    Utils.setErrorLabel(lblResponseMsg, "Interview Date must be before Joining Date.");
                 else
-                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
-                
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
+
             } 
             else
             {
@@ -192,9 +194,11 @@ namespace recruiter_webapp
                     
                 else if(ret == -3)
                     Utils.setErrorLabel(lblResponseMsg, "Another record already exists for this round.");
+                else if (ret == -4)
+                    Utils.setErrorLabel(lblResponseMsg, "Interview Date must be before Joining Date.");
                 else
                     Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
-                
+
             }
 
         }

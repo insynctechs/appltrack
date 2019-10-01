@@ -20,17 +20,23 @@
 
     <div class="row">
         <div id="entityDetails">
-            <div class="input-field col s12 m12 l6">
+            <div class="input-field col s12 m12 l6 card white lighten-3 z-depth-3 padding-3 border-radius-5">
+                <%if (employerList.Count > 0)
+                    { %>
                 <div class="row">
                     <input type="hidden" id="id" runat="server"/>
                     <div class="input-field col s12">
                         <input type="text" id="name" name="name" value="<%:employerList[0]["name"]%>"/>
                         <label for="name">Name*</label>
                     </div>
+                </div>
+                <div class="row">
                     <div class="input-field col s12">
                         <input type="text" id="address" name="address" value="<%:employerList[0]["address"]%>"/>
                         <label for="address">Address*</label>
                     </div>
+                </div>
+                <div class="row">
                     <div class="input-field col s6">
                         <input type="text" id="city" name="city" value="<%:employerList[0]["city"]%>"/>
                         <label for="city">City*</label>
@@ -39,32 +45,41 @@
                         <input type="text" id="state" name="state" value="<%:employerList[0]["state"]%>"/>
                         <label for="state">State*</label>
                     </div>
-                    <div class="input-field col s6">
+                </div>
+                <div class="row">
+                    <div class="input-field col s3">
                         <input type="text" id="zip" name="zip" value="<%:employerList[0]["zip"]%>"/>
                         <label for="zip">Zip</label>
                     </div>
-                    <div class="input-field col s6">
+                    <div class="input-field col s4">
                         <input type="text" id="phone" name="phone"  value="<%:employerList[0]["phone"]%>"/>
                         <label for="contact">Primary Contact*</label>
                     </div>
-                    <div class="input-field col s6">
+                    <div class="input-field col s5">
                         <input type="text" id="email" name="email" value="<%:employerList[0]["email"]%>"/>
                         <label for="email">Primary Email*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s9">
+                        <textarea id="description" name="description"><%:employerList[0]["description"]%></textarea>
                     </div>
                     <div class="input-field col s6">
                         <div class="switch">
                                     <label>
                                         Active
-                                        <input id="active" name="active" type="checkbox" <%: employerList[0]["active"].ToString()=="1"?"Checked":"Unchecked" %> />
+                                        <input id="active" name="active" type="checkbox" <%: employerList[0]["active"].ToString() == "1" ? "Checked" : "Unchecked" %> />
                                         <span class="lever"></span>
                                     </label>
                                 </div>
                     </div>
-                    <div class="input-field col s12">
-                        <input type="button" class="btn waves-effect waves-light blue lighten-1 right" id="btn_employer_update" value="Update"/>
-                        </div>
-                    
                 </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <a class="btn waves-effect waves-light blue lighten-1 right" id="btn_employer_update">Update</a>
+                        </div>
+                </div>
+                <%} %>
             </div>
             <div class="input-field col s12 m12 l6">
                 <a href="<%=WebURL %>EmployerStaffAdd?employer_id=<%=Request.QueryString["id"] %>" class="btn waves-effect waves-light blue lighten-1" id="btn-add">
@@ -198,6 +213,7 @@
                     var zip = $('#zip').val();
                     var email = $('#email').val();
                     var phone = $('#phone').val();
+                    var description = $('#description').val();
                     var active;
                     if ($('#active').prop('checked')) {
                         active = 1;
@@ -205,7 +221,7 @@
                     else {
                         active = 0;
                     }
-                    var datastring = JSON.stringify({ 'id': id, 'name': name, 'address': address, 'city': city, 'state': state, 'zip': zip, 'email': email, 'phone': phone, 'active': active });
+                    var datastring = JSON.stringify({ 'id': id, 'name': name, 'address': address, 'city': city, 'state': state, 'zip': zip, 'email': email, 'phone': phone, 'description':description, 'active': active });
                     $.ajax({
                         url: 'EmployerEdit.aspx/UpdateEmployer',
                         type: 'post',

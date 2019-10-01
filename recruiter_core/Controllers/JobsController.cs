@@ -39,10 +39,18 @@ namespace recruiter_core.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetJobs(string employer_id, string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
-            //File.AppendAllText("d:\\getjobparams.txt", employer_id + ":" + srchBy + ":" + srchVal + ":" + PageSize + ":" + CurrentPage + "\r\n");
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objJob.GetJobs(employer_id, srchBy, srchVal, PageSize, CurrentPage);
+            return Ok(art);
+        }
+
+        // To fetch list of jobs ids and titles, for a specific employer
+        [Route("api/Jobs/GetList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetJobList(int employer_id)
+        {
+            var art = await objJob.GetJobList(employer_id);
             return Ok(art);
         }
 
@@ -51,7 +59,8 @@ namespace recruiter_core.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetJobVacancies(int customer, int industry, int category, int skill, string job_code, int employer, int min_exp, int max_exp, string PageSize, string CurrentPage)
         {
-            //File.AppendAllText("d:\\getjobparams.txt", industry + ":" + category + ":" + skill + ":" + PageSize + ":" + CurrentPage + "\r\n");
+            if (job_code == null)
+                job_code = "";
             var art = await objJob.GetJobVacancies(customer, industry, category, skill, job_code, employer, min_exp, max_exp, PageSize, CurrentPage);
             return Ok(art);
         }
@@ -60,7 +69,6 @@ namespace recruiter_core.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> InsertJob([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("D:\\insertjob.txt", dictionaryAsJson.ToString());
             Dictionary<string, string> job = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
             var cat = await objJob.InsertJob(job);
             return Ok(cat);
@@ -70,7 +78,6 @@ namespace recruiter_core.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> EditJob([FromBody] JObject dictionaryAsJson)
         {
-            File.WriteAllText("D:\\editjob.txt", dictionaryAsJson.ToString());
             Dictionary<string, string> job = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
             var cat = await objJob.EditJob(job);
             return Ok(cat);
@@ -116,13 +123,7 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
-        [Route("api/Jobs/GetInterviewResults/")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetInterviewResults(int job_id, int interview_id)
-        {
-            var art = await objJob.GetInterviewResults2(job_id, interview_id);
-            return Ok(art);
-        }
+        
 
         [Route("api/Jobs/GetInterviewList/")]
         [HttpGet]

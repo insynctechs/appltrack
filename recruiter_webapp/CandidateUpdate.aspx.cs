@@ -33,10 +33,26 @@ namespace recruiter_webapp
         public static Dictionary<string, Dictionary<string, string>> dict_experiences;
         public static List<int> uploadedDocuments;
         public Dictionary<string, string> genders = new Dictionary<string, string>() { { "", "Choose Gender*" }, { "male", "Male" }, { "female", "Female" }, { "other", "Other" } };
+        private Boolean pageAccess = false;
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["user_id"] != null)
+            {
+                if(Session["user_type"].ToString() == "1")
+                {
+                    pageAccess = true;
+                }
+                if (Session["user_ref_id"] != null)
+                {
+                    if (Session["user_ref_id"].ToString() == Request.QueryString["id"].ToString())
+                        pageAccess = true;
+                }
+            }
+
+            if(Request.QueryString["id"]==null || pageAccess)
+            {
                 if (!IsPostBack)
                 {
                     ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
@@ -44,15 +60,22 @@ namespace recruiter_webapp
                     // To redirect to previous page
                     if (Request.UrlReferrer.ToString() != null)
                         Session["previous_url"] = Request.UrlReferrer.ToString();
-                    if (Request.QueryString["id"] != null)
-                    {
-                        int id = Convert.ToInt32(Request.QueryString["id"]);
-                        GetCandidate(id);
-                        GetCandidateSkills(id);
-                        GetCandidateQualifications(id);
-                        GetCandidateExperiences(id);
-                    }
                 }
+
+                if (Request.QueryString["id"] != null)
+                {
+                    int id = Convert.ToInt32(Request.QueryString["id"]);
+                    GetCandidate(id);
+                    GetCandidateSkills(id);
+                    GetCandidateQualifications(id);
+                    GetCandidateExperiences(id);
+                }
+            }
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
+
         }
 
 
@@ -181,10 +204,7 @@ namespace recruiter_webapp
             candidate.Add("phone", Request.Form["phone"]);
             candidate.Add("others", Request.Form["others"].Trim());
 
-            candidate.Add("status", (Request.Form["status"] == null ? "0" : Request.Form["status"]));
-            candidate.Add("rating", (Request.Form["rating"] == null ? "0" : Request.Form["rating"]));
-            candidate.Add("employer_comments", (Request.Form["employer_comments"] == null ? "" : Request.Form["employer_comments"]));
-            candidate.Add("active", (Request.Form["active"] == null ? "1" : (Request.Form["active"] == "on") ? "1" : "0"));
+            candidate.Add("active", (Request.Form["active"] == null ? "1" : Request.Form["active"]));
             candidate.Add("ip_address", new Utils().GetIpAddress());
             candidate.Add("notification", (Request.Form["notitfication"] == "on") ? "1" : "0");
             candidate.Add("user_type", "6");
@@ -303,7 +323,8 @@ namespace recruiter_webapp
                 ret = InsertCandidate();
                 if (ret > 0)
                 {
-                    Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString() + "CandidateDocUpdate.aspx?id=" + ret);
+                    Session["temp_id"] = ret;
+                    Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString() + "CandidateDocUpdate?id=" + ret);
                 }
                 else
                 {

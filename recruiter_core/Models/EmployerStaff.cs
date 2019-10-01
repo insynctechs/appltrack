@@ -42,9 +42,6 @@ namespace recruiter_core.Models
 
         public async Task<int> InsertEmployerStaff(Dictionary<string, string> employerStaff)
         {
-            
-            string password = Utils.GeneratePassword();
-            //File.AppendAllText("d:\\EmployerStaffLogins.txt", "Email: " + employerStaff["email"] + "\r\nPassword: " + password + "\r\n\r\n");
             SqlParameter[] sqlParam = new SqlParameter[16];
             sqlParam[0] = new SqlParameter("@user_id", employerStaff["user_id"]);
             sqlParam[1] = new SqlParameter("@employer_id", employerStaff["employer_id"]);
@@ -57,7 +54,7 @@ namespace recruiter_core.Models
             sqlParam[8] = new SqlParameter("@email", employerStaff["email"]);
             sqlParam[9] = new SqlParameter("@active", employerStaff["active"]);
             sqlParam[10] = new SqlParameter("@logged_in_userid", employerStaff["logged_in_userid"]);
-            sqlParam[11] = new SqlParameter("@password", password);
+            sqlParam[11] = new SqlParameter("@password", employerStaff["password"]);
             sqlParam[12] = new SqlParameter("@ip_address", employerStaff["ip_address"]);
             sqlParam[13] = new SqlParameter("@notification", employerStaff["notification"]);
             sqlParam[14] = new SqlParameter("@user_type", employerStaff["user_type"]);
@@ -70,7 +67,7 @@ namespace recruiter_core.Models
         // Some fields not meant to be changed are disabled
         public async Task<int> EditEmployerStaff(Dictionary<string, string> employerStaff)
         {
-            SqlParameter[] sqlParam = new SqlParameter[12];
+            SqlParameter[] sqlParam = new SqlParameter[13];
             sqlParam[0] = new SqlParameter("@employer_staff_id", employerStaff["id"]);
             sqlParam[1] = new SqlParameter("@employer_id", employerStaff["employer_id"]);
             sqlParam[2] = new SqlParameter("@employer_location_id", employerStaff["employer_location_id"]);
@@ -84,12 +81,12 @@ namespace recruiter_core.Models
             sqlParam[10] = new SqlParameter("@logged_in_userid", employerStaff["logged_in_userid"]);
             //sqlParam[11] = new SqlParameter("@ip_address", employerStaff["ip_address"]);
             //sqlParam[13] = new SqlParameter("@notification", employerStaff["notification"]);
-            //sqlParam[14] = new SqlParameter("@user_type", employerStaff["user_type"]);
-            sqlParam[11] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[11].Direction = ParameterDirection.Output;
+            sqlParam[11] = new SqlParameter("@user_type", employerStaff["user_type"]);
+            sqlParam[12] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[12].Direction = ParameterDirection.Output;
 
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspEmployerStaffs_Edit", sqlParam));
-            return Convert.ToInt32(sqlParam[11].Value);
+            return Convert.ToInt32(sqlParam[12].Value);
         }
     }
 }

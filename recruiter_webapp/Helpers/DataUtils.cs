@@ -193,7 +193,7 @@ namespace recruiter_webapp.Helpers
                 }
                 catch (Exception ex)
                 {
-                    CommonLogger.Info(ex.ToString() + " while sending mail to " + email);
+                    CommonLogger.Info(ex.ToString() + " while sending mail to " + email + " at " + DateTime.Now);
                 }
         }
 

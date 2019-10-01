@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Employer Staffs" Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeBehind="EmployerStaff.aspx.cs" Inherits="recruiter_webapp.EmployerStaff" %>
 <%@ Register Namespace="ASPnetControls" Assembly="ASPnetPagerV2_8" TagPrefix="cc" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <form runat="server">
+    <form id="frm_employer_staffs" runat="server">
         <div class="card z-depth-1 border-radius-5">
             <div class="row">
                 <div class="col s12">
@@ -12,7 +12,7 @@
         <div id="employerStaffsAddForm">
             <%if (Request.QueryString["employer_id"] != null)
                 { %>
-            <a href="<%= WebURL %>EmployerStaffAdd?employer_id=<%=Request.QueryString["employer_id"] %>" class="btn waves-effect waves-light blue lighten-1" id="btn-insert">Add Staff<i class="material-icons right">add</i>
+            <a href="<%= WebURL %>EmployerStaffUpdate?employer_id=<%=Request.QueryString["employer_id"] %>" class="btn waves-effect waves-light blue lighten-1" id="btn-insert">Add Staff<i class="material-icons right">add</i>
             </a>
             <div style="display: inline; padding: 0px 10px"></div>
             <br />
@@ -30,8 +30,8 @@
             
             <div id="employerStaffsForm">
                 <div class="input-field col s6 m6 l3">
-                <select id="combo_employers" onchange="setEmployerId();">
-                    <option disabled <%=(Request.QueryString["employer_id"]==null) ? "selected" : "" %>>Choose Employer</option>
+                <select id="cmb_employers" name="cmb_employers">
+                    <option value="0" <%=(Request.QueryString["employer_id"]==null) ? "selected" : "" %>>All</option>
                     <% foreach (var employer in listEmployers)
                         {
                     %>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="input-field col s4 m4 l2">
                     <asp:Button ID="btnSearch" OnClick="btnSearch_Click" runat="server" Text="" Style="display: none" />
-                <a class="btn waves-effect waves-light blue lighten-1" id="btn-search" onclick="doSearch()">Search<i class="material-icons right">search</i>
+                <a class="btn waves-effect waves-light blue lighten-1" id="btn-search">Search<i class="material-icons right">search</i>
                 </a>
                     </div>
                 
@@ -83,20 +83,20 @@
                     <ItemTemplate>
                         <tr>
                             <td class="center"><%#Eval("RowNumber")%></td>
-                            <td class="center"><%#Eval("employer_staff_name")%></td>
-                            <td class="center"><%#Eval("employer_staff_email")%></td>                           
-                            <td class="center"><%#Eval("employer_staff_location")%></td>
-                            <td class="center"><%#Eval("employer_staff_user_type")%></td>
+                            <td class="center"><%#Eval("name")%></td>
+                            <td class="center"><%#Eval("email")%></td>                           
+                            <td class="center"><%#Eval("employer_location_address")%></td>
+                            <td class="center"><%#Eval("user_type")%></td>
                             <td class="center">
                                 <div class="switch">
                                     <label>
-                                        <input type="checkbox" <%# Eval("employer_staff_active").ToString()=="1"?"Checked":"Unchecked" %> />
+                                        <input type="checkbox" <%# Eval("active").ToString()=="1"?"Checked":"Unchecked" %> />
                                         <span class="lever"></span>
                                     </label>
                                 </div>
                             </td>
                             <td class="center">
-                                <a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%= WebURL %>EmployerStaffAdd?id=<%#Eval("employer_staff_id")%>">Edit</a>
+                                <a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%= WebURL %>EmployerStaffUpdate?id=<%#Eval("id")%>">Edit</a>
                             </td>
                         </tr>
                     </ItemTemplate>
@@ -112,15 +112,9 @@
                 </div>
                 <%}
                 else
-    {
-        if (Request.QueryString["employer_id"] == null)
-        {%>
-                <p class="center">Choose an Employer!</p>
-                <%  }
-    else
     { %>
                 <p class="center">No Records Found!</p>
-                <% }
+                <%
     }%>
             </div>
 
@@ -129,18 +123,60 @@
     </form>
     <script>
         // Scripts for html anchors to asp button mapping
-
-        function doSearch() {
-            document.getElementById('<%= btnSearch.ClientID %>').click();
-        }
-
-        function setEmployerId() {
-                $('#<%= employer_id.ClientID %>').val($('#combo_employers').val());
-            }
-
         $(document).ready(function () {
+
             $('select').formSelect();
+
+            $.validator.setDefaults({
+                ignore: []
+            });
+
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg != value;
+            }, "Select an Employer*");
+
+            $('#<%=frm_employer_staffs.ClientID%>').validate({
+                onfocusout: false,
+                invalidHandler: function (form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        validator.errorList[0].element.focus();
+                    }
+                },
+
+                rules: {
+                    cmb_employers: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    cmb_employers: {
+                        required: "Please select an employer."
+                    },
+                },
+                errorElement: 'div',
+                errorPlacement: function (error, element) {
+                    var placement = $(element).data('error');
+                    if (placement) {
+                        $(placement).append(error)
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+
+            });
+
+            $('#btn-search').click(function () {
+                if ($('#<%=frm_employer_staffs.ClientID%>').valid()) {
+                    $('#<%= employer_id.ClientID %>').val($('#cmb_employers').val());
+                    document.getElementById('<%= btnSearch.ClientID %>').click();
+                };
+            });
+
+            function setEmployerId() {
+                $('#<%= employer_id.ClientID %>').val($('#cmb_employers').val());
+            }
         });
-       
+
     </script>
 </asp:Content>

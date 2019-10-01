@@ -22,8 +22,8 @@
         </div>
 
 
-        <div class="row no-padding">
-            <div class="col s12 m12 l12 card grey lighten-4 z-depth-0 no-padding">
+        <div class="row no-padding" style="margin-top: 10px">
+            <div class="col s12 m12 l12 no-padding">
                 <div id="employersForm">
                     <div class="col s12 l8 no-padding">
                         <div class="input-field col s8 m8 l4">

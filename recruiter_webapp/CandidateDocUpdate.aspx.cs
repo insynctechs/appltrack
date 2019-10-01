@@ -25,10 +25,27 @@ namespace recruiter_webapp
         public List<DataRow> documentList = new List<DataRow>();
         public List<DataRow> candidateDocumentList = new List<DataRow>();
         public static List<int> uploadedDocuments;
+        private Boolean pageAccess = false;
         #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            if (Session["temp_id"]!=null)
+            {
+                if (Session["temp_id"].ToString() == Request.QueryString["id"].ToString())
+                    pageAccess = true;
+            }
+            if (Session["user_id"] != null)
+            {
+                if(Session["user_ref_id"] != null)
+                {
+                    if (Session["user_ref_id"].ToString() == Request.QueryString["id"].ToString())
+                        pageAccess = true;
+                } 
+            }
+
+            if(pageAccess) {
                 if (!IsPostBack)
                 {
                     ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
@@ -47,6 +64,11 @@ namespace recruiter_webapp
                     DeleteDocument();
 
                 GetDocumentTypeList();
+            }
+            else
+            {
+                Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
+            }
         }
 
         private void GetCandidateDocuments(int id)

@@ -28,10 +28,10 @@ namespace recruiter_core.Controllers
         // To fetch multiple employer locations based on a field type and field value.
         [Route("api/EmployerLocations/Get")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetEmployerLocations(string employer_id, string srchBy, string srchVal, string PageSize, string CurrentPage)
+        public async Task<IHttpActionResult> GetEmployerLocations(string PageSize, string CurrentPage, string employer_id, string srchBy, string srchVal)
         {
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objEmployerLocation.GetEmployerLocations(employer_id, srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }

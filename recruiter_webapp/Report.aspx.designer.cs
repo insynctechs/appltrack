@@ -10,15 +10,15 @@
 namespace recruiter_webapp {
     
     
-    public partial class EmployerLocationAdd {
+    public partial class Report {
         
         /// <summary>
-        /// employer_loc_form control.
+        /// frm_reports control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm employer_loc_form;
+        protected global::System.Web.UI.HtmlControls.HtmlForm frm_reports;
     }
 }

@@ -43,6 +43,7 @@
    <%--
     Session["user_id"] = "1";
         Session["user_type"] = "1";
+       Session["user_name"] = "Super Admin";
     --%>
     <!-- HEADER BEGINS -->
     <header class="page-topbar" id="header">
@@ -51,10 +52,12 @@
                 <div class="nav-wrapper">
                     <span class="logo-text white-text" style="font-size: 20px; margin: 10px">insyncTalentBox</span>
                     <ul class="right">
+                        <%--
                         <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="toggle-fullscreen">Fullscreen</span></a></li>
 
                         <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Notifications</span></a></li>
-                        <%if (Session["user_id"] != null)
+                        --%>
+                            <%if (Session["user_id"] != null)
                             { %>
                         <%--
                         <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Welcome, <%=Session["user_name"] %></a>
@@ -170,8 +173,17 @@
                     --%>
                     <%if (Session["user_type"] != null)
                         {%>
-                    <li><a class="collapsible-body" href="#"><i class="material-icons"></i><span>Reports</span></a>
+                    <%if (Session["user_type"].ToString() != "6") {%>
+                    <li><a class="collapsible-header"><i class="material-icons">chevron_right</i><span>Reports</span></a>
+                    <div class="collapsible-body">
+                            <ul>
+                                <li><a class="center" href="<%= WebURL %>InterviewReport.aspx">Interview Report</a></li>
+                                <%--<li><a class="center" href="<%= WebURL %>EmployerReport.aspx">Employer Report</a></li>--%>
+                                <li><a class="center" href="<%= WebURL %>InterviewResults.aspx">Interview Results</a></li>
+                            </ul>
+                        </div>
                     </li>
+                    <%} %>
                     <%} %>
                     
                 </ul>

@@ -38,6 +38,12 @@ namespace recruiter_core.Models
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspCustomers_GetSingle", sqlParam));
         }
 
+        public async Task<DataSet> GetCustomerList()
+        {
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspCustomers_GetList"));
+        }
+
+
         // To insert customer using form data
         public async Task<int> InsertCustomer(Dictionary<string, string> customer)
         {

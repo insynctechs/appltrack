@@ -23,7 +23,7 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> GetCandidates(string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objCandidate.GetCandidates(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }

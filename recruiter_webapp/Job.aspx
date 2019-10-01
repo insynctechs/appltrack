@@ -22,7 +22,7 @@
         </div>
 
         <div class="row no-padding">
-            <div class="col s12 m12 l12 card grey lighten-4 z-depth-0 no-padding">
+            <div class="col s12 m12 l12 grey lighten-4 z-depth-0 no-padding">
                 <div id="employersForm">
                     <div class="col s12 l8 no-padding">
                         <div class="input-field col s8 m8 l4">
@@ -35,7 +35,7 @@
                             <input id="location_id" value="" hidden runat="server" />
                             <select id="srchBy" name="srchBy" runat="server">
                                 <option value="job_code" selected>Job Code</option>
-                                <option value="employer_id">Employer</option>
+                                <option value="employer">Employer</option>
                             </select>
                         </div>
                         <div class="input-field col s4 m4 l2">
@@ -55,7 +55,7 @@
                 <asp:Repeater ID="jobList" runat="server">
                     <HeaderTemplate>
                         <table class="table center">
-                            <tr class="card blue-grey z-depth-1 lighten-4 bold">
+                            <tr class="blue-grey z-depth-1 lighten-4 bold">
                                 <th class="center">#</th>
                                 <th class="center">Job Code</th>
                                 <th class="center">Employer</th>
@@ -81,7 +81,8 @@
                                 </div>
                             </td>
                             <td><a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL %>InterviewResults?job_id=<%#Eval("id")%>">Results</a></td>
-                            <td class="center"><a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL %>InterviewUpdate?job_id=<%#Eval("id")%>">Schedule</a></td>
+                            <td class="center" <%#Convert.ToDateTime(Eval("join_date").ToString())<DateTime.Now?"hidden":""%>><a class="white-text waves-light green lighten-1 padding-2 border-radius-5" href="<%=WebURL %>InterviewUpdate?job_id=<%#Eval("id")%>">Schedule</a></td>
+                            <td class="center" <%#Convert.ToDateTime(Eval("join_date").ToString())>=DateTime.Now?"hidden":""%>><a class="white-text waves-light red lighten-1 padding-2 border-radius-5">Expired</a></td>
 
                         </tr>
                     </ItemTemplate>

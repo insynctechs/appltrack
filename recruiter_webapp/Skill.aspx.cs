@@ -14,15 +14,12 @@ namespace recruiter_webapp
 {
     public partial class Skill : System.Web.UI.Page
     {
-
-        #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
         public Boolean displayUploadResult = false; // To display conflicting records after file upload, initially set to false.
         private int userid = 1; // For testing purpose
         WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> SkillListForDuplicates;
-        #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -35,15 +32,10 @@ namespace recruiter_webapp
                     {
                         ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                         WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
+                        GetSkills();
                     }
-
                     if (Request.Url.ToString().Contains("Delete"))
                         DeleteSkill();
-
-                    /* if (Request.Url.ToString().Contains("Edit"))
-                         EditSkill(); */
-
-                    GetSkills();
                 }
             }
             else
@@ -57,10 +49,7 @@ namespace recruiter_webapp
         {
             int currnetPageIndx = Convert.ToInt32(e.CommandArgument);
             pager1.CurrentIndex = currnetPageIndx;
-            if(srchVal!=null)
-                GetSkillsByTitle();
-            else
-                GetSkills();
+            GetSkills();
         }
 
         private void DeleteSkill()
@@ -79,22 +68,6 @@ namespace recruiter_webapp
             {
                 CommonLogger.Info(ex.ToString());
 
-            }
-        }
-
-        private void GetSkills()
-        {
-            try
-            {
-                var url = string.Format("api/Skills/Get?PageSize=" + pager1.PageSize + "&CurrentPage=" + pager1.CurrentIndex+ "&srchBy="+srchBy.Value+"&srchVal=");
-                DataSet ds = wHelper.GetDataSetFromWebApi(url);
-                skillList.DataSource = ds.Tables[0];
-                skillList.DataBind();
-                pager1.ItemCount = Convert.ToDouble(ds.Tables[1].Rows[0][0]);
-            }
-            catch (Exception ex)
-            {
-                CommonLogger.Info(ex.ToString());
             }
         }
 
@@ -148,10 +121,10 @@ namespace recruiter_webapp
         protected void btnSearch_Click(object sender, EventArgs e)
         {
             pager1.CurrentIndex = 1; // Reset to display records starting from first page
-            GetSkillsByTitle();
+            GetSkills();
         }
 
-        private void GetSkillsByTitle()
+        private void GetSkills()
         {
             try
             {

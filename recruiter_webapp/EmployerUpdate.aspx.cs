@@ -19,6 +19,7 @@ namespace recruiter_webapp
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
         public List<DataRow> formDataList;
+        public List<DataRow> customerList;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -35,6 +36,7 @@ namespace recruiter_webapp
                         ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                         WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
                     }
+                    GetCustomers();
                 }
             }
             else
@@ -42,6 +44,21 @@ namespace recruiter_webapp
                 Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
         }
+
+        private void GetCustomers()
+        {
+            try
+            {
+                var url = string.Format("api/Customers/GetList");
+                DataTable dt = wHelper.GetDataTableFromWebApi(url);
+                customerList = dt.AsEnumerable().ToList();
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+        }
+
 
         private void PopulateFormData(int id)
         {
@@ -61,25 +78,26 @@ namespace recruiter_webapp
         [ScriptMethod]
         public static void InsertEmployer0(string obj)
         {
-            File.WriteAllText("d:\\obj.txt", obj.ToString());
+           // File.WriteAllText("d:\\obj.txt", obj.ToString());
         }
 
 
         [System.Web.Services.WebMethod]
         [ScriptMethod]
-        public static int InsertEmployer(string name, string address, string city, string state, string zip, string email, string phone, string active)
+        public static int InsertEmployer(string customer, string name, string address, string city, string state, string zip, string email, string phone, string description, string active)
         {
             int ret = 0;
             var employer = new Dictionary<string, string>();
             //employer.Add("id", id);
-            employer.Add("customer_id", "58");
-            employer.Add("name", name);
-            employer.Add("address", address);
-            employer.Add("city", city);
-            employer.Add("state", state);
-            employer.Add("zip", zip);
-            employer.Add("email", email);
-            employer.Add("phone", phone);
+            employer.Add("customer_id", customer);
+            employer.Add("name", name.Trim());
+            employer.Add("address", address.Trim());
+            employer.Add("city", city.Trim());
+            employer.Add("state", state.Trim());
+            employer.Add("zip", zip.Trim());
+            employer.Add("email", email.Trim());
+            employer.Add("phone", phone.Trim());
+            employer.Add("description", description.Trim());
             employer.Add("active", active);         
                 try
                 {
@@ -100,12 +118,12 @@ namespace recruiter_webapp
             int ret = 0;
             var employer = new Dictionary<string, string>();
             employer.Add("employer_id", employer_id);
-            employer.Add("address", address);
-            employer.Add("city", city);
-            employer.Add("zip", zip);
-            employer.Add("email", email);
-            employer.Add("phone", phone);
-            employer.Add("country", country);
+            employer.Add("address", address.Trim());
+            employer.Add("city", city.Trim());
+            employer.Add("zip", zip.Trim());
+            employer.Add("email", email.Trim());
+            employer.Add("phone", phone.Trim());
+            employer.Add("country", country.Trim());
             employer.Add("active", active);
             try
             {
@@ -137,18 +155,18 @@ namespace recruiter_webapp
             employer.Add("user_id", "0");
             employer.Add("employer_id", employer_id);
             employer.Add("employer_location_id", employer_location_id);
-            employer.Add("name", name);
-            employer.Add("gender", gender);
-            employer.Add("designation", designation);
-            employer.Add("address", address);
-            employer.Add("phone", phone);
-            employer.Add("email", email);
+            employer.Add("name", name.Trim());
+            employer.Add("gender", gender.Trim());
+            employer.Add("designation", designation.Trim());
+            employer.Add("address", address.Trim());
+            employer.Add("phone", phone.Trim());
+            employer.Add("email", email.Trim());
             employer.Add("active", active);
-            //employer.Add("logged_in_userid", Session["user_id"] != null ? Session["user_id"].ToString() : "1");
-            employer.Add("logged_in_userid", "1");
+            employer.Add("logged_in_userid", HttpContext.Current.Session["user_id"] != null ? HttpContext.Current.Session["user_id"].ToString() : "1");
             employer.Add("ip_address", new Utils().GetIpAddress());
             employer.Add("notification",notification);
             employer.Add("user_type",user_type);
+            employer.Add("password", Utils.GeneratePassword());
             try
             {               
                 var url = string.Format("api/EmployerStaffs/Insert");

@@ -31,17 +31,22 @@ namespace recruiter_webapp
                     {
                         ApiPath = ConfigurationManager.AppSettings["Api"].ToString();
                         WebURL = ConfigurationManager.AppSettings["WebURL"].ToString();
-                        if (Request.QueryString["employer_id"] != null)
-                        {
-                            employer_id.Value = Request.QueryString["employer_id"];
-                        }
                     }
                     GetEmployerList();
 
                     if (Request.Url.ToString().Contains("Delete"))
                         DeleteEmployerStaff();
 
+                    if (Request.QueryString["employer_id"] != null)
+                    {
+                        employer_id.Value = Request.QueryString["employer_id"];
+                    }
+                    if (Request.QueryString["employer_id"] == null || Request.QueryString["employer_id"]=="0")
+                    {
+                        employer_id.Value = "0";
+                    }
                     GetEmployerStaffs();
+
                 }
             }
             else
@@ -54,6 +59,7 @@ namespace recruiter_webapp
         {
             int currnetPageIndx = Convert.ToInt32(e.CommandArgument);
             pager1.CurrentIndex = currnetPageIndx;
+            GetEmployerStaffs();
         }
 
         private void GetEmployerList()
@@ -94,7 +100,7 @@ namespace recruiter_webapp
         {
             try
             {
-                var url = string.Format("api/EmployerStaffs/Get?PageSize=" + pager1.PageSize + "&CurrentPage=" + pager1.CurrentIndex + "&employer_id=" + employer_id.Value + "&srchBy=" + srchBy.Value + "&srchVal=" + srchVal.Value);
+                var url = string.Format("api/EmployerStaffs/Get?employer_id=" + employer_id.Value + "&srchBy=" + srchBy.Value + "&srchVal=" + srchVal.Value + "&PageSize=" + pager1.PageSize + "&CurrentPage=" + pager1.CurrentIndex);
                 DataSet ds = wHelper.GetDataSetFromWebApi(url);
                 employerList.DataSource = ds.Tables[0];
                 employerList.DataBind();
@@ -109,9 +115,7 @@ namespace recruiter_webapp
 
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            pager1.CurrentIndex = 1; // Reset to display records starting from first page
-            //GetEmployerStaffs();
-            Response.Redirect(WebURL + "EmployerStaff?employer_id=" + employer_id.Value);
+            pager1.CurrentIndex = 1; // Reset to display records starting from first page 
         }
        
     }

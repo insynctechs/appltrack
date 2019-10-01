@@ -31,10 +31,20 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> GetCustomers(string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objCustomer.GetCustomers(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
+
+        // To fetch list of customer ids and names
+        [Route("api/Customers/GetList/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCustomerList()
+        {
+            var art = await objCustomer.GetCustomerList();
+            return Ok(art);
+        }
+
 
         [Route("api/Customers/Insert")]
         [HttpPost]

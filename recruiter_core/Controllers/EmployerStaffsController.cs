@@ -31,7 +31,7 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> GetEmployerStaffs(string employer_id, string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objEmployerStaff.GetEmployerStaffs(employer_id, srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }

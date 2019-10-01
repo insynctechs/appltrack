@@ -52,13 +52,22 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
+        // To fetch list of employer ids and names
+        [Route("api/Employers/GetListWithJobCount/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetEmployerListWithJobCount(int customer_id)
+        {
+            var art = await objEmployer.GetEmployerListWithJobCount(customer_id);
+            return Ok(art);
+        }
+
         // To fetch multiple employers based on a field type and field value.
         [Route("api/Employers/Get")]
         [HttpGet]
         public async Task<IHttpActionResult> GetEmployers(string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objEmployer.GetEmployers(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }

@@ -13,6 +13,15 @@ namespace recruiter_webapp {
     public partial class EmployerStaff {
         
         /// <summary>
+        /// frm_employer_staffs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlForm frm_employer_staffs;
+        
+        /// <summary>
         /// lblResponseMsg control.
         /// </summary>
         /// <remarks>

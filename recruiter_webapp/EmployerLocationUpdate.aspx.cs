@@ -11,15 +11,13 @@ using System.Web.UI.WebControls;
 
 namespace recruiter_webapp
 {
-    public partial class EmployerLocationAdd : System.Web.UI.Page
+    public partial class EmployerLocationUpdate : System.Web.UI.Page
     {
-        #region declaration
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
         public static WebApiHelper wHelper = new WebApiHelper();
         public List<DataRow> employerList = new List<DataRow>();
         public List<DataRow> employerLocationList = new List<DataRow>();
-        #endregion
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -48,6 +46,7 @@ namespace recruiter_webapp
                 Response.Redirect(ConfigurationManager.AppSettings["WebURL"].ToString());
             }
         }
+
 
         private void GetEmployer(int id)
         {
@@ -79,47 +78,81 @@ namespace recruiter_webapp
             }
         }
 
-        [System.Web.Services.WebMethod]
-        [ScriptMethod]
-        public static int InsertEmployerLocation(string employer_loc_id, string employer_id, string address, string city, string zip, string email, string phone, string country, string active)
+        public Dictionary<string, string> PrepareLocation()
+        {
+            Dictionary<string, string> employerLoc = new Dictionary<string, string>();
+            employerLoc.Add("employer_id", Request.Form["employer_id"]);
+            employerLoc.Add("address", Request.Form["address"].Trim());
+            employerLoc.Add("city", Request.Form["city"].Trim());
+            employerLoc.Add("zip", Request.Form["zip"]);
+            employerLoc.Add("email", Request.Form["email"]);
+            employerLoc.Add("phone", Request.Form["phone"].Trim());
+            employerLoc.Add("country", Request.Form["country"].Trim());
+            employerLoc.Add("active", (Request.Form["active"] == null ? "1" : Request.Form["active"]));
+            return employerLoc;
+        }
+
+        public int InsertLocation()
         {
             int ret = 0;
-            var employer = new Dictionary<string, string>();
-            employer.Add("employer_id", employer_id);
-            employer.Add("address", address);
-            employer.Add("city", city);
-            employer.Add("zip", zip);
-            employer.Add("email", email);
-            employer.Add("phone", phone);
-            employer.Add("country", country);
-            employer.Add("active", active);
-
-            if(employer_loc_id != "")
+            Dictionary<string, string> employerLoc = PrepareLocation();
+            try
             {
-                employer.Add("id", employer_loc_id);
-                try
-            {
-                    var url = string.Format("api/EmployerLocations/Edit");
-                    ret = wHelper.PostExecuteNonQueryResFromWebApi(url, employer);
-                }
+                var url = string.Format("api/EmployerLocations/Insert");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, employerLoc);
+            }
             catch (Exception ex)
-                {
-                    CommonLogger.Info(ex.ToString());
-                }
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return ret;
+        }
+
+        public int EditLocation()
+        {
+            int ret = 0;
+            Dictionary<string, string> employerLoc = PrepareLocation();
+            employerLoc.Add("id", Request.QueryString["id"]);
+            try
+            {
+                var url = string.Format("api/EmployerLocations/Edit");
+                ret = wHelper.PostExecuteNonQueryResFromWebApi(url, employerLoc);
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.Info(ex.ToString());
+            }
+            return ret;
+        }
+
+        protected void btn_submit_Click(object sender, EventArgs e)
+        {
+            int ret = 0;
+            if (Request.QueryString["id"] != null)
+            {
+                ret = EditLocation();
+                if (ret > 0)
+                    Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_UPDATE);
+                else
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_UPDATE);
             }
             else
             {
-                try
+                ret = InsertLocation();
+                if (ret > 0)
                 {
-                    var url = string.Format("api/EmployerLocations/Insert");
-                    ret = wHelper.PostExecuteNonQueryResFromWebApi(url, employer);
+                    Utils.setSuccessLabel(lblResponseMsg, Constants.SUCCESS_INSERT);
                 }
-                catch (Exception ex)
+                else
                 {
-                    CommonLogger.Info(ex.ToString());
+                    Utils.setErrorLabel(lblResponseMsg, Constants.ERR_RECORD_EXIST);
                 }
-            }            
-            return ret;
+            }
         }
+
+
+
+
+
     }
 }

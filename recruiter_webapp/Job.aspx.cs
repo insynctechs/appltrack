@@ -22,7 +22,7 @@ namespace recruiter_webapp
         {
             if(Session["user_id"] != null)
             {
-                if (Convert.ToInt32(Session["user_id"]) < 4)
+                if (Convert.ToInt32(Session["user_type"]) < 6)
                 {
                     lblResponseMsg.Text = "";
                     if (!IsPostBack)
@@ -49,10 +49,7 @@ namespace recruiter_webapp
         {
             int currnetPageIndx = Convert.ToInt32(e.CommandArgument);
             pager1.CurrentIndex = currnetPageIndx;
-            /*if (srchVal != null)
-                GetEmployersByField();
-            else*/
-                GetJobs();
+            GetJobs();
         }
 
         private void DeleteJob()
@@ -96,10 +93,9 @@ namespace recruiter_webapp
         {
             pager1.CurrentIndex = 1; // Reset to display records starting from first page
             GetJobs();
-            //GetEmployersByField();
         }
 
-        private void GetEmployersByField()
+        /*private void GetEmployersByField()
         {
             try
             {
@@ -114,6 +110,7 @@ namespace recruiter_webapp
                 CommonLogger.Info(ex.ToString());
             }
         }
+        */
     }
 
     

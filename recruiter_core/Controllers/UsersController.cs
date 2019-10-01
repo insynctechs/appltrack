@@ -46,7 +46,6 @@ namespace recruiter_core.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> ChangePassword(string email, string old_password, string new_password, string ip_address)
         {
-            //File.WriteAllText("d:\\changecalled.txt", email + " -> " + old_password + " -> " + new_password + " -> " + ip_address);
             var art = await objUser.ChangePassword(email, old_password, new_password, ip_address);
             return Ok(art);
         }

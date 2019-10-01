@@ -19,37 +19,55 @@
                 <p class="fs-title">Add Employer</p>
                 <p class="fs-subtitle">Enter details of your client.</p>
                 <div class="col s12">
-
+                    <%if (Session["user_type"].ToString() == "1") {%>
+                    <%if (customerList.Count > 0)
+                            { %>
+                    <div class="col s4 input-field">
+                        <select id="customer" name="customer">
+                            <option value="0" disabled selected>Choose Customer*</option>
+                            <%foreach (var customer in customerList)
+                            {%>
+                            <option value="<%:customer["id"]%>"><%:customer["name"]%></option>
+                            <%} %>
+                        </select>
+                        <label class="input-label" for="customer">Customer*</label>
+                    </div>
+                    <%} %>
+                    <%} %>
                     <input type="hidden" id="employer_id" value="<%if (formDataList != null) { if (formDataList[0]["employer_id"] != null) {%><%=formDataList[0]["employer_id"]%><%} } %>" />
-                    <div class="col s12 input-field">
+                    <div class="col s8 input-field">
                         <input type="text" id="employer_name" name="employer_name" value="<%if (formDataList != null) { if (formDataList[0]["employer_name"] != null) {%><%=formDataList[0]["employer_name"]%><%} } %>"/>
-                        <label class="input-label" for="employer_name">Name</label>
+                        <label class="input-label" for="employer_name">Name*</label>
                     </div>
                     <div class="col s12 input-field">
                         <input type="text" id="employer_address" name="employer_address" />
-                        <label class="input-label" for="employer_address">Address</label>
+                        <label class="input-label" for="employer_address">Address*</label>
                     </div>
-                    <div class="col s6 input-field">
+                    <div class="col s5 input-field">
                         <input type="text" id="employer_city" name="employer_city" />
-                        <label class="input-label" for="employer_city">City</label>
+                        <label class="input-label" for="employer_city">City*</label>
                     </div>
-                    <div class="col s6 input-field">
+                    <div class="col s5 input-field">
                         <input type="text" id="employer_state" name="employer_state" />
-                        <label class="input-label" for="employer_state">State</label>
+                        <label class="input-label" for="employer_state">State*</label>
                     </div>
-                    <div class="col s6 input-field">
+                    <div class="col s2 input-field">
                         <input type="text" id="employer_zip" name="employer_zip" />
-                        <label class="input-label" for="employer_zip">Zip / P.O.Box</label>
+                        <label class="input-label" for="employer_zip">Zip</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_email" name="employer_email" />
-                        <label class="input-label" for="employer_email">Email</label>
+                        <label class="input-label" for="employer_email">Email*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_phone" name="employer_phone" />
-                        <label class="input-label" for="employer_phone">Phone</label>
+                        <label class="input-label" for="employer_phone">Phone*</label>
                     </div>
-                    <div class="col s6 input-field">
+                    <div class="col s9 input-field">
+                        <textarea id="description" name="description"></textarea>
+                        <label class="input-label" for="description">Description</label>
+                    </div>
+                    <div class="col s3 input-field">
                         <label class="input-checkbox">
                             <input type="checkbox" id="employer_active" class="filled-in blue lighten-3" checked="checked" />
                             <span>Active</span>
@@ -71,7 +89,6 @@
                         </div>
                     </div>
                 </div>
-
             </form>
 
             <!-- FORM 2 - ADD EMPLOYER LOCATION -->
@@ -80,31 +97,35 @@
                 <p id="title_location" class="fs-title"></p>
                 <p class="fs-subtitle">Enter client branch details.</p>
                 <div class="col s12">
-                    <input type="hidden" id="employer_loc_id" value="<%if (formDataList != null) { if (formDataList[0]["employer_loc_id"] != null) {%><%=formDataList[0]["employer_loc_id"]%><%} } %>"/>
+                    <input type="hidden" id="employer_loc_id" value="<%if (formDataList != null)
+                        {
+                            if (formDataList[0]["employer_loc_id"] != null)
+                            {%><%=formDataList[0]["employer_loc_id"]%><%}
+                    } %>" />
 
                     <div class="col s12 input-field">
                         <input type="text" id="employer_loc_address" name="employer_loc_address" />
-                        <label class="input-label" for="employer_loc_address">Address</label>
+                        <label class="input-label" for="employer_loc_address">Address*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_loc_city" name="employer_loc_city" />
-                        <label class="input-label" for="employer_loc_city">City</label>
+                        <label class="input-label" for="employer_loc_city">City*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_loc_zip" name="employer_loc_zip" />
-                        <label class="input-label" for="employer_loc_zip">P.O.Box</label>
+                        <label class="input-label" for="employer_loc_zip">P.O.Box*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_loc_country" name="employer_loc_country" />
-                        <label class="input-label" for="employer_loc_country">Country</label>
+                        <label class="input-label" for="employer_loc_country">Country*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_loc_email" name="employer_loc_email" />
-                        <label class="input-label" for="employer_loc_email">Email</label>
+                        <label class="input-label" for="employer_loc_email">Email*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_loc_phone" name="employer_loc_phone" />
-                        <label class="input-label" for="employer_loc_phone">Phone</label>
+                        <label class="input-label" for="employer_loc_phone">Phone*</label>
                     </div>
                     <div class="col s2 input-field">
                         <label class="input-checkbox">
@@ -125,34 +146,35 @@
                     <input type="hidden" id="employer_admin_id" />
                     <div class="col s12 input-field">
                         <input type="text" id="employer_admin_name" name="employer_admin_name" />
-                        <label class="input-label" for="employer_admin_name">Name</label>
+                        <label class="input-label" for="employer_admin_name">Name*</label>
                     </div>
 
                     <div class="col s6 input-field">
                         <input type="text" id="employer_admin_designation" name="employer_admin_designation" />
-                        <label class="input-label" for="employer_admin_designation">Designation</label>
+                        <label class="input-label" for="employer_admin_designation">Designation*</label>
                     </div>
 
                     <div class="col s6 input-field">
                         <select id="employer_admin_gender" name="employer_admin_gender">
-                            <option value="" disabled selected>Choose Gender</option>
+                            <option value="" disabled selected>Choose Gender*</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other</option>
                         </select>
+                        <label class="input-label" for="employer_admin_gender">Gender*</label>
                     </div>
                     <div class="col s12 input-field">
                         <input type="text" id="employer_admin_address" name="employer_admin_address" />
-                        <label class="input-label" for="employer_admin_address">Address</label>
+                        <label class="input-label" for="employer_admin_address">Address*</label>
                     </div>
 
                     <div class="col s6 input-field">
                         <input type="text" id="employer_admin_email" name="employer_admin_email" />
-                        <label class="input-label" for="employer_admin_email">Email</label>
+                        <label class="input-label" for="employer_admin_email">Email*</label>
                     </div>
                     <div class="col s6 input-field">
                         <input type="text" id="employer_admin_phone" name="employer_admin_phone" />
-                        <label class="input-label" for="employer_admin_phone">Phone</label>
+                        <label class="input-label" for="employer_admin_phone">Phone*</label>
                     </div>
 
                     <div class="col s6 input-field">
@@ -175,7 +197,7 @@
             <form id="result_form">
 
                 <p class="fs-title">Finished</p>
-                <p class="fs-subtitle">You have successfully setup your client.</p>
+                <p class="fs-subtitle">You have successfully setup employer.</p>
                 <a href="<%= WebURL %>Employer.aspx">Go to Employers Listing</a>
 
             </form>
@@ -370,9 +392,15 @@
                 ignore: []
             });
 
+            function isNullOrWhitespace(input) {
+                if (typeof input === 'undefined' || input == null)
+                    return true;
+                return /^\s+$/.test(input);
+            }
+
             // For select input
-            $.validator.addMethod("valueNotEquals", function(value, element, arg){
-            return arg !== value;
+            $.validator.addMethod("valueNotEquals", function (value, element, arg) {
+                return arg !== value;
             }, "Value must not equal arg.");
 
             $.validator.addMethod("regexMatch", function (value, element, regexp) {
@@ -381,6 +409,10 @@
             },
                 "Not a valid input!"
             );
+
+            $.validator.addMethod("validateNullOrWhiteSpace", function (value, element) {
+                return !isNullOrWhitespace(value);
+            }, "Blank spaces not allowed!");
 
             $("#employer_form").validate({
                 onfocusout: false,
@@ -392,19 +424,20 @@
                 },
                 // Specify validation rules
                 rules: {
+                    customer: "required",
                     employer_name: "required",
                     employer_address: "required",
                     employer_city: "required",
                     employer_state: "required",
                     employer_zip: {
-                        required: true,
+                        validateNullOrWhiteSpace: true,
                         digits: true,
                         minlength: 4,
                         maxlength: 10,
                     },
                     employer_email: {
                         required: true,
-                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
+                        regexMatch: "[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
                     },
                     employer_phone: {
                         required: true,
@@ -412,6 +445,9 @@
                     },
                 },
                 messages: {
+                    customer: {
+                        required: "Please select a Customer*",
+                    },
                     employer_name: {
                         required: "Required*",
                     },
@@ -425,10 +461,9 @@
                         required: "Required*",
                     },
                     employer_zip: {
-                        required: "Required*",
-                        digits: "Please enter valid zip / p.o.box",
-                        minlength: "Please enter valid zip / p.o.box",
-                        maxlength: "Please enter valid zip / p.o.box",
+                        digits: "Please enter valid zip",
+                        minlength: "Please enter valid zip",
+                        maxlength: "Please enter valid zip",
                     },
                     employer_phone: {
                         required: "Required*",
@@ -472,7 +507,7 @@
                     },
                     employer_loc_email: {
                         required: true,
-                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
+                        regexMatch: "[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
                     },
                     employer_loc_phone: {
                         required: true,
@@ -534,7 +569,7 @@
                     },
                     employer_admin_email: {
                         required: true,
-                        regexMatch: "^([a-z0-9\\\\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})$"
+                        regexMatch: "[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
                     },
                     employer_admin_phone: {
                         required: true,
@@ -555,7 +590,7 @@
                         required: "Required*",
                     },
                     employer_admin_gender: {
-                       required: "Please select a Gender."
+                        required: "Please select a Gender."
                     },
                     employer_admin_phone: {
                         required: "Required*",
@@ -581,9 +616,10 @@
 
 
 
-            
+
             $("#btn_next_form1").click(function () {
                 if ($("#employer_form").valid()) {
+                    var customer = $('#customer').val();
                     var name = $('#employer_name').val();
                     var address = $('#employer_address').val();
                     var city = $('#employer_city').val();
@@ -591,6 +627,7 @@
                     var zip = $('#employer_zip').val();
                     var email = $('#employer_email').val();
                     var phone = $('#employer_phone').val();
+                    var description = $('#description').val();
                     var active;
                     if ($('#employer_active').prop('checked')) {
                         active = 1;
@@ -598,7 +635,7 @@
                     else {
                         active = 0;
                     }
-                    var datastring = JSON.stringify({ 'name': name, 'address': address, 'city': city, 'state': state, 'zip': zip, 'email': email, 'phone': phone, 'active': active });
+                    var datastring = JSON.stringify({ 'customer': customer, 'name': name, 'address': address, 'city': city, 'state': state, 'zip': zip, 'email': email, 'phone': phone, 'description': description, 'active': active });
                     $("#preloader_form1").attr("display", "inline");
                     $("#preloader_form1").show();
                     $.ajax({
@@ -616,8 +653,11 @@
                                 $('#title_location').html("Add location for " + name);
                                 next($("#btn_next_form1"));
                             }
-                            else {
+                            else if (ret == -2) {
                                 toastr.error('Record for ' + name + ' already exists!');
+                            }
+                            else if (ret == -3) {
+                                toastr.error('Record for ' + email + ' already exists!');
                             }
                         },
                         error: function (error) {
@@ -658,8 +698,11 @@
                                 $('#title_admin').html("Add Administrator for " + $('#employer_name').val());
                                 next($("#btn_next_form2"));
                             }
-                            else {
-                                toastr.error('Record already exists!');
+                            else if (ret == -2) {
+                                toastr.error('Record for ' + address + ' already exists!');
+                            }
+                            else if (ret == -3) {
+                                toastr.error('Record for ' + email + ' already exists!');
                             }
                         },
                         error: function (error) {
@@ -713,8 +756,8 @@
                             if (ret > 0) {
                                 next($("#btn_next_form3"));
                             }
-                            else {
-                                toastr.error('Record for ' + name + ' already exists!');
+                            else if (ret == -2) {
+                                toastr.error('Record for ' + email + ' already exists!');
                             }
                         },
                         error: function (error) {
@@ -738,7 +781,7 @@
             animating = true;
 
             current_fs = $(btn_next).parent();
-            
+
             next_fs = $(btn_next).parent().next();
 
             //activate next step on progressbar using the index of next_fs

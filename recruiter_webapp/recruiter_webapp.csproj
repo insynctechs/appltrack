@@ -147,10 +147,11 @@
     <Content Include="Employer.aspx" />
     <Content Include="EmployerEdit.aspx" />
     <Content Include="EmployerLocation.aspx" />
-    <Content Include="EmployerLocationAdd.aspx" />
+    <Content Include="EmployerLocationUpdate.aspx" />
     <Content Include="EmployerLocationView.aspx" />
+    <Content Include="EmployerReport.aspx" />
     <Content Include="EmployerStaff.aspx" />
-    <Content Include="EmployerStaffAdd.aspx" />
+    <Content Include="EmployerStaffUpdate.aspx" />
     <Content Include="EmployerUpdate.aspx" />
     <Content Include="EmployerView.aspx" />
     <Content Include="favicon.ico" />
@@ -166,6 +167,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Interview.aspx" />
+    <Content Include="InterviewReport.aspx" />
     <Content Include="InterviewResults.aspx" />
     <Content Include="InterviewUpdate.aspx" />
     <Content Include="Job.aspx" />
@@ -173,6 +175,8 @@
     <Content Include="JobUpdate.aspx" />
     <Content Include="Login.ascx" />
     <Content Include="Logout.ascx" />
+    <Content Include="Report.aspx" />
+    <Content Include="Report2.aspx" />
     <Content Include="Scripts\dropify.min.js" />
     <Content Include="Scripts\jquery.fileupload.js" />
     <Content Include="Scripts\metro.min.js" />
@@ -180,12 +184,12 @@
     <Content Include="SetInterview.aspx" />
     <Content Include="SetInterview2.aspx" />
     <Content Include="Styles\dropify.min.css" />
+    <Content Include="Styles\materialize.css" />
     <Content Include="Styles\metro-all.min.css" />
     <Content Include="Styles\metro.min.css" />
     <Content Include="Styles\style.css" />
     <Content Include="UserProfile.aspx" />
     <Content Include="Vacancies.aspx" />
-    <Content Include="WebForm1.aspx" />
     <Content Include="WebService.asmx" />
     <Content Include="fonts\dropify.eot" />
     <Content Include="fonts\dropify.ttf" />
@@ -344,12 +348,12 @@
     <Compile Include="EmployerLocation.aspx.designer.cs">
       <DependentUpon>EmployerLocation.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EmployerLocationAdd.aspx.cs">
-      <DependentUpon>EmployerLocationAdd.aspx</DependentUpon>
+    <Compile Include="EmployerLocationUpdate.aspx.cs">
+      <DependentUpon>EmployerLocationUpdate.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EmployerLocationAdd.aspx.designer.cs">
-      <DependentUpon>EmployerLocationAdd.aspx</DependentUpon>
+    <Compile Include="EmployerLocationUpdate.aspx.designer.cs">
+      <DependentUpon>EmployerLocationUpdate.aspx</DependentUpon>
     </Compile>
     <Compile Include="EmployerLocationView.aspx.cs">
       <DependentUpon>EmployerLocationView.aspx</DependentUpon>
@@ -358,6 +362,13 @@
     <Compile Include="EmployerLocationView.aspx.designer.cs">
       <DependentUpon>EmployerLocationView.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EmployerReport.aspx.cs">
+      <DependentUpon>EmployerReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EmployerReport.aspx.designer.cs">
+      <DependentUpon>EmployerReport.aspx</DependentUpon>
+    </Compile>
     <Compile Include="EmployerStaff.aspx.cs">
       <DependentUpon>EmployerStaff.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -365,12 +376,12 @@
     <Compile Include="EmployerStaff.aspx.designer.cs">
       <DependentUpon>EmployerStaff.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EmployerStaffAdd.aspx.cs">
-      <DependentUpon>EmployerStaffAdd.aspx</DependentUpon>
+    <Compile Include="EmployerStaffUpdate.aspx.cs">
+      <DependentUpon>EmployerStaffUpdate.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EmployerStaffAdd.aspx.designer.cs">
-      <DependentUpon>EmployerStaffAdd.aspx</DependentUpon>
+    <Compile Include="EmployerStaffUpdate.aspx.designer.cs">
+      <DependentUpon>EmployerStaffUpdate.aspx</DependentUpon>
     </Compile>
     <Compile Include="EmployerUpdate.aspx.cs">
       <DependentUpon>EmployerUpdate.aspx</DependentUpon>
@@ -400,6 +411,13 @@
     </Compile>
     <Compile Include="Interview.aspx.designer.cs">
       <DependentUpon>Interview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InterviewReport.aspx.cs">
+      <DependentUpon>InterviewReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InterviewReport.aspx.designer.cs">
+      <DependentUpon>InterviewReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="InterviewResults.aspx.cs">
       <DependentUpon>InterviewResults.aspx</DependentUpon>
@@ -464,6 +482,20 @@
     </Compile>
     <Compile Include="QualificationUpdate.aspx.designer.cs">
       <DependentUpon>QualificationUpdate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Report.aspx.cs">
+      <DependentUpon>Report.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report.aspx.designer.cs">
+      <DependentUpon>Report.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Report2.aspx.cs">
+      <DependentUpon>Report2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Report2.aspx.designer.cs">
+      <DependentUpon>Report2.aspx</DependentUpon>
     </Compile>
     <Compile Include="SetInterview.aspx.cs">
       <DependentUpon>SetInterview.aspx</DependentUpon>
@@ -541,13 +573,6 @@
     </Compile>
     <Compile Include="ViewSwitcher.ascx.designer.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="WebForm1.aspx.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="WebForm1.aspx.designer.cs">
-      <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
     <Compile Include="WebService.asmx.cs">
       <DependentUpon>WebService.asmx</DependentUpon>

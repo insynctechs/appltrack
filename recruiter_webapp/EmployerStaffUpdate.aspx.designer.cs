@@ -10,42 +10,33 @@
 namespace recruiter_webapp {
     
     
-    public partial class EmployerStaffAdd {
+    public partial class EmployerStaffUpdate {
         
         /// <summary>
-        /// employer_staff_form control.
+        /// frm_employer_staff control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm employer_staff_form;
+        protected global::System.Web.UI.HtmlControls.HtmlForm frm_employer_staff;
         
         /// <summary>
-        /// emp_id control.
+        /// lblResponseMsg control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText emp_id;
+        protected global::System.Web.UI.WebControls.Label lblResponseMsg;
         
         /// <summary>
-        /// emp_loc_id control.
+        /// btnSubmit control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText emp_loc_id;
-        
-        /// <summary>
-        /// emp_name control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText emp_name;
+        protected global::System.Web.UI.WebControls.Button btnSubmit;
     }
 }

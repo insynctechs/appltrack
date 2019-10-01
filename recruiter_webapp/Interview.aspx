@@ -24,7 +24,7 @@
         <br />
         <br />
         <div class="row no-padding">
-            <div class="col s12 m12 l12 card grey lighten-4 z-depth-0 no-padding">
+            <div class="col s12 m12 l12 grey lighten-4 z-depth-0 no-padding">
                 <div id="employersForm">
                     <div class="col s12 l8 no-padding">
                         <div class="input-field col s8 m8 l4">
@@ -33,11 +33,9 @@
                         </div>
                        
                         <div class="input-field col s4 m4 l2">
-                            <input id="job_id" value="" hidden runat="server" />
                             <select id="srchBy" name="srchBy" runat="server">
-                                <option value="title">Title</option>
-                                <option value="job_code" selected>Job Code</option>
-                                
+                                <option value="title" selected>Title</option>
+                                <option value="job_code">Job Code</option>
                             </select>
                         </div>
 
@@ -58,10 +56,10 @@
                 <asp:Repeater ID="interviewList" runat="server">
                     <HeaderTemplate>
                         <table class="table center">
-                            <tr class="card blue-grey z-depth-1 lighten-4 bold">
+                            <tr class="blue-grey z-depth-1 lighten-4 bold">
                                 <th class="center">#</th>
                                 <th class="center">Title</th>
-                                <th class="center">Description</th>
+                                <th class="center">Job Code</th>
                                 <th class="center">Round</th>
                                 <th class="center">Venue</th>
                                 <th class="center">Date</th>
@@ -76,7 +74,7 @@
                             <td class="center">
                                 <a href="<%=WebURL %>InterviewUpdate?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>"><%#Eval("title")%></a>
                             </td>
-                            <td class="center"><%#Eval("description")%></td>
+                            <td class="center"><%#Eval("job_code")%></td>
                             <td class="center"><%#Eval("round")%></td>
                             <td class="center"><%#Eval("venue")%></td>
                             <td class="center"><%#Convert.ToDateTime(Eval("date_of_interview")).ToShortDateString()%></td>
@@ -89,8 +87,8 @@
                                 </div>
                             </td>
                             <td class="center">
-                                <a <%# Convert.ToInt32(Eval("round").ToString()) == 1 ? "" : "hidden" %> class="btn-edit white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL%>SetInterview.aspx?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>">Set Interview</a>
-                                <a <%# Convert.ToInt32(Eval("round").ToString()) > 1 ? "" : "hidden" %> class="btn-edit white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL%>SetInterview2.aspx?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>">Set Interview</a>
+                                <a <%# Convert.ToInt32(Eval("round").ToString()) == 1 ? "" : "hidden" %> class="btn-edit white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL%>SetInterview.aspx?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>">Assign Candidates</a>
+                                <a <%# Convert.ToInt32(Eval("round").ToString()) > 1 ? "" : "hidden" %> class="btn-edit white-text waves-light blue lighten-1 padding-2 border-radius-5" href="<%=WebURL%>SetInterview2.aspx?id=<%#Eval("id")%>&job_id=<%#Eval("job_id")%>">Assign Candidates</a>
                             </td>
 
                         </tr>

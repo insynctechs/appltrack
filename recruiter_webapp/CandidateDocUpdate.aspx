@@ -98,7 +98,8 @@
 
                 <div class="col s12 input-field right">
                     <%--<a id="btn-check" class="btn waves-effect waves-light blue lighten-1 right">Check</a>--%>
-                    <a id="btn-cancel" class="btn waves-effect waves-light blue lighten-1 right" href="<%= WebURL %>CandidateUpdate?id=<%:Request.QueryString["id"]%>">Cancel</a>
+                    <a id="btn-cancel" class="btn waves-effect waves-light blue lighten-1" href="<%= WebURL %>CandidateUpdate?id=<%:Request.QueryString["id"]%>">Previous</a>
+                    <a id="btn-close" class="btn waves-effect waves-light blue lighten-1 right" href="<%= WebURL %>">Close</a>
                     <asp:Button Style="display: none" ID="btn_submit" CssClass="btn waves-effect waves-light blue lighten-1 right" Text="Submit" runat="server" OnClick="btn_submit_Click" />
                     
                 </div>

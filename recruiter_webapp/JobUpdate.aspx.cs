@@ -270,7 +270,7 @@ namespace recruiter_webapp
                 catch (Exception ex)
                 {
                     CommonLogger.Info(ex.ToString());
-                    return -2;
+                    return -1;
                 }
             return ret;
         }

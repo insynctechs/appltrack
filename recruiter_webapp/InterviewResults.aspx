@@ -2,100 +2,130 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <form runat="server">
-        <div class="card z-depth-1 border-radius-5" style="padding-left: 10px">
+        <div class="z-depth-1 border-radius-5" style="padding-left: 10px">
             <div class="row">
                 <h5>Dashboard <i class="material-icons">chevron_right</i> <%: Title %></h5>
             </div>
         </div>
-            <asp:Label ID="lblResponseMsg" runat="server"></asp:Label>
-
-        <div class="row">
-            <div class="col s12 m12 l12 card card grey lighten-2 padding-1 border-radius-5 no-margin padding-1">
-                <h6><%if (jobList.Count > 0)
-                        { %>Results For <%:jobList[0]["job_code"] %><%} %></h6>
-            </div>
-            <div class="input-field col s12 m12 l12 card white lighten-3 z-depth-3 padding-3 border-radius-5">
-                
-                <div id="div_interview_results">
-                    
-                    <%if (ds.Tables.Count > 0)
-
-                        { %>
-                    <div class="row">
-                        <div class="input-field col s6 m4 l4">
-                            <select id="interview_id" name="interview_id">
-                                <option value="0" <%:Request.QueryString["interview_id"]=="0"?"selected":"" %>>All</option>
-                                <%foreach (var interview in interviewList)
+        <br />
+        <asp:Label ID="lblResponseMsg" runat="server"></asp:Label>
+           <div class="row">
+            <div class="col s12">
+                <div class="col s6 white z-depth-1 padding-3 border-radius-10">
+                        <div class="row">
+                            <div class="col s6 input-field">
+                             <span class="center">Employer</span>
+                                </div>
+                                <div class="col s6 input-field">
+                            <select id="employer" name="employer">
+                                <option value="0" <%:employer_id.Value=="0"?"selected":""%>>All</option>
+                                <%foreach (var employer in employerList)
                                     {%>
-                                <option value="<%=interview["id"] %>" <%:Request.QueryString["interview_id"]==interview["id"].ToString()?"selected":"" %>><%:interview["title"] %></option>
+                                <option value="<%=employer["id"]%>" <%:employer_id.Value==employer["id"].ToString()?"selected":"" %>><%=employer["name"] %></option>
                                 <%} %>
                             </select>
-                            <label class="input-label" for="location_id">Interview</label>
-                            
-                    </div>
-                        <div class="input-field left">
-                            <asp:Button ID="btnSubmit" CssClass="btn waves-effect waves-light blue lighten-1 right" runat="server" OnClick="btn_submit_Click" Text="Submit" />
+                            <asp:HiddenField id="employer_id" Value="0" runat="server"/>
                         </div>
-                        
-                        
-                   
                         </div>
-                    <div class="row">
-                    
-                        <%foreach (System.Data.DataTable table in ds.Tables)
-                            { %>
-                    <%if (table.Rows.Count > 0)
-                        { %>
-                            <h6><%:table.Rows[0]["title"] %> (Round <%:table.Rows[0]["round"] %>) On <%:Convert.ToDateTime(table.Rows[0]["date_of_interview"]).ToShortDateString() %></h6>
-                           
-                    <table class="">
-                                <thead>
-                                    <tr class="blue-grey lighten-4">
-                                        <th class="font-weight-100">Candidate Name</th>
-                                        <th class="font-weight-100">Status</th>
-                                        <th class="font-weight-100">Score</th>
-                                        <th class="font-weight-100">Rating</th>
-                                        <th class="font-weight-100">Comments</th>
-                                        <th class="font-weight-100">Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <%foreach (System.Data.DataRow dr in table.Rows)
-                                        { %>
-                   
-                                    <tr id="data-qualification">
-                                        <td class="qualification"><%:dr["candidate_name"]%></td>
-                                        <td class="qualification"><%:dr["status"]%></td>
-                                        <td class="qualification"><%:dr["score"]%></td>
-                                        <td class="qualification"><%:dr["rating"]%></td>
-                                        <td class="qualification"><%:dr["employer_comments"]%></td>
-                                        <td class="qualification"><%:dr["date_added"]%></td>
-                                        <%--<td><a class="btn white-text waves-light blue lighten-1 padding-2 border-radius-5 right">Button</a></td>--%>
-                                    </tr>
-                                    <%
-                                        }%>
-                                </tbody>
-                            </table>
-                    <br /><br />
-                    <%} %> 
-                    <% } %>
-                    <asp:Button ID="btn_export" CssClass="btn waves-effect waves-light blue lighten-1 right" runat="server" OnClick="btn_export_Click" Text="Export To Excel" />
-                    <%}
-                        else
-                        {%>
-                    <p class="center">No interviews scheduled for this job.</p>
-                <%} %>
-                        </div>
-                    </div>
                 
-            </div>
-            <div class="row">
-                <div class="col s12">
+                    <div class="row">
+                        <div class="col s6 input-field">
+                            <label>Job</label>
+                            </div>
+                                <div class="col s6 input-field">
+                            <select id="job" name="job">
+                                <option value="0" <%:job_id.Value=="0"?"selected":""%>>All Jobs</option>
+                                <%foreach (var job in jobList)
+                                    {%>
+                                <option value="<%=job["id"] %>" <%:job_id.Value==job["id"].ToString()?"selected":""%>><%=job["job_code"] %></option>
+                                <%} %>
+                            </select>
+                            <asp:HiddenField id="job_id" Value="0" runat="server"/>
+                        </div>
+                    </div>
 
+                        <div class="row">
+                            <div class="col s6 input-field">
+                                <label>Interview</label>
+                            </div>
+                            <div class="col s6 input-field">
+                            <select id="interview" name="interview">
+                                <option value="0" <%:Request.QueryString["interview_id"] == "0" ? "selected" : "" %>>All</option>
+                                <%foreach (var interview in interviewList)
+                                    {%>
+                                <option value="<%=interview["id"] %>" <%:Request.QueryString["interview_id"] == interview["id"].ToString() ? "selected" : "" %>><%:interview["title"] %></option>
+                                <%} %>
+                            </select>
+                            <asp:HiddenField id="interview_id" Value="0" runat="server"/>
+                    </div>
+                        </div>
+                <%--
+                    <div class="row">
+                        <div class="col s6 input-field">
+                            <label>From</label>
+                            </div>
+                                <div class="col s6 input-field">
+                            <input type="text" class="datepicker" id="from_date" name="from_date" value="<%:DateTime.Now.Day.ToString("d2")+"-"+DateTime.Now.Month.ToString("d2")+"-"+DateTime.Now.Year%>" />
+                        <asp:HiddenField id="fromDate" runat="server" Value=""/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6 input-field">
+                            <label>To</label>
+                            </div>
+                                <div class="col s6 input-field">
+                            <input type="text" class="datepicker" id="to_date" name="to_date" value="<%:DateTime.Now.Day.ToString("d2")+"-"+DateTime.Now.Month.ToString("d2")+"-"+DateTime.Now.Year%>" />
+                        <asp:HiddenField id="toDate" runat="server" Value=""/>
+                        </div>
+                    </div>
+                        --%>
+                    
+                        <div class="row">
+                            <a class="btn waves-effect waves-light blue lighten-1 right" id="btn-print" style="margin-left: 10px">Print<i class="material-icons right">print</i></a>
+                            <a class="btn waves-effect waves-light blue lighten-1 right" id="btn-export">Export To Excel<i class="material-icons right">file_upload</i></a>
+                    <asp:Button ID="btnExport" runat="server" OnClick="btn_Export_Click" Style="display: none" />
+                    <asp:Button ID="btnPrint" runat="server" OnClick="btnPrint_Click" Style="display: none" />
+                    <asp:Button ID="btnRefresh" OnClick="btnRefresh_Click" runat="server" Text="" Style="display: none" />
+
+                        </div>
+                    </div>
+                    <div class="col s6">
+
+                    </div>
                 </div>
+
             </div>
-
-        </div>
-
         </form>
+
+    <script>
+        $(document).ready(function () {
+            $('#employer').change(function () {
+                $('#<%:employer_id.ClientID%>').val($('#employer').val().trim());
+                $('#<%:btnRefresh.ClientID%>').click();
+            });
+
+            $('#job').change(function () {
+                $('#<%:job_id.ClientID%>').val($('#job').val().trim());
+                $('#<%:btnRefresh.ClientID%>').click();
+            });
+
+            $('#interview').change(function () {
+                $('#<%:interview_id.ClientID%>').val($('#interview').val().trim());
+            });
+
+            $('#btn-export').click(function () {
+                $('#<%:employer_id.ClientID%>').val($('#employer').val().trim());
+                $('#<%:job_id.ClientID%>').val($('#job').val().trim());
+                $('#<%:interview_id.ClientID%>').val($('#interview').val().trim());
+                $('#<%:btnExport.ClientID%>').click();
+            });
+
+            $('#btn-print').click(function () {
+                $('#<%:employer_id.ClientID%>').val($('#employer').val().trim());
+                $('#<%:job_id.ClientID%>').val($('#job').val().trim());
+                $('#<%:interview_id.ClientID%>').val($('#interview').val().trim());
+                $('#<%:btnPrint.ClientID%>').click();
+            });
+        });
+    </script>
     </asp:Content>

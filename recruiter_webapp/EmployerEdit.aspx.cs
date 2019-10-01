@@ -60,19 +60,20 @@ namespace recruiter_webapp
 
         [System.Web.Services.WebMethod]
         [ScriptMethod]
-        public static int UpdateEmployer(string id, string name, string address, string city, string state, string zip, string email, string phone, string active)
+        public static int UpdateEmployer(string id, string name, string address, string city, string state, string zip, string email, string phone, string description, string active)
         {
             int ret = 0;
             var employer = new Dictionary<string, string>();
             employer.Add("id", id);
-            employer.Add("name", name);
-            employer.Add("address", address);
-            employer.Add("city", city);
-            employer.Add("state", state);
-            employer.Add("zip", zip);
-            employer.Add("email", email);
-            employer.Add("phone", phone);            
-            employer.Add("active", active);
+            employer.Add("name", name.Trim());
+            employer.Add("address", address.Trim());
+            employer.Add("city", city.Trim());
+            employer.Add("state", state.Trim());
+            employer.Add("zip", zip.Trim());
+            employer.Add("email", email.Trim());
+            employer.Add("phone", phone.Trim());
+            employer.Add("description", description.Trim());
+            employer.Add("active", active.Trim());
             try
             {
                 var url = string.Format("api/Employers/Edit");

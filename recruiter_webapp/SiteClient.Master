@@ -42,34 +42,32 @@
     <!-- HEADER BEGINS -->
     <header class="page-topbar" id="header">
         <div class="navbar navbar-fixed">
-            <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-light-blue-cyan no-shadow">
+            <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-dark gradient-45deg-red-grey no-shadow">
                 <div class="nav-wrapper">
                     <span class="logo-text white-text" style="font-size: 20px; margin: 10px">insyncTalentBox</span>
                     <ul class="right">
-                        <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="toggle-fullscreen">Fullscreen</span></a></li>
-
-                        <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Notifications</span></a></li>
+                        
                         <%if (Session["user_id"] != null)
                             { %>
                         <%--
                         <li class="hide-on-med-and-down"><a class="waves-effect waves-block waves-light" href="<%= WebURL %>User.aspx">Welcome, <%=Session["user_name"] %></a>
                             <ul id = "dropdown" class = "dropdown-content"> --%>
                         <li class="hide-on-med-and-down">
-                            <a class="btn waves-effect waves-light blue lighten-1 dropdown-button" href="javascript:void(0);" data-target="login-dropdown"><%=Session["user_name"] %>
+                            <a class="btn waves-effect waves-light red darken-3 dropdown-button" href="javascript:void(0);" data-target="login-dropdown"><%=Session["user_name"] %>
                             </a>
                         </li>
                         <% }
                             else
                             { %>
-                        <li class="hide-on-med-and-down"><a id="login" class="waves-effect waves-block waves-light"><span class="flag-icon flag-icon-gb">Login</span></a>
+                        <li class="hide-on-med-and-down"><a id="login" class="waves-effect red darken-3 waves-block waves-light"><span class="flag-icon flag-icon-gb">Login</span></a>
                         </li>
 
                         <%} %>
                     </ul>
                     <ul id="login-dropdown" class="dropdown-content">
-                        <li><a class="waves-effect waves-block waves-light popup-btn" href="<%= WebURL %>UserProfile.aspx">Profile</a></li>
+                        <li><a class="red darken-3 waves-effect waves-block waves-light popup-btn" href="<%= WebURL %>UserProfile.aspx">Profile</a></li>
                         <li class="divider"></li>
-                        <li><a id="logout" class="waves-effect waves-block waves-light popup-btn">Logout</a></li>
+                        <li><a id="logout" class="red darken-3 waves-effect waves-block waves-light popup-btn">Logout</a></li>
 
                     </ul>
                 </div>
@@ -85,122 +83,9 @@
 
     <div id="client_main">
         <div class="wrapper">
-            <form id="frm_client" runat="server">
 
-                <div class="row flex-parent">
-                    <div class="col s3 left flex-child">
-                        <div class="col s12 white z-depth-1" style="min-height: 560px; margin-top: 15px; margin-bottom: 15px">
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <input type="text" id="job_code" name="job_code" />
-                                    <label class="input-label" for="industry">Job Title</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s6 left">
-                                    <select id="min_exp" name="min_exp">
-                                        <option value="0" selected disabled></option>
-                                        <%foreach (int i in Enumerable.Range(1, 21))
-                                            { %>
-                                        <option value="<%:i %>"><%:i %></option>
-                                        <%} %>
-                                    </select>
-                                    <label class="input-label" for="min_exp">Minimum Experience</label>
-                                </div>
-                                <div class="input-field col s6 right">
-                                    <select id="max_exp" name="max_exp">
-                                        <option value="0" selected disabled></option>
-                                        <%foreach (int i in Enumerable.Range(1, 31))
-                                            { %>
-                                        <option value="<%:i %>"><%:i %></option>
-                                        <%} %>
-                                    </select>
-                                    <label class="input-label" for="max_exp">Maximum Experience</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <select id="employer" name="employer">
-                                        <option value="0" selected disabled></option>
-                                        <%foreach (var employer in employerList)
-                                            {%>
-                                        <option value="<%=employer["id"] %>"><%=employer["name"] %></option>
-                                        <%} %>
-                                    </select>
-                                    <label class="input-label" for="employer">Employer</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col s12">
-                                    <a class="btn waves-effect waves-light blue lighten-1 btn-search right" id="btn-search2">Search<i class="material-icons right">search</i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s9 right flex-child">
-                        <div class="col s12 white z-depth-1" style="min-height: 560px; margin-top: 15px; margin-bottom: 15px">
-                            <div class="row">
-                                <div class="col s12 z-depth-1 white border-radius-5" style="padding-top: 5px">
-                                    <div class="input-field col s3 left">
-                                        <select id="industry" name="industry">
-                                            <%if (Request.QueryString["id"] == null)
-                                                { %>
-                                            <option value="" disabled selected>Choose Industry*</option>
-                                            <%} %>
-                                            <%foreach (var industry in industryList)
-                                                {%>
-                                            <option value="<%=industry["id"] %>" <%if (Request.QueryString["industry"] != null)
-                                                {%><%:(Request.QueryString["industry"].ToString()==industry["id"].ToString())?"selected":""%><%}%>><%=industry["title"] %></option>
-                                            <%} %>
-                                        </select>
-                                        <label class="input-label" for="industry">Industry</label>
-                                    </div>
-                                    <div class="input-field col s3">
-                                        <select id="category" name="category">
-                                            <%if (Request.QueryString["id"] == null)
-                                                { %>
-                                            <option value="" disabled selected>Choose Category*</option>
-                                            <%} %>
-
-                                            <%foreach (var category in categoryList)
-                                                {%>
-                                            <option value="<%=category["id"] %>" <%if (Request.QueryString["category"] != null)
-                                                {%><%:(Request.QueryString["category"].ToString()==category["id"].ToString())?"selected":""%><%}%>><%=category["title"] %></option>
-                                            <%} %>
-                                        </select>
-                                        <label class="input-label" for="category">Category</label>
-                                    </div>
-                                    <div class="input-field col s3">
-                                        <input type="text" id="skill" name="skill" />
-                                        <label class="input-label" for="skill">Key Skill*</label>
-                                        <input type="hidden" id="skill_id" name="skill_id" />
-                                    </div>
-                                    <div class="input-field col s3 center">
-                                        <asp:Button ID="btnSearch" runat="server" Text="" Style="display: none" PostBackUrl="~/Vacancies.aspx?customer=58" />
-                                        <a class="btn waves-effect waves-light blue lighten-1 btn-search" id="btn-search">Search<i class="material-icons right">search</i></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Search results from here on -->
-                            <div class="row">
-                                <asp:ContentPlaceHolder ID="MainContent" runat="server">
-                                </asp:ContentPlaceHolder>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-
-
-
-
-
-
-
-
-
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
 
                 <!-- CONTENTS SPECIFIC TO PAGES INCLUDING COMMON FOOTER -->
                 <section id="content" class="container">
@@ -217,9 +102,6 @@
                         © insyncTalentBox. All rights reserved. | Developed by <a href="http://www.insynctechs.com" target="_blank">Insync Tech Solutions</a>. 
                     </footer>
                 </section>
-
-            </form>
-
         </div>
     </div>
 </body>
@@ -259,37 +141,6 @@
         $('.dropdown-trigger').dropdown();
         $('.dropdown-button').dropdown();
         $('#login').webuiPopover({ url: '#login-form' });
-
-
-        $('.btn-search').click(function () {
-            $('#<%= btnSearch.ClientID %>').click();
-        });
-
-        $("#skill").autocomplete({
-            source: function (request, response) {
-                var param = { searchValue: $('#skill').val() };
-                $.ajax({
-                    url: "Vacancies.aspx/GetSkillList",
-                    data: JSON.stringify(param),
-                    dataType: "json",
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    dataFilter: function (data) { return data; },
-                    success: function (data) {
-                        response($.parseJSON(data.d));
-                    },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        var err = eval("(" + XMLHttpRequest.responseText + ")");
-                        alert(err.Message)
-                        // console.log("Ajax Error!");  
-                    }
-                });
-            },
-            minLength: 1, //This is the Char length of inputTextBox
-            select: function (event, ui) {
-                $('#skill_id').val(ui.item.id);
-            }
-        });
 
     });
 </script>

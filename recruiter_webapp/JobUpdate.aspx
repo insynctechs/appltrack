@@ -51,7 +51,7 @@
                                     {%><%:(Request.QueryString["employer_id"].ToString()==employer["id"].ToString())?"selected":""%><%}%>><%=employer["name"] %></option>
                                 <%} %>
                             </select>
-                            <label class="input-label" for="industry">Employer*</label>
+                            <label class="input-label" for="employer_id">Employer*</label>
                         </div>
 
                         <div class="col s8 input-field">
@@ -171,7 +171,7 @@
                         <div class="col s12 input-field">
                             <input type="text" id="other_notes" name="other_notes" value="<%if (jobList.Count > 0)
                                 {%><%:jobList[0]["other_notes"]%><%}%>" />
-                            <label class="input-label" for="other_notes">Other Notes*</label>
+                            <label class="input-label" for="other_notes">Other Notes</label>
                         </div>
                     </div>
 
@@ -426,7 +426,6 @@
                     }
                     $("#div-qualifications").append('<div class="qualification chip" id="' + ui.item.id + '">' + ui.item.value + '<i class="close material-icons">close</i></div>');
                     arrQualifications.push(ui.item.id);
-                    console.log($(".qualification").get());
                     $('#job_qualifications').val("");
                     return false;
                 }
@@ -550,7 +549,6 @@
                     },
 
                     other_notes: {
-                        required: true,
                         validateNullOrWhiteSpace: true,
                     },
 

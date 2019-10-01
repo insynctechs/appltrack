@@ -142,10 +142,22 @@
         };
 
         $(document).ready(function () {
-            $('.btn-delete').click(function () {
+            /*$('.btn-delete').click(function () {
                 $(this).webuiPopover({ title: 'Sure to delete?', content: '<a href="' + this.getAttribute("href") + '">Yes</a>', closeable: true });
                 return false;
+            });*/
+            $('.btn-delete').on('focus', function () {
+
+                $(this).webuiPopover('destroy'); // the trick
+                $(this).webuiPopover({
+                    placement: 'right',
+                    title: 'Sure to delete?',
+                    content: '<a href="' + this.getAttribute("href") + '">Yes</a>',
+                    closeable: true,
+                    cache: false
+                });
             });
+
         });
 
     </script>

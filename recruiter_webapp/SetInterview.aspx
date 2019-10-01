@@ -172,13 +172,13 @@
                                 %>
                                 <tr>
                                     <td hidden><%:candidate["candidate_id"]%></td>
-                                    <td><%:candidate["name"]%></td>
-                                    <td><%:candidate["status"]%></td>
-                                    <td>
-                                        <input class="score" type="number" value="<%:candidate["score"]%>" /></td>
-                                    <td>
-                                        <input class="rating" type="number" value="<%:candidate["rating"]%>" /></td>
-                                    <td>
+                                    <td class=""><%:candidate["name"]%></td>
+                                    <td class="center"><%:candidate["status"]%></td>
+                                    <td class="center" style="max-width:10px">
+                                        <input class="score" type="number" value="<%:candidate["score"]%>" min="0" /></td>
+                                    <td class="cneter" style="max-width:10px">
+                                        <input class="rating" type="number" value="<%:candidate["rating"]%>" min="0" /></td>
+                                    <td class="center" style="max-width:100px">
                                         <input class="employer_comments" type="text" value="<%:candidate["employer_comments"]%>" /></td>
                                     <%--<td><a class="white-text waves-light blue lighten-1 padding-2 border-radius-5" style="margin: 3px" href="#">Update</a></td> --%>
                                     <td>

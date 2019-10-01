@@ -22,7 +22,7 @@ namespace recruiter_webapp
         public string ApiPath { get; set; }
         public string WebURL { get; set; }
         public static WebApiHelper wHelper = new WebApiHelper();
-        public List<DataRow> jobList = new List<DataRow>();
+        public List<DataRow> jobDetailList = new List<DataRow>();
         public Boolean isApplied = false;
         public Boolean isCandidate = true;
 
@@ -72,7 +72,7 @@ namespace recruiter_webapp
             {
                 var url = string.Format("api/Jobs/GetDetails?job_id=" + job_id);
                 DataTable dt = wHelper.GetDataTableFromWebApi(url);
-                jobList = dt.AsEnumerable().ToList();
+                jobDetailList = dt.AsEnumerable().ToList();
             }
             catch (Exception ex)
             {

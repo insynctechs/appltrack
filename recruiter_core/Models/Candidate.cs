@@ -34,10 +34,6 @@ namespace recruiter_core.Models
 
         public async Task<int> InsertCandidate(Dictionary<string, string> candidate)
         {
-            //string password = Utils.GeneratePassword();
-            //File.AppendAllText("d:\\CandidateLogins.txt", "Email: " + candidate["email"] + "\r\nPassword: " + password + "\r\n\r\n");
-
-
             DataTable dt = new DataTable();
             dt.Columns.Add(new DataColumn("skill_id", typeof(int)));
             var array = candidate["skills"].Split(',');
@@ -90,7 +86,7 @@ namespace recruiter_core.Models
 
 
 
-            SqlParameter[] sqlParam = new SqlParameter[18];
+            SqlParameter[] sqlParam = new SqlParameter[15];
             sqlParam[0] = new SqlParameter("@user_id", candidate["user_id"]);
             sqlParam[1] = new SqlParameter("@name", candidate["name"]);
             sqlParam[2] = new SqlParameter("@gender", candidate["gender"]);
@@ -101,14 +97,11 @@ namespace recruiter_core.Models
             sqlParam[7] = new SqlParameter("@others", candidate["others"]);
             sqlParam[8] = new SqlParameter("@SkillList", dt);
             sqlParam[8].SqlDbType = SqlDbType.Structured;
-            sqlParam[9] = new SqlParameter("@status", candidate["status"]);
-            sqlParam[10] = new SqlParameter("@rating", candidate["rating"]);
-            sqlParam[11] = new SqlParameter("@employer_comments", candidate["employer_comments"]);
-            sqlParam[12] = new SqlParameter("@active", candidate["active"]);
-            sqlParam[13] = new SqlParameter("@password", candidate["password"]);
-            sqlParam[14] = new SqlParameter("@ip_address", candidate["ip_address"]);
-            sqlParam[15] = new SqlParameter("@notification", candidate["notification"]);
-            sqlParam[16] = new SqlParameter("@user_type", candidate["user_type"]);
+            sqlParam[9] = new SqlParameter("@active", candidate["active"]);
+            sqlParam[10] = new SqlParameter("@password", candidate["password"]);
+            sqlParam[11] = new SqlParameter("@ip_address", candidate["ip_address"]);
+            sqlParam[12] = new SqlParameter("@notification", candidate["notification"]);
+            sqlParam[13] = new SqlParameter("@user_type", candidate["user_type"]);
             /*
             sqlParam[17] = new SqlParameter("@qualificationList", DictionaryToDataTable(JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(candidate["qualifications"].ToString())));
             sqlParam[17].SqlDbType = SqlDbType.Structured;
@@ -116,21 +109,21 @@ namespace recruiter_core.Models
             sqlParam[18] = new SqlParameter("@experienceList", DictionaryToDataTable(JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(candidate["experiences"].ToString())));
             sqlParam[18].SqlDbType = SqlDbType.Structured;
             */
-            sqlParam[17] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[17].Direction = ParameterDirection.Output;
+            sqlParam[14] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[14].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCandidates_Add3", sqlParam));
 
             //return Convert.ToInt32(sqlParam[17].Value);
 
             // The return value is id of candidate.
-            if (Convert.ToInt32(sqlParam[17].Value) >= 0)
+            if (Convert.ToInt32(sqlParam[14].Value) >= 0)
             {
                 Dictionary<string, Dictionary<string, string>> candidateQualifications = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(candidate["qualifications"].ToString());
-                Boolean ret_of_qual = await InsertCandidateQualifications(Convert.ToInt32(sqlParam[17].Value), candidateQualifications);
+                Boolean ret_of_qual = await InsertCandidateQualifications(Convert.ToInt32(sqlParam[14].Value), candidateQualifications);
                 Dictionary<string, Dictionary<string, string>> candidateExperiences = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(candidate["experiences"].ToString());
-                Boolean ret_of_exp = await InsertCandidateExperiences(Convert.ToInt32(sqlParam[17].Value), candidateExperiences);
+                Boolean ret_of_exp = await InsertCandidateExperiences(Convert.ToInt32(sqlParam[14].Value), candidateExperiences);
                 if (ret_of_qual && ret_of_exp)
-                    return (Convert.ToInt32(sqlParam[17].Value));
+                    return (Convert.ToInt32(sqlParam[14].Value));
             }
             return -1;
         }
@@ -148,41 +141,38 @@ namespace recruiter_core.Models
             }
 
 
-            SqlParameter[] sqlParam = new SqlParameter[18];
+            SqlParameter[] sqlParam = new SqlParameter[15];
             sqlParam[0] = new SqlParameter("@user_id", candidate["user_id"]);
             sqlParam[1] = new SqlParameter("@name", candidate["name"]);
             sqlParam[2] = new SqlParameter("@gender", candidate["gender"]);
             sqlParam[3] = new SqlParameter("@dob", candidate["dob"]);
-            sqlParam[3].SqlDbType = SqlDbType.Date;
+            //sqlParam[3].SqlDbType = SqlDbType.Date;
             sqlParam[4] = new SqlParameter("@address", candidate["address"]);
             sqlParam[5] = new SqlParameter("@email", candidate["email"]);
             sqlParam[6] = new SqlParameter("@phone", candidate["phone"]);
             sqlParam[7] = new SqlParameter("@others", candidate["others"]);
             sqlParam[8] = new SqlParameter("@SkillList", dt);
             sqlParam[8].SqlDbType = SqlDbType.Structured;
-            sqlParam[9] = new SqlParameter("@status", candidate["status"]);
-            sqlParam[10] = new SqlParameter("@rating", candidate["rating"]);
-            sqlParam[11] = new SqlParameter("@employer_comments", candidate["employer_comments"]);
-            sqlParam[12] = new SqlParameter("@active", candidate["active"]);
-            sqlParam[13] = new SqlParameter("@ip_address", candidate["ip_address"]);
-            sqlParam[14] = new SqlParameter("@notification", candidate["notification"]);
-            sqlParam[15] = new SqlParameter("@user_type", candidate["user_type"]);
-            sqlParam[16] = new SqlParameter("@id", candidate["id"]);
+            sqlParam[9] = new SqlParameter("@active", candidate["active"]);
+            sqlParam[10] = new SqlParameter("@ip_address", candidate["ip_address"]);
+            sqlParam[11] = new SqlParameter("@notification", candidate["notification"]);
+            sqlParam[12] = new SqlParameter("@user_type", candidate["user_type"]);
+            sqlParam[13] = new SqlParameter("@id", candidate["id"]);
 
-            sqlParam[17] = new SqlParameter("@Ret", SqlDbType.Int);
-            sqlParam[17].Direction = ParameterDirection.Output;
+            sqlParam[14] = new SqlParameter("@Ret", SqlDbType.Int);
+            sqlParam[14].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspCandidates_Edit", sqlParam));
             //return Convert.ToInt32(sqlParam[17].Value);
             // The return value is id of candidate.
-            if (Convert.ToInt32(sqlParam[17].Value) >= 0)
+            if (Convert.ToInt32(sqlParam[14].Value) >= 0)
             {
                 Dictionary<string, Dictionary<string, string>> candidateQualifications = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(candidate["qualifications"].ToString());
-                Boolean ret_of_qual = await InsertCandidateQualifications(Convert.ToInt32(sqlParam[17].Value), candidateQualifications);
+                Boolean ret_of_qual = await InsertCandidateQualifications(Convert.ToInt32(sqlParam[14].Value), candidateQualifications);
                 Dictionary<string, Dictionary<string, string>> candidateExperiences = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(candidate["experiences"].ToString());
-                Boolean ret_of_exp = await InsertCandidateExperiences(Convert.ToInt32(sqlParam[17].Value), candidateExperiences);
+                Boolean ret_of_exp = await InsertCandidateExperiences(Convert.ToInt32(sqlParam[14].Value), candidateExperiences);
                 if (ret_of_qual && ret_of_exp)
                 {
-                    return (Convert.ToInt32(sqlParam[17].Value));
+                    return (Convert.ToInt32(sqlParam[14].Value));
                 }
             }
             return -1;

@@ -31,15 +31,6 @@ namespace recruiter_webapp {
         protected global::System.Web.UI.HtmlControls.HtmlInputText srchVal;
         
         /// <summary>
-        /// job_id control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText job_id;
-        
-        /// <summary>
         /// srchBy control.
         /// </summary>
         /// <remarks>

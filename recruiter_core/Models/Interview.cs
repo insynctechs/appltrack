@@ -57,7 +57,6 @@ namespace recruiter_core.Models
             sqlParam[3] = new SqlParameter("@round", interview["round"]);
             sqlParam[4] = new SqlParameter("@venue", interview["venue"]);
             sqlParam[5] = new SqlParameter("@date_of_interview", interview["date_of_interview"]);
-            sqlParam[5].SqlDbType = SqlDbType.Date;
             sqlParam[6] = new SqlParameter("@active", interview["active"]);
             sqlParam[7] = new SqlParameter("@logged_in_user_id", interview["logged_in_userid"]);
             sqlParam[8] = new SqlParameter("@Ret", SqlDbType.Int);
@@ -78,7 +77,6 @@ namespace recruiter_core.Models
             sqlParam[4] = new SqlParameter("@round", interview["round"]);
             sqlParam[5] = new SqlParameter("@venue", interview["venue"]);
             sqlParam[6] = new SqlParameter("@date_of_interview", interview["date_of_interview"]);
-            sqlParam[6].SqlDbType = SqlDbType.Date;
             sqlParam[7] = new SqlParameter("@active", interview["active"]);
             sqlParam[8] = new SqlParameter("@logged_in_user_id", interview["logged_in_userid"]);
             sqlParam[9] = new SqlParameter("@Ret", SqlDbType.Int);
@@ -156,6 +154,34 @@ namespace recruiter_core.Models
             sqlParam[4].Direction = ParameterDirection.Output;
             var sqlret = await Task.Run(() => SqlHelper.ExecuteNonQuery(Settings.Constr, CommandType.StoredProcedure, "uspInterview_Candidates_UpdateCandidates", sqlParam));
             return Convert.ToInt32(sqlParam[4].Value);
+        }
+
+        public async Task<DataSet> GetResults(int employer_id, int job_id, int interview_id)
+        {
+            SqlParameter[] sqlParam = new SqlParameter[3];
+            sqlParam[0] = new SqlParameter("@employer_id", employer_id.ToString());
+            sqlParam[1] = new SqlParameter("@job_id", job_id.ToString());
+            sqlParam[2] = new SqlParameter("@int_id", interview_id.ToString());
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspInterviews_GetResults", sqlParam));
+        }
+
+        public async Task<DataSet> GetReport(string customer_id, string employer_id, string job_id, string from_date, string to_date)
+        {
+            if (from_date == null)
+            {
+                from_date = "";
+            }
+            if (to_date == null)
+            {
+                to_date = "";
+            }
+            SqlParameter[] sqlParam = new SqlParameter[5];
+            sqlParam[0] = new SqlParameter("@customer_id", customer_id.ToString());
+            sqlParam[1] = new SqlParameter("@employer_id", employer_id.ToString());
+            sqlParam[2] = new SqlParameter("@job_id", job_id.ToString());
+            sqlParam[3] = new SqlParameter("@from_date", from_date.ToString());
+            sqlParam[4] = new SqlParameter("@to_date", to_date.ToString());
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspInterviews_GetReport", sqlParam));
         }
 
     }

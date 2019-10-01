@@ -36,6 +36,10 @@ namespace recruiter_webapp
                         {
                             employer_id.Value = Request.QueryString["employer_id"];
                         }
+                        if (Request.QueryString["employer_id"] == null)
+                        {
+                            employer_id.Value = "0";
+                        }
                     }
                     GetEmployerList();
 
@@ -55,6 +59,7 @@ namespace recruiter_webapp
         {
             int currnetPageIndx = Convert.ToInt32(e.CommandArgument);
             pager1.CurrentIndex = currnetPageIndx;
+            GetEmployerLocations();
         }
 
         private void GetEmployerList()
@@ -94,22 +99,6 @@ namespace recruiter_webapp
         {
             try
             {               
-                var url = string.Format("api/EmployerLocations/Get?PageSize=" + pager1.PageSize + "&CurrentPage=" + pager1.CurrentIndex + "&employer_id=" + employer_id.Value + "&srchBy=name&&srchVal=");
-                DataSet ds = wHelper.GetDataSetFromWebApi(url);
-                employerList.DataSource = ds.Tables[0];
-                employerList.DataBind();
-                pager1.ItemCount = Convert.ToDouble(ds.Tables[1].Rows[0][0]);
-            }
-            catch (Exception ex)
-            {
-                CommonLogger.Info(ex.ToString());
-            }
-        }
-
-        private void GetEmployerLocationsByFilter()
-        {
-            try
-            {
                 var url = string.Format("api/EmployerLocations/Get?PageSize=" + pager1.PageSize + "&CurrentPage=" + pager1.CurrentIndex + "&employer_id=" + employer_id.Value + "&srchBy=" + srchBy.Value + "&srchVal=" + srchVal.Value);
                 DataSet ds = wHelper.GetDataSetFromWebApi(url);
                 employerList.DataSource = ds.Tables[0];
@@ -125,8 +114,7 @@ namespace recruiter_webapp
 
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            pager1.CurrentIndex = 1; // Reset to display records starting from first page
-            GetEmployerLocationsByFilter();
-        }       
+            pager1.CurrentIndex = 1; // Reset to display records starting from first page 
+        }
     }
 }

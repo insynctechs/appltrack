@@ -32,13 +32,15 @@ namespace recruiter_webapp.Helpers
         public const String ERR_UPDATE_NAME_EXIST = "Updation failed! Record with similar name exists.";
         public const String ERR_UPDATE_EMAIL_EXIST = "Updation failed! Record with similar email exists.";
         public const String ERR_UPDATE = "Record updation failed!";
-        
+        public const String ERR_EXCEL_NO_RECORDS = "No matching records for excel generation!";
+
 
         // Success Messages
         public const String SUCCESS_INSERT = "Record inserted successfully.";
         public const String SUCCESS_DELETE = "Record deleted successfully.";
         public const String SUCCESS_UPDATE = "Record updated successfully.";
-        public const String SUCCESS_INSERTS_COUNT = " Records inserted."; 
+        public const String SUCCESS_INSERTS_COUNT = " Records inserted.";
+        public const String SUCCESS_EXCEL_GEN = "Excel file generated.";
 
         // Colors for file upload messages
         public static System.Drawing.Color successColor = System.Drawing.Color.LimeGreen;

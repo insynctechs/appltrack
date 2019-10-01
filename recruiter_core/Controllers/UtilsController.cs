@@ -34,12 +34,30 @@ namespace recruiter_core.Controllers
             return Ok(art);
         }
 
+        // To fetch industry list with job count
+        [Route("api/Utils/GetIndustryListWithJobCount/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetIndustryListWithJobCount()
+        {
+            var art = await objUtil.GetIndustryListWithJobCount();
+            return Ok(art);
+        }
+
         // To fetch category list
         [Route("api/Utils/GetCategoryList/")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCategoryList()
         {
             var art = await objUtil.GetCategoryList();
+            return Ok(art);
+        }
+
+        // To fetch category list with job count
+        [Route("api/Utils/GetCategoryListWithJobCount/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCategoryListWithJobCount()
+        {
+            var art = await objUtil.GetCategoryListWithJobCount();
             return Ok(art);
         }
 

@@ -105,6 +105,17 @@
 
         $(document).ready(function () {
             $('select').formSelect();
+            $('.btn-delete').on('focus', function () {
+
+                $(this).webuiPopover('destroy'); // the trick
+                $(this).webuiPopover({
+                    placement: 'left',
+                    title: 'Sure to delete?',
+                    content: '<a href="' + this.getAttribute("href") + '">Yes</a>',
+                    closeable: true,
+                    cache: false
+                });
+            });
         });
        
     </script>

@@ -40,7 +40,7 @@ namespace recruiter_core.Controllers
         public async Task<IHttpActionResult> GetInterviews(string srchBy, string srchVal, string PageSize, string CurrentPage)
         {
             if (srchVal == null)
-                srchVal = "%";
+                srchVal = "";
             var art = await objInterview.GetInterviews(srchBy, srchVal, PageSize, CurrentPage);
             return Ok(art);
         }
@@ -87,6 +87,22 @@ namespace recruiter_core.Controllers
             Dictionary<string, string> interview_candidates = JsonConvert.DeserializeObject<Dictionary<string, string>>(dictionaryAsJson.ToString());
             var cat = await objInterview.UpdateCandidatesForInterview(interview_candidates);
             return Ok(cat);
+        }
+
+        [Route("api/Interviews/GetResults/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetResults(int employer_id, int job_id, int interview_id)
+        {
+            var art = await objInterview.GetResults(employer_id, job_id, interview_id);
+            return Ok(art);
+        }
+
+        [Route("api/Interviews/GetReport/")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetReport(string customer_id, string employer_id, string job_id, string from_date, string to_date)
+        {
+            var art = await objInterview.GetReport(customer_id, employer_id, job_id, from_date, to_date);
+            return Ok(art);
         }
     }
 }

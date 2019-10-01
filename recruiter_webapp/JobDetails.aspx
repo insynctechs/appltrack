@@ -1,24 +1,24 @@
 ﻿<%@ Page Language="C#" Title="Job Details" MasterPageFile="~/SiteClient.Master" AutoEventWireup="true" CodeBehind="JobDetails.aspx.cs" Inherits="recruiter_webapp.JobDetails" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
- 
-                <div class="col s12 white padding-2 border-radius-5" style="min-height: 560px; margin-top: 15px; margin-bottom: 15px">
-                    <%if (jobList.Count > 0)
+ <form id="frm_job" runat="server">
+     <div class="col s12 white padding-2 border-radius-5" style="min-height: 560px; margin-top: 15px; margin-bottom: 15px">
+                    <%if (jobDetailList.Count > 0)
                         {%>
-                    <h5 class="grey lighten-3 z-depth-1 padding-1 border-radius-5"><%:jobList[0]["job_code"]%></h5>
+                    <h5 class="grey lighten-3 z-depth-1 padding-1 border-radius-5"><%:jobDetailList[0]["job_code"]%></h5>
                     <div class="padding-2">
                         <h6>Job Description</h6>
-                    <p><%:jobList[0]["description"]%></p>
-                    <p><b>Date of Posting: </b><%:Convert.ToDateTime(jobList[0]["date_added"]).ToShortDateString()%></p>
-                    <p><b>Industry: </b><%:jobList[0]["industry"]%> / <%:jobList[0]["category"]%></p>
+                    <p><%:jobDetailList[0]["description"]%></p>
+                    <p><b>Date of Posting: </b><%:Convert.ToDateTime(jobDetailList[0]["date_added"]).ToShortDateString()%></p>
+                    <p><b>Industry: </b><%:jobDetailList[0]["industry"]%> / <%:jobDetailList[0]["category"]%></p>
 
-                    <p><b>Key Skills: </b><%:jobList[0]["skills"]%></p>
-                    <p><b>Qualifications: </b><%:jobList[0]["qualifications"]%></p>
-                    <p><b>Vacancies: </b><%:jobList[0]["vacancy_count"]%></p>
-                    <p><b>Experience Required: </b><%:jobList[0]["min_exp"]%> to <%:jobList[0]["max_exp"]%> Yrs</p>
-                    <p><b>Salary: </b><%:jobList[0]["min_sal"]%> to <%:jobList[0]["max_sal"]%> <%:jobList[0]["currency"]%></p>
-                    <p><b>Other Details: </b><%:jobList[0]["other_notes"]%></p>
-                    <p><b>Date of Joining: </b><%:Convert.ToDateTime(jobList[0]["join_date"]).ToLongDateString()%></p>
+                    <p><b>Key Skills: </b><%:jobDetailList[0]["skills"]%></p>
+                    <p><b>Qualifications: </b><%:jobDetailList[0]["qualifications"]%></p>
+                    <p><b>Vacancies: </b><%:jobDetailList[0]["vacancy_count"]%></p>
+                    <p><b>Experience Required: </b><%:jobDetailList[0]["min_exp"]%> to <%:jobDetailList[0]["max_exp"]%> Yrs</p>
+                    <p><b>Salary: </b><%:jobDetailList[0]["min_sal"]%> to <%:jobDetailList[0]["max_sal"]%> <%:jobDetailList[0]["currency"]%></p>
+                    <p><b>Other Details: </b><%:jobDetailList[0]["other_notes"]%></p>
+                    <p><b>Date of Joining: </b><%:Convert.ToDateTime(jobDetailList[0]["join_date"]).ToLongDateString()%></p>
                     </div>
                     
                     <%}%>
@@ -49,13 +49,15 @@
                                      {%>
                             <a class="btn waves-effect waves-light green lighten-1 left">Applied</a>
                             <%}
-                                     } %>
+                                //} %>
                             <asp:Button ID="btnApply" OnClick="btnApply_Click" runat="server" Text="" Style="display: none" />
 
                             <a href="<%:WebURL%>Vacancies?customer=<%:Request.QueryString["customer"]%>" class="btn waves-effect waves-light blue lighten-1 right" id="btn-cancel">Cancel</a>
                                 </div>
                            </div>
                     </div>
+ </form>
+                
 
         
 

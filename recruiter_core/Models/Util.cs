@@ -21,9 +21,19 @@ namespace recruiter_core.Models
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspIndustries_GetList"));
         }
 
+        public async Task<DataSet> GetIndustryListWithJobCount()
+        {
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspIndustries_GetListWithJobCount"));
+        }
+
         public async Task<DataSet> GetCategoryList()
         {
             return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspCategories_GetList"));
+        }
+
+        public async Task<DataSet> GetCategoryListWithJobCount()
+        {
+            return await Task.Run(() => SqlHelper.ExecuteDataset(Settings.Constr, CommandType.StoredProcedure, "uspCategories_GetListWithJobCount"));
         }
 
         public async Task<DataSet> GetDocumentTypeList()
